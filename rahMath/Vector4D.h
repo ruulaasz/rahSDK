@@ -2,31 +2,34 @@
 
 namespace rah
 {
+	class Vector3D;
+
 	/**
-	* A 3D float vector class
+	* A 4D float vector class
 	*
 	*/
-	class Vector3D
+	class Vector4D
 	{
 	public:
-		explicit Vector3D(float _x = 0.f, float _y = 0.f, float _z = 0.f);
-		Vector3D(const Vector3D &_vector);
-		virtual ~Vector3D();
+		explicit Vector4D(float _x = 0.f, float _y = 0.f, float _z = 0.f, float _w = 0.f);
+		Vector4D(const Vector4D &_vector);
+		Vector4D(Vector3D& _vector);
+		virtual ~Vector4D();
 
 		/**
 		* Operator overload
 		*
 		*/
-		Vector3D operator- (const Vector3D& _vector);
-		Vector3D operator+ (const Vector3D& _vector);
-		Vector3D operator* (const Vector3D& _vector);
-		void operator+= (const Vector3D& _vector);
-		void operator-= (const Vector3D& _vector);
-		Vector3D operator/ (const float& _value);
+		Vector4D operator- (const Vector4D& _vector);
+		Vector4D operator+ (const Vector4D& _vector);
+		Vector4D operator* (const Vector4D& _vector);
+		void operator+= (const Vector4D& _vector);
+		void operator-= (const Vector4D& _vector);
+		Vector4D operator/ (const float& _value);
 		void operator/= (const float& _value);
-		bool operator== (const Vector3D& _vector);
-		bool operator!= (const Vector3D& _vector);
-		Vector3D operator* (const float& _value);
+		bool operator== (const Vector4D& _vector);
+		bool operator!= (const Vector4D& _vector);
+		Vector4D operator* (const float& _value);
 		void operator*= (const float& _value);
 		float& operator[](const int idx);
 
@@ -34,25 +37,25 @@ namespace rah
 		* Dot product between this and another vector
 		*
 		* @param _vector
-		* a 3D vector 
+		* a 4D vector
 		*
 		*@return float
 		*a vector scalar
 		*
 		*/
-		float dot(const Vector3D &_vector);
+		float dot(const Vector4D &_vector);
 
 		/**
 		* Cross product between this and another vector
 		*
 		* @param _vector
-		* a 3D vector
+		* a 4D vector
 		*
-		*@return Vector3D
+		*@return Vector4D
 		*the result vector
 		*
 		*/
-		Vector3D cross(const Vector3D &_vector);
+		Vector4D cross(const Vector4D &_vector);
 
 		/**
 		* Process the magnitude
@@ -105,5 +108,7 @@ namespace rah
 		float x;
 		float y;
 		float z;
+		float w;
 	};
 }
+

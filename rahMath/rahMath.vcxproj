@@ -22,9 +22,11 @@
     <ClInclude Include="PlatformMath.h" />
     <ClInclude Include="rahMath.h" />
     <ClInclude Include="Vector3D.h" />
+    <ClInclude Include="Vector4D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3D.cpp" />
+    <ClCompile Include="Vector4D.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{107DC226-69AE-42EA-8019-53DCE19968EA}</ProjectGuid>

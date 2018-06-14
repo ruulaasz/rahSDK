@@ -55,22 +55,18 @@ namespace rah
 		return result;
 	}
 
-	Vector3D & Vector3D::operator+=(const Vector3D & _vector)
+	void Vector3D::operator+=(const Vector3D & _vector)
 	{
 		x += _vector.x;
 		y += _vector.y;
 		z += _vector.z;
-
-		return *this;
 	}
 
-	Vector3D & Vector3D::operator-=(const Vector3D & _vector)
+	void Vector3D::operator-=(const Vector3D & _vector)
 	{
 		x -= _vector.x;
 		y -= _vector.y;
 		z -= _vector.z;
-
-		return *this;
 	}
 
 	Vector3D Vector3D::operator/(const float & _value)
@@ -133,8 +129,7 @@ namespace rah
 
 	Vector3D Vector3D::cross(const Vector3D & _vector)
 	{
-		Vector3D temp(y * _vector.z - z * _vector.y, z * _vector.x - x * _vector.z, x * _vector.y - y * _vector.x);
-		return temp;
+		return Vector3D(y * _vector.z - z * _vector.y, z * _vector.x - x * _vector.z, x * _vector.y - y * _vector.x);
 	}
 
 	float Vector3D::length()

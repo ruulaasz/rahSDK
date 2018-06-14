@@ -24,9 +24,15 @@
     <ClInclude Include="rahMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Vector4D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

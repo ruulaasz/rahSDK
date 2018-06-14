@@ -10,6 +10,14 @@ void printVector3(const rah::Vector3D &_vector)
 	printf("z=%.2f", _vector.z);
 }
 
+void printVector4(const rah::Vector4D &_vector)
+{
+	printf("x=%.2f, ", _vector.x);
+	printf("y=%.2f, ", _vector.y);
+	printf("z=%.2f, ", _vector.z);
+	printf("w=%.2f", _vector.w);
+}
+
 void vector3Test()
 {
 	rah::Vector3D A;
@@ -70,6 +78,12 @@ void vector3Test()
 	system("cls");
 
 	printf("~~~~VECTOR3 OPERATORS PART 2~~~");
+
+	printf("\n\nVector A: ");
+	printVector3(A);
+
+	printf("\nVector B: ");
+	printVector3(B);
 
 	C = B / 2;
 	printf("\n\nOperator/ C=B/2");
@@ -234,11 +248,173 @@ void platformMathTest()
 	system("cls");
 }
 
+void vector4Test()
+{
+	rah::Vector4D A;
+	rah::Vector4D B;
+
+	A.x = 1.0f;
+	A.y = 2.0f;
+	A.z = 3.0f;
+	A.w = 1.0f;
+
+	B.x = 1.0f;
+	B.y = 5.0f;
+	B.z = 7.0f;
+	B.w = 1.0f;
+
+	printf("~~~~VECTOR4 OPERATORS~~~");
+
+	printf("\n\nVector A: ");
+	printVector4(A);
+
+	printf("\nVector B: ");
+	printVector4(B);
+
+	rah::Vector4D C(A);
+	printf("\n\nContructor Copia Vector4D C(A)");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C = A - B;
+	printf("\n\nOperator- C=A-B");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C = A + B;
+	printf("\n\nOperator+ C=A+B");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C = A * B;
+	printf("\n\nOperator* C=A*B");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C.clear();
+	printf("\n\nFunction Clear(C)");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C += A;
+	printf("\n\nOperator+= C+=A");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C -= A;
+	printf("\n\nOperator-= C-=A");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	getchar();
+	system("cls");
+
+	printf("~~~~VECTOR4 OPERATORS PART 2~~~");
+
+	printf("\n\nVector A: ");
+	printVector4(A);
+
+	printf("\nVector B: ");
+	printVector4(B);
+
+	C = B / 2;
+	printf("\n\nOperator/ C=B/2");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C /= 2;
+	printf("\n\nOperator/= C /= 2");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	bool check = A == B;
+	printf("\n\nOperator== A == B");
+	if (check)
+		printf("\nTrue");
+	else
+		printf("\nFalse");
+
+	check = A != B;
+	printf("\n\nOperator!= A != B");
+	if (check)
+		printf("\nTrue");
+	else
+		printf("\nFalse");
+
+	C = A * 2;
+	printf("\n\nOperator* C=A*2");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C *= 2;
+	printf("\n\nOperator*= C*=2");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	printf("\n\nOperator[] C[1]");
+	printf("\n%.2f", C[1]);
+
+	getchar();
+	system("cls");
+
+	printf("~~~~VECTOR3 FUNCTIONS~~~");
+
+	printf("\n\nVector A: ");
+	printVector4(A);
+
+	printf("\nVector B: ");
+	printVector4(B);
+
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C.clear();
+	printf("\n\nFunction Clear(C)");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	float temp = A.dot(B);
+	printf("\n\nFunction Dot A.dot(B)");
+	printf("\nResult: %.2f", temp);
+
+	C = A.cross(B);
+	printf("\n\nFunction Cross A.cross(B)");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	temp = C.length();
+	printf("\n\nFunction Length C.length()");
+	printf("\nResult: %.2f", temp);
+
+	temp = C.lengthSquared();
+	printf("\n\nFunction Length C.lengthSquared()");
+	printf("\nResult: %.2f", temp);
+
+	C.escalate(2.f);
+	printf("\n\nFunction Escalate C.escalate(2.f)");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	C.truncate(1.f);
+	printf("\n\nFunction Truncate C.truncate(1.f)");
+	printf("\nVector C: ");
+	printVector4(C);
+
+	B.normalize();
+	printf("\n\nFunction Normalize B.normalize()");
+	printf("\nVector B: ");
+	printVector4(B);
+
+	getchar();
+}
+
 int main()
 {
 	platformMathTest();
 
 	vector3Test();
+
+	vector4Test();
 
     return 0;
 }
