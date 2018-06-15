@@ -250,6 +250,7 @@ void platformMathTest()
 
 void vector4Test()
 {
+	system("cls");
 	rah::Vector4D A;
 	rah::Vector4D B;
 
@@ -357,7 +358,7 @@ void vector4Test()
 	getchar();
 	system("cls");
 
-	printf("~~~~VECTOR3 FUNCTIONS~~~");
+	printf("~~~~VECTOR4 FUNCTIONS~~~");
 
 	printf("\n\nVector A: ");
 	printVector4(A);

@@ -7,6 +7,7 @@ namespace rah
 	namespace math
 	{
 		typedef unsigned int uint;
+		typedef unsigned char int8;
 
 		/**
 		* PI Constant

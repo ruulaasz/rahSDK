@@ -19,12 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Degrees.h" />
     <ClInclude Include="PlatformMath.h" />
+    <ClInclude Include="Radians.h" />
     <ClInclude Include="rahMath.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Vector4D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Degrees.cpp" />
+    <ClCompile Include="Radians.cpp" />
     <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="Vector4D.cpp" />
   </ItemGroup>
