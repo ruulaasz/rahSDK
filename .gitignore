@@ -2,3 +2,17 @@ rahMath_Test/ReadMe.txt
 rahMath.VC.db
 intermediate/
 ipch/
+/.vs/rahMath/v14/.suo
+/.vs/rahSDK/v14/.suo
+/bin/rahMath_Test/x64/Debug/rahMath_Test.exe
+/bin/rahMath_Test/x64/Debug/rahMath_Test.ilk
+/bin/rahMath_Test/x64/Debug/rahMath_Test.pdb
+/bin/rahTools_Test/x64/Debug/rahTools_Test.exe
+/bin/rahTools_Test/x64/Debug/rahTools_Test.ilk
+/bin/rahTools_Test/x64/Debug/rahTools_Test.pdb
+/lib/rahMath/x64/Debug/rahMath_debug.lib
+/lib/rahTools/x64/Debug/rahTools_debug.lib
+/rahTools_Test/ReadMe.txt
+/rahSDK.VC.VC.opendb
+/rahSDK.VC.db
+/rahTools/ReadMe.txt
