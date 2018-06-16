@@ -16,3 +16,5 @@ ipch/
 /rahSDK.VC.VC.opendb
 /rahSDK.VC.db
 /rahTools/ReadMe.txt
+/rahMath_Test/rahMath_Test.vcxproj.user
+/rahTools_Test/rahTools_Test.vcxproj.user
