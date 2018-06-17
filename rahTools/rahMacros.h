@@ -1,7 +1,11 @@
 #pragma once
 
 /*Use macros or classes for any #define for general use*/
-
+enum ReturnValue
+{
+	RAH_SUCCES = 0,
+	RAH_ERROR
+};
 template<class t>
 /*
 * A generic set get container

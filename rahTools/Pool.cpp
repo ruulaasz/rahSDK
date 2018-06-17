@@ -56,8 +56,9 @@ namespace rah
 				if (MH.NumberInPool == NInPool)
 				{
 					cp += sizeof(HeaderMemory);
-					ptr = (void*)cp;
-					return ptr;
+					char* rrnValue;
+					memcpy(&rrnValue, cp, MH.size);
+					return rrnValue;
 				}
 				cp += MH.size + sizeof(HeaderMemory);
 				ptr = (void*)cp;

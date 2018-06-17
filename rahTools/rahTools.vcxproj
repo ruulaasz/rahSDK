@@ -153,6 +153,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Module.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="rahMacros.h" />
     <ClInclude Include="rahTools.h" />
