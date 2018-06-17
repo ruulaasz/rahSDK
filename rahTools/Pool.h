@@ -4,19 +4,10 @@ namespace rah
 	namespace memory
 	{
 		/*
-		* Struct to know the header of each object in the pool
-		* Use this to create a pool considering the header
+		* conteiner of the memory now is a template to know the size of the object
 		*
 		*/
-		struct HeaderMemory
-		{
-			int size;
-			int NumberInPool;
-		};
-		/*
-		* conteiner of the memory
-		*
-		*/
+		template<class T>
 		class Pool
 		{
 		protected:
@@ -26,25 +17,20 @@ namespace rah
 			*/
 			int count;
 			/*
-			* the pool
+			* begin of the pool
 			*
 			*/
-			void* poolMemory;
-			/*
-			* Begin of the pool memory
-			*
-			*/
-			void* beginPos;
+			T* poolMemory;
 			/*
 			* The last pointer of the pool
 			*
 			*/
-			void* lastPos;
+			T* endPool;
 			/*
 			* The ctual position of the pool
 			*
 			*/
-			void* actualPos;
+			T* actualPos;
 			/*
 			* The tolta size of the pool
 			*
@@ -60,45 +46,112 @@ namespace rah
 			* Intialize the pool cosider the MemoryHeader
 			*
 			*/
-			void Initialize(unsigned int _sizeOfPool);
+			void Initialize(unsigned int _sizeOfPool)
+			{
+				poolMemory = new T[_sizeOfPool];
+				totalSize = _sizeOfPool;
+				remainingSpace = totalSize;
+				actualPos = poolMemory;
+				endPool = poolMemory + _sizeOfPool;
+				count = 0;
+			}
 			/*
 			* Push a object to the pool
 			*
 			*/
-			void Push(void* _Object, int size);
+			void Push(T* _Object)
+			{
+				//checamos por si aun tenemos espacio en la pool
+				if (totalSize - remainingSpace >= 0)
+				{
+					int rm = remainingSpace - sizeof(T);
+					if (rm < 0)
+						return;
+					count++;//aumentamos nuestro conteo
+					//escribimos la informacion del puntero
+					memcpy(actualPos, _Object, sizeof(T));
+					//adelantamos el puntero de actual pos
+					actualPos += sizeof(T);
+					remainingSpace -= sizeof(T);
+				}
+			}
 			/*
 			* Get a object in the pool
 			*
 			*/
-			void* Get(int NInPool);
+			T* Get(int NInPool)
+			{
+				if (NInPool >= count)
+					return NULL;
+				T* bIterator = poolMemory;
+				for (int i = 0; i < count; i++)
+				{
+					if (NInPool == i)
+					{
+						return bIterator;
+					}
+					bIterator += sizeof(T);
+				}
+				return NULL;
+			}
 			/*
 			* Get the remaining space in the pool
 			*
 			*/
-			int getRemainingSpace();
+			int getRemainingSpace()
+			{
+				return remainingSpace;
+			}
 			/*
 			* Get the count of the pool
 			*
 			*/
-			int getCount();
+			int getCount()
+			{
+				return count;
+			}
 			/*
 			* get the size of the pool
 			*
 			*/
-			int getSize();
+			int getSize()
+			{
+				return totalSize;
+			}
 			/*
 			* Clean the elements in the pool
 			*
 			*/
-			void clean();
+			void clean()
+			{
+				delete[] poolMemory;
+				Initialize(totalSize);
+			}
 			/*
 			* Destroy the pool and its elemnts
 			*
 			*/
-			void destroy();
+			void destroy()
+			{
+				delete[] poolMemory;
+				poolMemory = NULL;
+				totalSize = 0;
+				remainingSpace = 0;
+				actualPos = NULL;
+				endPool = NULL;
+				count = 0;
+			}
 		public:
-			Pool();
-			~Pool();
+			Pool()
+			{
+				poolMemory = NULL;
+				totalSize = 0;
+				remainingSpace = 0;
+				actualPos = NULL;
+				endPool = NULL;
+				count = 0;
+			}
+			~Pool() {}
 		};
 	}
 }

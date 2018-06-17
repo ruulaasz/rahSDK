@@ -61,19 +61,19 @@ int main()
 	/************************************************************************/
 	TestClass Var;
 	Var.mygetVar.Set(10);
-	rah::memory::Pool PoolTest;
+	rah::memory::Pool<TestClass> PoolTest;
 	PoolTest.Initialize(sizeof(TestClass) * 80);
 	for (int i = 0; i < 5; i++)
 	{
-		PoolTest.Push(&Var, sizeof(TestClass));
-		Var.mygetVar.Set((1 + i)* 10);
+		Var.mygetVar.Set((2 + i) * 10);
+		PoolTest.Push(&Var);
 		std::cout << Var.mygetVar.Get() << " Push to the pool " << '\n';
 	}
 	std::cout << "--------------------------------------------" << '\n';
 	for (int i = 0; i < 5; i++)
 	{
-		int tmp = *((int*)PoolTest.Get(i));
-		std::cout << tmp << " Get from the pool " << '\n';
+		TestClass* tmp = PoolTest.Get(i);
+		std::cout << tmp->mygetVar.Get() << " Get from the pool " << '\n';
 	}
 	/************************************************************************/
 	/* Delete zone                                                          */

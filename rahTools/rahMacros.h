@@ -1,6 +1,10 @@
 #pragma once
 
 /*Use macros or classes for any #define for general use*/
+/*
+* Generic valor of returning functions
+*
+*/
 enum ReturnValue
 {
 	RAH_SUCCES = 0,
