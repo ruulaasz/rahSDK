@@ -1,4 +1,5 @@
 #pragma once
+#include "rahMacros.h"
 namespace rah
 {
 	namespace memory
@@ -83,16 +84,8 @@ namespace rah
 			{
 				if (NInPool >= count)
 					return NULL;
-				T* bIterator = poolMemory;
-				for (int i = 0; i < count; i++)
-				{
-					if (NInPool == i)
-					{
-						return bIterator;
-					}
-					bIterator += sizeof(T);
-				}
-				return NULL;
+				T* bIterator = poolMemory + (sizeof(T) * NInPool);
+				return bIterator;
 			}
 			/*
 			* Get the remaining space in the pool
@@ -124,7 +117,7 @@ namespace rah
 			*/
 			void clean()
 			{
-				delete[] poolMemory;
+				RAH_ARRAY_SAFE_DELETE(poolMemory);
 				Initialize(totalSize);
 			}
 			/*
@@ -133,7 +126,7 @@ namespace rah
 			*/
 			void destroy()
 			{
-				delete[] poolMemory;
+				RAH_ARRAY_SAFE_DELETE(poolMemory);
 				poolMemory = NULL;
 				totalSize = 0;
 				remainingSpace = 0;

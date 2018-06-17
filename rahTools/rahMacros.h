@@ -1,14 +1,21 @@
 #pragma once
 
 /*Use macros or classes for any #define for general use*/
+
+/************************************************************************/
+/* Safe Deletes                                                         */
+/************************************************************************/
+#define RAH_SAFE_DELETE(ptr) if(ptr != NULL) delete ptr; ptr=NULL;
+#define RAH_ARRAY_SAFE_DELETE(ptr) if(ptr != NULL) delete[] ptr; ptr=NULL;
+#define RAH_STDVECTOR_SAFE_DELETE(ptr) while(!ptr.empty()){ RAH_SAFE_DELETE(ptr.back()); ptr.pop_back();}
 /*
 * Generic valor of returning functions
 *
 */
 enum ReturnValue
 {
-	RAH_SUCCES = 0,
-	RAH_ERROR
+	RAH_ERROR = -1,
+	RAH_SUCCESS = 0
 };
 template<class t>
 /*
