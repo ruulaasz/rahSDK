@@ -12,7 +12,7 @@
 * Generic valor of returning functions
 *
 */
-enum ReturnValue
+enum RahResult
 {
 	RAH_ERROR = -1,
 	RAH_SUCCESS = 0

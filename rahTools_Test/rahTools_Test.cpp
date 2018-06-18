@@ -29,7 +29,7 @@ public:
 	int m_id;
 	int m_size;
 	float m_vector[4];
-	ReturnValue Initialize(InitStruct ptr)
+	RahResult Initialize(InitStruct ptr)
 	{
 		m_id = ptr.id;
 		m_size = ptr.size;

@@ -11,7 +11,7 @@ namespace rah
 		}
 
 	public:
-		static ReturnValue StartModule(structInit initValue)
+		static RahResult StartModule(structInit initValue)
 		{
 			instance() = new _type();
 			return instance()->Initialize(initValue);
