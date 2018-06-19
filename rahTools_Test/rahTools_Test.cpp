@@ -5,7 +5,7 @@
 #include <rahTools.h>
 #include <iostream>
 #include <vector>
-#include <vld.h>
+//#include <vld.h>
 class TestClass
 {
 public:

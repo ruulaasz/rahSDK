@@ -18,6 +18,11 @@ void printVector4(const rah::Vector4D &_vector)
 	printf("w=%.2f", _vector.w);
 }
 
+void printColor(const rah::Color &_color)
+{
+	printf("%.2f, %.2f, %.2f, %.2f", _color.r, _color.g, _color.b, _color.alpha);
+}
+
 void vector3Test()
 {
 	rah::Vector3D A;
@@ -409,6 +414,188 @@ void vector4Test()
 	getchar();
 }
 
+void colorTest()
+{
+	system("cls");
+	
+	rah::Color a;
+	a.r = 1.f;
+	a.b = 0.f;
+	a.g = 0.f;
+
+	rah::Color b;
+	b.r = 0.f;
+	b.b = 1.f;
+	b.g = 0.f;
+
+	rah::Color c;
+
+	printf("~~~~COLOR OPERATORS~~~");
+
+	printf("\n\na= ");
+	printColor(a);
+
+	printf("\nb= ");
+	printColor(b);
+
+	c = a;
+	printf("\n\nc=a\n");
+	printColor(c);
+
+	c = a + b;
+	printf("\n\nc=a+b\n");
+	printColor(c);
+
+	c = a - b;
+	printf("\n\nc=a-b\n");
+	printColor(c);
+
+	c += a;
+	printf("\n\nc+=a\n");
+	printColor(c);
+
+	c -= a;
+	printf("\n\nc-=a\n");
+	printColor(c);
+
+	bool check;
+	check = a == b;
+	printf("\n\na==b\n");
+	if (check)
+		printf("True");
+	else
+		printf("False");
+
+	check = a != b;
+	printf("\n\na!=b\n");
+	if (check)
+		printf("True");
+	else
+		printf("False");
+
+	c.clear();
+	printf("\n\nc.clear()\n");
+	printColor(c);
+
+	getchar();
+}
+
+void degreesTest()
+{
+	rah::Degrees degree(90.f);
+	rah::Degrees degreeB(45.f);
+	rah::Radians radian(degreeB);
+
+	system("cls");
+
+	printf("~~~~DEGREES OPERATORS~~~");
+
+	printf("\n\ndegree = %.2f", degree.m_degrees);
+	printf("\ndegreeB = %.2f", degreeB.m_degrees);
+	printf("\nradian = %.2f", radian.m_radians);
+
+	printf("\n\nCopy constructor");
+	rah::Degrees degreeCopy(degree);
+	printf("\ndegreeCopy = %.2f", degreeCopy.m_degrees);
+
+	printf("\n\nRadian Constructor");
+	rah::Degrees degreeRadian(radian);
+	printf("\ndegreeRadian = %.2f", degreeRadian.m_degrees);
+
+	rah::Degrees r;
+	r = degree + degreeB;
+	printf("\n\ndegree+degreeB");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r = degree + radian;
+	printf("\n\ndegree+radian");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r = degree - degreeB;
+	printf("\n\ndegree-degreeB");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r = degree - radian;
+	printf("\n\ndegree-radian");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r += degree;
+	printf("\n\nr+=degree");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r += radian;
+	printf("\n\nr+=radian");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r -= degree;
+	printf("\n\nr-=degree");
+	printf("\nr = %.2f", r.m_degrees);
+
+	r -= radian;
+	printf("\n\nr-=radian");
+	printf("\nr = %.2f", r.m_degrees);
+
+	getchar();
+}
+
+void radiansTest()
+{
+	system("cls");
+
+	printf("~~~~RADIANS OPERATORS~~~");
+
+	rah::Radians radian(1.57);
+	rah::Radians radianB(0.785398);
+	rah::Degrees degree(radianB);
+
+	printf("\n\nradian= %.2f", radian.m_radians);
+	printf("\nradianB = %.2f", radianB.m_radians);
+	printf("\ndegree = %.2f", degree.m_degrees);
+
+	printf("\n\nCopy constructor");
+	rah::Radians radianCopy(radian);
+	printf("\nradianCopy = %.2f", radianCopy.m_radians);
+
+	printf("\n\nDegree Constructor");
+	rah::Radians radianDegree(degree);
+	printf("\nradianDegree = %.2f", radianDegree.m_radians);
+
+	rah::Radians r;
+	r = radian + radianB;
+	printf("\n\nradian+radianB");
+	printf("\nr = %.2f", r.m_radians);
+
+	r = radian + degree;
+	printf("\n\nradian+degree");
+	printf("\nr = %.2f", r.m_radians);
+
+	r = radian - radianB;
+	printf("\n\nradian-radianB");
+	printf("\nr = %.2f", r.m_radians);
+
+	r = radian - degree;
+	printf("\n\nradian-degree");
+	printf("\nr = %.2f", r.m_radians);
+
+	r += radian;
+	printf("\n\nr+=radian");
+	printf("\nr = %.2f", r.m_radians);
+
+	r += degree;
+	printf("\n\nr+=degree");
+	printf("\nr = %.2f", r.m_radians);
+
+	r -= radian;
+	printf("\n\nr-=radian");
+	printf("\nr = %.2f", r.m_radians);
+
+	r -= degree;
+	printf("\n\nr-=degree");
+	printf("\nr = %.2f", r.m_radians);
+	
+	getchar();
+}
+
 int main()
 {
 	platformMathTest();
@@ -416,6 +603,12 @@ int main()
 	vector3Test();
 
 	vector4Test();
+
+	colorTest();
+
+	degreesTest();
+
+	radiansTest();
 
     return 0;
 }
