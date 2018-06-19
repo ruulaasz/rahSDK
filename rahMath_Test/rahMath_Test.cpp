@@ -544,8 +544,8 @@ void radiansTest()
 
 	printf("~~~~RADIANS OPERATORS~~~");
 
-	rah::Radians radian(1.57);
-	rah::Radians radianB(0.785398);
+	rah::Radians radian(1.57f);
+	rah::Radians radianB(0.785398f);
 	rah::Degrees degree(radianB);
 
 	printf("\n\nradian= %.2f", radian.m_radians);

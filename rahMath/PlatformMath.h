@@ -9,6 +9,13 @@ namespace rah
 		typedef unsigned int uint;
 		typedef unsigned char int8;
 
+		enum Axis
+		{
+			Axis_X=0, 
+			Axis_Y,
+			Axis_Z
+		};
+
 		/**
 		* PI Constant
 		*
