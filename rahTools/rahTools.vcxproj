@@ -156,11 +156,13 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="rahMacros.h" />
+    <ClInclude Include="rahResource.h" />
     <ClInclude Include="rahTools.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="rahMacros.cpp" />
+    <ClCompile Include="rahResource.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

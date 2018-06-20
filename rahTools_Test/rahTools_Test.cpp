@@ -5,7 +5,40 @@
 #include <rahTools.h>
 #include <iostream>
 #include <vector>
-//#include <vld.h>
+#include <vld.h>
+struct TestResourceParams : public rah::BasicResourceParams
+{
+	int x, y;
+};
+class resourceTest : public rah::rahResource
+{
+public:
+	SecuredVar<int>x;
+	SecuredVar<int>y;
+public:
+	virtual RahResult Initialize(rah::BasicResourceParams* _params)
+	{
+		if (__super::Initialize(_params) != RahResult::RAH_SUCCESS)
+			return RahResult::RAH_ERROR;
+
+		TestResourceParams* params = (TestResourceParams*)_params;
+		x.Set(params->x);
+		y.Set(params->y);
+		return Load();
+	}
+	virtual void Destroy()
+	{
+		__super::Destroy();
+		x.Set(0);
+		y.Set(0);
+	}
+	virtual RahResult Load()
+	{
+		return RahResult::RAH_SUCCESS;
+	}
+	resourceTest(){}
+	~resourceTest(){}
+};
 class TestClass
 {
 public:
@@ -89,6 +122,18 @@ int main()
 		vectorTest.push_back(temp);
 	}
 	RAH_STDVECTOR_SAFE_DELETE(vectorTest);
+	/************************************************************************/
+	/* Pruebas de recursos                                                  */
+	/************************************************************************/
+	TestResourceParams testParams;
+	testParams.fileName = "dir/here";
+	testParams.id = 1;
+	testParams.name = "newTest";
+	testParams.x = 10;
+	testParams.y = 10;
+	resourceTest resourcetest;
+	resourcetest.Initialize(&testParams);
+	resourcetest.Destroy();
 	/************************************************************************/
 	/* Delete zone                                                          */
 	/************************************************************************/
