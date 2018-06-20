@@ -1,4 +1,5 @@
 #include "InputLayout.h"
+#include <d3dcompiler.h>
 
 namespace rah
 {
@@ -22,7 +23,9 @@ namespace rah
 	void InputLayout::createInputLayoutFromVertexShaderSignature(ID3D11Device* _device, ID3DBlob* _pShaderBlob)
 	{
 		ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
+
 		D3DReflect(_pShaderBlob->GetBufferPointer(), _pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pVertexShaderReflection);
+
 		if (!pVertexShaderReflection)
 		{
 			throw "CreationFailed pVertexShaderReflection";

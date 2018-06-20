@@ -17,7 +17,6 @@
 #include <memory.h>
 #include <tchar.h>
 
-#include <GraphicManager.h>
-
+#include <rahGraphics.h>
 
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita

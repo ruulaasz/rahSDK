@@ -1,7 +1,9 @@
 #pragma once
 
 #include <d3d11.h>
-#include <d3dcompiler.h>
+
+#pragma comment(lib, "D3DCompiler.lib") 
+#pragma comment(lib, "dxguid.lib")
 
 namespace rah
 {

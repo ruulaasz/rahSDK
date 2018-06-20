@@ -146,7 +146,7 @@ namespace rah
 		GraphicDevice m_device;
 		GraphicDeviceContext m_deviceContext;
 		RenderTarget m_renderTarget;
-		unsigned int m_driverType;
+		UINT m_driverType;
 		D3D_FEATURE_LEVEL m_featureLevel;
 		Texture2D m_depthStencil;
 		Texture2D m_backBuffer;
