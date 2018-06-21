@@ -27,7 +27,7 @@ namespace rah
 		* The initial data to fill the buffer
 		*
 		*/
-		void create(const GraphicDevice* _device, D3D11_BUFFER_DESC* _desc, D3D11_SUBRESOURCE_DATA* _initData = nullptr);
+		void create(GraphicDevice* _device, D3D11_BUFFER_DESC* _desc, D3D11_SUBRESOURCE_DATA* _initData = nullptr);
 
 		ID3D11Buffer* m_buffer;
 	};

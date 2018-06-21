@@ -25,10 +25,50 @@ D3D11_VIEWPORT* g_pViewport;
 float g_deltaTime = 0.0f;
 float g_lastTime = 0.0f;
 float g_currentTime = 0.0f;
-
-rah::RenderTarget g_renderTarget[8];
 int g_RasterizerState = 2;
+
+struct SimpleVertex
+{
+	rah::Vector3D Pos;
+	rah::Vector2D Tex;
+};
+
+struct CBView
+{
+	rah::Matrix4D mView;
+};
+
+struct CBProj
+{
+	rah::Matrix4D mProjection;
+};
+
+struct CBWorld
+{
+	rah::Matrix4D mWorld;
+};
+
+struct CBColor
+{
+	rah::Vector4D mColor;
+};
+
+rah::ConstantBuffer g_pVertexBuffer;
+rah::ConstantBuffer g_pIndexBuffer;
+rah::ConstantBuffer g_pCBView;
+rah::ConstantBuffer g_pCBProj;
+rah::ConstantBuffer g_pCBWorld;
+rah::ConstantBuffer g_pCBColor;
+
+rah::Matrix4D  g_World;
+rah::Matrix4D  g_View;
+rah::Matrix4D  g_Projection;
 float colorbk[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
+
+rah::RenderTarget g_renderTarget;
+rah::Texture2D pBackBuffer;
+rah::VertexShader g_vertexShader;
+rah::FragmentShader g_pixelShader;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -58,32 +98,168 @@ RahResult InitD3D(HWND hWnd)
 	return RAH_SUCCESS;
 }
 
-void RenderFrame()
+void LoadContent()
 {
-	g_currentTime = GetTickCount();
-	g_deltaTime = (g_currentTime - g_lastTime) / 1000;
-	g_lastTime = g_currentTime;
+	g_renderTarget = rah::GraphicManager::GetInstance().m_renderTarget;
 
-	ID3D11RenderTargetView* pRenderTargets[8];
+	//g_vertexShader.createVertexShader(g_pD3DDevice, L"Tutorial07.fx", "VS", "vs_4_0");
+	//g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_pD3DDevice, g_vertexShader.m_shaderBlob);
 
-	for (size_t i = 0; i < 8; ++i)
+	//g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
+
+	//g_pixelShader.createFragmentShader(&rah::GraphicManager::GetInstance().m_device, L"Tutorial07.fx", "PS", "ps_4_0");
+
+
+	// Create vertex buffer
+	SimpleVertex vertices[] =
 	{
-		pRenderTargets[i] = g_renderTarget[i].m_renderTarget;
-	}
+		{ rah::Vector3D(-1.0f, 1.0f, -1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector3D(-1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
 
-	g_pDeviceContext->OMSetRenderTargets(8, pRenderTargets, g_pDepthStencilView);
-	g_pDeviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
-	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[g_RasterizerState]);
-	g_pDeviceContext->RSSetViewports(1, g_pViewport);
+		{ rah::Vector3D(-1.0f, -1.0f, -1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector3D(-1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
 
-	for (size_t i = 0; i < 8; ++i)
-	{
-		rah::GraphicManager::GetInstance().clearScreen(&g_renderTarget[i], const_cast<float*>(colorbk));
-	}
+		{ rah::Vector3D(-1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector3D(-1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector3D(-1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector3D(-1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
 
-	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		{ rah::Vector3D(1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector3D(1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
 
-	g_pSwapChain->Present(0, 0);
+		{ rah::Vector3D(-1.0f, -1.0f, -1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector3D(-1.0f, 1.0f, -1.0f), rah::Vector2D(0.0f, 1.0f) },
+
+		{ rah::Vector3D(-1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector3D(1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector3D(-1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+	};
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(SimpleVertex) * 24;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = vertices;
+
+	rah::GraphicManager g = rah::GraphicManager::GetInstance();
+
+	g_pVertexBuffer.create(&g.m_device, &bd, &InitData);
+
+	// Set vertex buffer
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	g_pDeviceContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer.m_buffer, &stride, &offset);
+
+	//// Create index buffer
+	//// Create vertex buffer
+	//WORD indices[] =
+	//{
+	//	3,1,0,
+	//	2,1,3,
+
+	//	6,4,5,
+	//	7,4,6,
+
+	//	11,9,8,
+	//	10,9,11,
+
+	//	14,12,13,
+	//	15,12,14,
+
+	//	19,17,16,
+	//	18,17,19,
+
+	//	22,20,21,
+	//	23,20,22
+	//};
+
+	//bd.Usage = D3D11_USAGE_DEFAULT;
+	//bd.ByteWidth = sizeof(WORD) * 36;
+	//bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	//bd.CPUAccessFlags = 0;
+	//InitData.pSysMem = indices;
+	//hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//// Set index buffer
+	//g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+	//// Set primitive topology
+	//g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//// Create the constant buffers
+	//bd.Usage = D3D11_USAGE_DEFAULT;
+	//bd.ByteWidth = sizeof(CBNeverChanges);
+	//bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	//bd.CPUAccessFlags = 0;
+	//hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//bd.ByteWidth = sizeof(CBChangeOnResize);
+	//hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//bd.ByteWidth = sizeof(CBChangesEveryFrame);
+	//hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//// Load the Texture
+	//hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//// Create the sample state
+	//D3D11_SAMPLER_DESC sampDesc;
+	//ZeroMemory(&sampDesc, sizeof(sampDesc));
+	//sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	//sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	//sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	//sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	//sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	//sampDesc.MinLOD = 0;
+	//sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	//hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//// Initialize the world matrices
+	//g_World = XMMatrixIdentity();
+
+	//// Initialize the view matrix
+	//XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
+	//XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	//XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	//g_View = XMMatrixLookAtLH(Eye, At, Up);
+
+	//CBNeverChanges cbNeverChanges;
+	//cbNeverChanges.mView = XMMatrixTranspose(g_View);
+	//g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
+
+	//// Initialize the projection matrix
+	//g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+
+	//CBChangeOnResize cbChangesOnResize;
+	//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
+	//g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+
+	//return S_OK;
 }
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -112,6 +288,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
 	InitD3D(g_hWnd);
+	LoadContent();
 
     // Bucle principal de mensajes:
     while (GetMessage(&msg, nullptr, 0, 0))

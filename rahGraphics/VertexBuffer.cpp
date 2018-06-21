@@ -13,7 +13,7 @@ namespace rah
 		m_vertexInfo.clear();
 	}
 
-	void VertexBuffer::create(const GraphicDevice* _device, unsigned int _creationFlags)
+	void VertexBuffer::create(GraphicDevice* _device, unsigned int _creationFlags)
 	{
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));

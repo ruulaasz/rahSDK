@@ -56,7 +56,7 @@ namespace rah
 		* Set of flags for the creation of the buffer
 		*
 		*/
-		void create(const GraphicDevice* _device, unsigned int _creationFlags = VB_CREATE_DEFAULT | CPU_ACCESS_DEFAULT);
+		void create(GraphicDevice* _device, unsigned int _creationFlags = VB_CREATE_DEFAULT | CPU_ACCESS_DEFAULT);
 
 		/**
 		* Adds a vertex to the vertex vector

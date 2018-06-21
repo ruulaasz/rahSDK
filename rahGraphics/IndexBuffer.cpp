@@ -13,7 +13,7 @@ namespace rah
 		m_indexArray.clear();
 	}
 
-	void IndexBuffer::create(const GraphicDevice* _device, unsigned int _creationFlags)
+	void IndexBuffer::create(GraphicDevice* _device, unsigned int _creationFlags)
 	{
 		if (!_device)
 		{

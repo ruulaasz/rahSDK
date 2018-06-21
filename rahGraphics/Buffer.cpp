@@ -10,10 +10,10 @@ namespace rah
 
 	Buffer::~Buffer()
 	{
-		m_buffer->Release();
+		
 	}
 
-	void Buffer::create(const GraphicDevice* _device, D3D11_BUFFER_DESC * _desc, D3D11_SUBRESOURCE_DATA * _initData)
+	void Buffer::create(GraphicDevice* _device, D3D11_BUFFER_DESC * _desc, D3D11_SUBRESOURCE_DATA * _initData)
 	{
 		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
 		if (!pD3DDevice)

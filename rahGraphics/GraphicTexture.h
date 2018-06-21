@@ -28,9 +28,6 @@ namespace rah
 		*/
 		void loadFromFile(GraphicDevice* _device, string _route);
 
-		void Load() {};
-		void Unload() {};
-
 		ID3D11ShaderResourceView* m_texture;
 	};
 }

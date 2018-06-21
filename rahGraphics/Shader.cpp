@@ -27,7 +27,7 @@ namespace rah
 
 		ID3DBlob* pErrorBlob = nullptr;
 		D3DCompileFromFile(_szFileName, nullptr, nullptr, _szEntryPoint, _szShaderModel, dwShaderFlags, 0, _ppBlobOut, &pErrorBlob);
-
+		
 		if (!_ppBlobOut)
 		{
 			if (pErrorBlob)
