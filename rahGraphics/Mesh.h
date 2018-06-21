@@ -36,7 +36,7 @@ namespace rah
 		* The type of the new texture
 		*
 		*/
-		void assignNewTexture(const Texture* _texture, TextureType _textureType = TextureType_DIFFUSE);
+		void assignNewTexture(const GraphicTexture* _texture, TextureType _textureType = TextureType_DIFFUSE);
 
 		/**
 		* Assign a new material to the mesh

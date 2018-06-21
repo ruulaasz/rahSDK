@@ -32,14 +32,14 @@ namespace rah
 		pDeviceContext->DrawIndexed(m_indexBuffer.getIndexSize(), 0, 0);
 	}
 
-	void Mesh::assignNewTexture(const Texture* _texture, TextureType _textureType)
+	void Mesh::assignNewTexture(const GraphicTexture* _texture, TextureType _textureType)
 	{
 		if (!_texture)
 		{
 			throw "NullPointer _texture";
 		}
 
-		m_material->m_textures[_textureType] = _texture->m_texture;
+		m_material->m_textures[_textureType] = _texture->m_graphicTexture;
 	}
 
 	void Mesh::assignNewMaterial(Material * _material)

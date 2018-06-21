@@ -270,4 +270,62 @@ namespace rah
 			m01 * (m12 * m20 - m10 * m22) +
 			m02 * (m10 * m21 - m11 * m20));
 	}
+
+	void Matrix4D::lookAtLH(Vector4D _eye, Vector4D _at, Vector4D _up)
+	{
+		//Direccion, que es una linea de ti al objeto, no esta perpendicular al vector y de vista
+		Vector4D vDir, vRight, vUp, vOffset;
+		vDir = _at - _eye;
+		vDir.normalize();
+
+		//Perpendicularizar el vector vista hacia up y vista
+		vRight = _up;
+		vRight.cross(vDir);
+		vRight.normalize();
+
+		//Con esto, el productro cruz con derecha y arriva me da el nuevo vector arriva, que es perpendicular al vector que esta hacia el objeto
+		vUp = vDir;
+		vUp.cross(vRight);
+
+		//Esta ultima transformacion terminara convirtiendo los objetos a mi origen, suponiendo que yo soy el origen
+		vOffset = Vector4D(
+			-vRight.dot(_eye), 
+			-vUp.dot(_eye),
+			-vDir.dot(_eye),
+			0.f);
+
+	m00 = vRight.x;
+	m10 = vRight.y;
+	m20 = vRight.z;
+	m30 = vOffset.x;
+
+	m01 = vUp.x;
+	m11 = vUp.y;
+	m21 = vUp.z;
+	m31 = vOffset.y;
+
+	m02 = vDir.x;
+	m12 = vDir.y;
+	m22 = vDir.z;
+	m32 = vOffset.z;
+
+	m03 = 0;
+	m13 = 0;
+	m23 = 0;
+	m33 = 1;
+
+	}
+
+	void Matrix4D::perspectiveFovLH(float _FovAngleY, float _AspectRatio, float _NearZ, float _FarZ)
+	{
+		//Cotagente
+		float h = 1.0f / math::Tan(_FovAngleY / 2);
+		float w = h / _AspectRatio;
+
+		m00 = w;
+		m11 = h;
+		m22 = _FarZ / (_FarZ - _NearZ);
+		m32 = -_NearZ * _FarZ / (_FarZ - _NearZ);
+		m23 = 1;
+	}
 }

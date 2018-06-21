@@ -1,22 +1,22 @@
-#include "GraphicDevice.h"
 #include "GraphicTexture.h"
 #include <DirectXTex.h>
+#include "GraphicDevice.h"
 
 using std::wstring;
 
 namespace rah
 {
-	Texture::Texture()
+	GraphicTexture::GraphicTexture()
 	{
-		m_texture = nullptr;
+		m_graphicTexture = nullptr;
 	}
 
-	Texture::~Texture()
+	GraphicTexture::~GraphicTexture()
 	{
 
 	}
 
-	void Texture::loadFromFile(GraphicDevice* _device, string _route)
+	void GraphicTexture::loadFromFile(GraphicDevice* _device, string _route)
 	{
 		if (_route.empty())
 		{
@@ -38,8 +38,8 @@ namespace rah
 			throw "CreationFailed Image";
 		}
 
-		DirectX::CreateShaderResourceView(pDevice, Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &m_texture);
-		if (!m_texture)
+		DirectX::CreateShaderResourceView(pDevice, Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &m_graphicTexture);
+		if (!m_graphicTexture)
 		{
 			throw "CreationFailed m_texture";
 		}

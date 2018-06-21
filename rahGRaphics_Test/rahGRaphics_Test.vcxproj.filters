@@ -56,7 +56,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\bin\Tutorial07.fx">
+    <FxCompile Include="Tutorial07.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

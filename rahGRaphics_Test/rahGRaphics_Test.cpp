@@ -46,10 +46,6 @@ struct CBProj
 struct CBWorld
 {
 	rah::Matrix4D mWorld;
-};
-
-struct CBColor
-{
 	rah::Vector4D mColor;
 };
 
@@ -58,15 +54,14 @@ rah::ConstantBuffer g_pIndexBuffer;
 rah::ConstantBuffer g_pCBView;
 rah::ConstantBuffer g_pCBProj;
 rah::ConstantBuffer g_pCBWorld;
-rah::ConstantBuffer g_pCBColor;
 
 rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
-float colorbk[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
+rah::Vector4D g_Color(1, 1, 1, 1);
 
 rah::RenderTarget g_renderTarget;
-rah::Texture2D pBackBuffer;
+rah::GraphicTexture g_texture;
 rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
 
@@ -102,12 +97,12 @@ void LoadContent()
 {
 	g_renderTarget = rah::GraphicManager::GetInstance().m_renderTarget;
 
-	//g_vertexShader.createVertexShader(g_pD3DDevice, L"Tutorial07.fx", "VS", "vs_4_0");
-	//g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_pD3DDevice, g_vertexShader.m_shaderBlob);
+	g_vertexShader.createVertexShader(g_pD3DDevice, L"Tutorial07.fx", "VS", "vs_4_0");
+	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_pD3DDevice, g_vertexShader.m_shaderBlob);
 
-	//g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
+	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 
-	//g_pixelShader.createFragmentShader(&rah::GraphicManager::GetInstance().m_device, L"Tutorial07.fx", "PS", "ps_4_0");
+	g_pixelShader.createFragmentShader(&rah::GraphicManager::GetInstance().m_device, L"Tutorial07.fx", "PS", "ps_4_0");
 
 
 	// Create vertex buffer
@@ -154,112 +149,158 @@ void LoadContent()
 	ZeroMemory(&InitData, sizeof(InitData));
 	InitData.pSysMem = vertices;
 
-	rah::GraphicManager g = rah::GraphicManager::GetInstance();
-
-	g_pVertexBuffer.create(&g.m_device, &bd, &InitData);
+	g_pVertexBuffer.create(&rah::GraphicManager::GetInstance().m_device, &bd, &InitData);
 
 	// Set vertex buffer
 	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	g_pDeviceContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer.m_buffer, &stride, &offset);
 
-	//// Create index buffer
-	//// Create vertex buffer
-	//WORD indices[] =
-	//{
-	//	3,1,0,
-	//	2,1,3,
+	// Create index buffer
+	// Create vertex buffer
+	WORD indices[] =
+	{
+		3,1,0,
+		2,1,3,
 
-	//	6,4,5,
-	//	7,4,6,
+		6,4,5,
+		7,4,6,
 
-	//	11,9,8,
-	//	10,9,11,
+		11,9,8,
+		10,9,11,
 
-	//	14,12,13,
-	//	15,12,14,
+		14,12,13,
+		15,12,14,
 
-	//	19,17,16,
-	//	18,17,19,
+		19,17,16,
+		18,17,19,
 
-	//	22,20,21,
-	//	23,20,22
-	//};
+		22,20,21,
+		23,20,22
+	};
 
-	//bd.Usage = D3D11_USAGE_DEFAULT;
-	//bd.ByteWidth = sizeof(WORD) * 36;
-	//bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	//bd.CPUAccessFlags = 0;
-	//InitData.pSysMem = indices;
-	//hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
-	//if (FAILED(hr))
-	//	return hr;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(WORD) * 36;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	InitData.pSysMem = indices;
+	g_pIndexBuffer.create(&rah::GraphicManager::GetInstance().m_device, &bd, &InitData);
+	
+	// Set index buffer
+	g_pDeviceContext->IASetIndexBuffer(g_pIndexBuffer.m_buffer, DXGI_FORMAT_R16_UINT, 0);
 
-	//// Set index buffer
-	//g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	// Set primitive topology
+	g_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//// Set primitive topology
-	//g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	// Create the constant buffers
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = 64;//sizeof(CBView);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = 0;
+	g_pCBView.create(&rah::GraphicManager::GetInstance().m_device, &bd);
 
-	//// Create the constant buffers
-	//bd.Usage = D3D11_USAGE_DEFAULT;
-	//bd.ByteWidth = sizeof(CBNeverChanges);
-	//bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//bd.CPUAccessFlags = 0;
-	//hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
-	//if (FAILED(hr))
-	//	return hr;
+	bd.ByteWidth = 64;//sizeof(CBProj);
+	g_pCBProj.create(&rah::GraphicManager::GetInstance().m_device, &bd, nullptr);
 
-	//bd.ByteWidth = sizeof(CBChangeOnResize);
-	//hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
-	//if (FAILED(hr))
-	//	return hr;
+	bd.ByteWidth = 80;//sizeof(CBWorld);
+	g_pCBWorld.create(&rah::GraphicManager::GetInstance().m_device, &bd, nullptr);
 
-	//bd.ByteWidth = sizeof(CBChangesEveryFrame);
-	//hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
-	//if (FAILED(hr))
-	//	return hr;
+	// Load the Texture
+	std::string path = "seafloor.dds";
+	g_texture.loadFromFile(&rah::GraphicManager::GetInstance().m_device, path);
 
-	//// Load the Texture
-	//hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
-	//if (FAILED(hr))
-	//	return hr;
+	// Create the sample state
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	g_pD3DDevice->CreateSamplerState(&sampDesc, &g_pSamplerState);
+	
+	// Initialize the world matrices
+	g_World.identity();
 
-	//// Create the sample state
-	//D3D11_SAMPLER_DESC sampDesc;
-	//ZeroMemory(&sampDesc, sizeof(sampDesc));
-	//sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	//sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	//sampDesc.MinLOD = 0;
-	//sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	//hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
-	//if (FAILED(hr))
-	//	return hr;
+	// Initialize the view matrix
+	rah::Vector4D Eye(0.0f, 3.0f, -6.0f, 0.0f);
+	rah::Vector4D At(0.0f, 1.0f, 0.0f, 0.0f);
+	rah::Vector4D Up(0.0f, 1.0f, 0.0f, 0.0f);
+	g_View.lookAtLH(Eye, At, Up);
 
-	//// Initialize the world matrices
-	//g_World = XMMatrixIdentity();
+	CBView cbview;
+	g_View.transpose();
+	cbview.mView = g_View;
+	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
-	//// Initialize the view matrix
-	//XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
-	//XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	//XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	//g_View = XMMatrixLookAtLH(Eye, At, Up);
+	// Initialize the projection matrix
+	g_Projection.perspectiveFovLH(rah::math::PI / 4, SCREEN_WIDTH / (FLOAT)SCREEN_HEIGHT, 0.01f, 100.0f);
 
-	//CBNeverChanges cbNeverChanges;
-	//cbNeverChanges.mView = XMMatrixTranspose(g_View);
-	//g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0);
+	CBProj cbproj;
+	g_Projection.transpose();
+	cbproj.mProjection = g_Projection;
+	g_pDeviceContext->UpdateSubresource(g_pCBProj.m_buffer, 0, NULL, &cbproj, 0, 0);
+}
 
-	//// Initialize the projection matrix
-	//g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f);
+void render()
+{
+	// Update our time
+	//static float t = 0.0f;
+	//
+	//static DWORD dwTimeStart = 0;
+	//DWORD dwTimeCur = GetTickCount();
+	//if (dwTimeStart == 0)
+	//	dwTimeStart = dwTimeCur;
+	//t = (dwTimeCur - dwTimeStart) / 1000.0f;
+	
 
-	//CBChangeOnResize cbChangesOnResize;
-	//cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
-	//g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+	// Rotate cube around the origin
+	//g_World = XMMatrixRotationY(t);
 
-	//return S_OK;
+	// Modify the color
+	//g_Color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+	//g_Color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+	//g_Color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+
+	//
+	// Clear the back buffer
+	//
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+	g_pDeviceContext->ClearRenderTargetView(g_renderTarget.m_renderTarget, ClearColor);
+
+	//
+	// Clear the depth buffer to 1.0 (max depth)
+	//
+	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	//
+	// Update variables that change once per frame
+	//
+	CBWorld cb;
+	g_World.transpose();
+	cb.mWorld = g_World;
+	cb.mColor = g_Color;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cb, 0, 0);
+
+	//
+	// Render the cube
+	//
+	g_pDeviceContext->VSSetShader(g_vertexShader.m_vertexShader, NULL, 0);
+	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pCBView.m_buffer);
+	g_pDeviceContext->VSSetConstantBuffers(1, 1, &g_pCBProj.m_buffer);
+	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
+	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
+	g_pDeviceContext->PSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
+	g_pDeviceContext->PSSetShaderResources(0, 1, &g_texture.m_graphicTexture);
+	g_pDeviceContext->PSSetSamplers(0, 1, &g_pSamplerState);
+	g_pDeviceContext->DrawIndexed(36, 0, 0);
+
+	//
+	// Present our back buffer to our front buffer
+	//
+	g_pSwapChain->Present(0, 0);
 }
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -293,6 +334,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // Bucle principal de mensajes:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
+		render();
+
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
         {
             TranslateMessage(&msg);

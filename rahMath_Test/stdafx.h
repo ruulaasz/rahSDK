@@ -12,8 +12,4 @@
 #include <Windows.h>
 #include <rahMath.h>
 
-//#pragma comment(lib, "rahMath_debug.lib")
-
-//#pragma comment(lib, "rahMath_release.lib")
-
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita

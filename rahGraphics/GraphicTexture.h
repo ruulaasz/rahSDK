@@ -12,11 +12,11 @@ namespace rah
 	/**
 	* Directx Texture
 	*/
-	class Texture 
+	class GraphicTexture
 	{
 	public:
-		Texture();
-		~Texture();
+		GraphicTexture();
+		~GraphicTexture();
 
 		/**
 		* Fill an input layout using the vertex shader blob data
@@ -30,6 +30,9 @@ namespace rah
 		*/
 		void loadFromFile(GraphicDevice* _device, string _route);
 
-		ID3D11ShaderResourceView* m_texture;
+		void Load() {};
+		void Unload() {};
+
+		ID3D11ShaderResourceView* m_graphicTexture;
 	};
 }

@@ -26,7 +26,7 @@ namespace rah
 		}
 	}
 
-	void Model::assignMeshTexture(Texture * _texture, TextureType _textureType, unsigned int _index)
+	void Model::assignMeshTexture(GraphicTexture * _texture, TextureType _textureType, unsigned int _index)
 	{
 		if (!_texture)
 		{

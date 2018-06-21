@@ -43,7 +43,7 @@ namespace rah
 		* The index of the mesh recieving the material
 		*
 		*/
-		void assignMeshTexture(Texture* _texture, TextureType _textureType, unsigned int _index);
+		void assignMeshTexture(GraphicTexture* _texture, TextureType _textureType, unsigned int _index);
 
 		/**
 		* Render the model

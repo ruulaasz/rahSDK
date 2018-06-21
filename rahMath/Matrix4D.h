@@ -1,5 +1,6 @@
 #pragma once
 #include "PlatformMath.h"
+#include "Vector4D.h"
 
 namespace rah
 {
@@ -108,5 +109,9 @@ namespace rah
 		*
 		*/
 		void inverse();
+
+		void lookAtLH(Vector4D _eye, Vector4D _at, Vector4D _up);
+
+		void perspectiveFovLH(float _FovAngleY, float _AspectRatio, float _NearZ, float _FarZ);
 	};
 }

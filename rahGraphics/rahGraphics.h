@@ -5,3 +5,4 @@
 #include "GraphicManager.h"
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
+#include <DirectXTex.h>
