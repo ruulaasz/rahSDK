@@ -2,10 +2,10 @@
 
 #include <d3d11.h>
 
-class GraphicDevice;
-
 namespace rah
 {
+	class GraphicDevice;
+
 	/**
 	* Create 2d textures as render targets or depth stencils
 	*/

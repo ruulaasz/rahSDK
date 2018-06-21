@@ -1,12 +1,14 @@
 #pragma once
+
 #include <d3d11.h>
 #include <string>
 
 using std::string;
-class GraphicDevice;
 
 namespace rah
 {
+	class GraphicDevice;
+
 	/**
 	* Directx Texture
 	*/

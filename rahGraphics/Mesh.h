@@ -1,13 +1,13 @@
 #pragma once
+
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Material.h"
 #include "GraphicTexture.h"
 
-class GraphicDeviceContext;
-
 namespace rah
 {
+	class GraphicDeviceContext;
 	/**
 	* Container for a mesh object
 	*/

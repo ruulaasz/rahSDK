@@ -1,10 +1,10 @@
 #pragma once
-#include <d3d11.h>
 
-class GraphicDevice;
+#include <d3d11.h>
 
 namespace rah
 {
+	class GraphicDevice;
 	/**
 	* Base class for a graphic buffer.
 	*/

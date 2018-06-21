@@ -5,10 +5,10 @@
 #include <rahMath.h>
 
 using std::vector;
-class GraphicDevice;
 
 namespace rah
 {
+	class GraphicDevice;
 	/**
 	* Data cointainer of a Vertex
 	*/

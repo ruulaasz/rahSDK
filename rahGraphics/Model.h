@@ -1,12 +1,14 @@
 #pragma once
+
 #include <vector>
 #include "Mesh.h"
 
 using std::vector;
-class GraphicDeviceContext;
 
 namespace rah
 {
+	class GraphicDeviceContext;
+
 	/**
 	* Container for a model object
 	*/

@@ -11,11 +11,11 @@
 #define IB_CREATE_STATIC	0x00000008	
 #define IB_CREATE_DYNAMIC	0x00000010	
 
-class GraphicDevice;
 using std::vector;
 
 namespace rah
 {
+	class GraphicDevice;
 	/**
 	* Create and manage an index buffer
 	*/
