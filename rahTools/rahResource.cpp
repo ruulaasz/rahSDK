@@ -22,6 +22,16 @@ namespace rah
 	{
 	}
 
+	rahResource::rahResource(BasicResourceParams* _params)
+	{
+		Initialize(_params);
+	}
+
+	rahResource::rahResource(BasicResourceParams _params)
+	{
+		Initialize(&_params);
+	}
+
 
 	rahResource::~rahResource()
 	{

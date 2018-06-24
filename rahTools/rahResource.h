@@ -41,6 +41,8 @@ namespace rah
 		*/
 		virtual RahResult Load() = 0;
 		rahResource();
+		rahResource(BasicResourceParams* _params);
+		rahResource(BasicResourceParams _params);
 		virtual ~rahResource();
 	};
 }

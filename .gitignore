@@ -24,3 +24,12 @@ rahSDK.sdf
 rahGRaphics_Test/Debug/
 Tutorial07.fx
 rahGRaphics_Test/seafloor.dds
+lib/rahTools/Win32/Debug/rahTools_Debug.lib
+lib/rahGraphics/Win32/Debug/rahGraphics_Debug.lib
+bin/rahGRaphics_Test/Win32/Debug/rahGRaphics_Test.ilk
+bin/rahGRaphics_Test/Win32/Debug/rahGRaphics_Test.exe
+rahGRaphics_Test/rahGRaphics_Test.vcxproj.user
+bin/rahGRaphics_Test/Win32/Debug/rahGRaphics_Test.pdb
+rahGraphics/rahGraphics.vcxproj.user
+lib/rahGraphics/x64/Debug/rahGraphics_Debug.lib
+lib/rahMath/Win32/Debug/rahMath_Debug.lib

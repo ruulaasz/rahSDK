@@ -47,6 +47,10 @@ public:
 	{
 		Var = object;
 	}
+	t operator=(t _other)
+	{
+		Var = _other;
+	}
 	/*
 	* Empty constructor
 	*
