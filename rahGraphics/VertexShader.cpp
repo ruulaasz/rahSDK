@@ -1,4 +1,5 @@
 #include "VertexShader.h"
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -12,15 +13,17 @@ namespace rah
 
 	}
 
-	void VertexShader::createVertexShader(ID3D11Device* _device, WCHAR* _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel)
+	void VertexShader::createVertexShader(WCHAR* _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel)
 	{
+		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
 		compileShaderFromFile(_szFileName, _szEntryPoint, _szShaderModel, &m_shaderBlob);
 		if (!m_shaderBlob)
 		{
 			throw "CreationFailed m_shaderBlob";
 		}
 
-		_device->CreateVertexShader(m_shaderBlob->GetBufferPointer(), m_shaderBlob->GetBufferSize(), nullptr, &m_vertexShader);
+		pD3DDevice->CreateVertexShader(m_shaderBlob->GetBufferPointer(), m_shaderBlob->GetBufferSize(), nullptr, &m_vertexShader);
 		if (!m_vertexShader)
 		{
 			m_shaderBlob->Release();

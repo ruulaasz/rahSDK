@@ -1,5 +1,5 @@
-#include "GraphicDevice.h"
 #include "VertexBuffer.h"
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -13,7 +13,7 @@ namespace rah
 		m_vertexInfo.clear();
 	}
 
-	void VertexBuffer::create(GraphicDevice* _device, unsigned int _creationFlags)
+	void VertexBuffer::create(unsigned int _creationFlags)
 	{
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
@@ -47,7 +47,8 @@ namespace rah
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = &m_vertexInfo[0];
 
-		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
+		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
 		if (!pD3DDevice)
 		{
 			throw "NullPointer _device";

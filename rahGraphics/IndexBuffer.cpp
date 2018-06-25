@@ -1,5 +1,5 @@
-#include "GraphicDevice.h"
 #include "IndexBuffer.h"
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -13,9 +13,11 @@ namespace rah
 		m_indexArray.clear();
 	}
 
-	void IndexBuffer::create(GraphicDevice* _device, unsigned int _creationFlags)
+	void IndexBuffer::create(unsigned int _creationFlags)
 	{
-		if (!_device)
+		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
+		if (!pD3DDevice)
 		{
 			throw "NullPointer _device";
 		}
@@ -54,7 +56,6 @@ namespace rah
 			ZeroMemory(&InitData, sizeof(InitData));
 			InitData.pSysMem = &m_indexArray[0];
 
-			ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
 			pD3DDevice->CreateBuffer(&bd, &InitData, &m_buffer);
 			if (!m_buffer)
 			{

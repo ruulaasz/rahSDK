@@ -3,12 +3,8 @@
 #include <d3d11.h>
 #include <string>
 
-using std::string;
-
 namespace rah
 {
-	class GraphicDevice;
-
 	/**
 	* Directx Texture
 	*/
@@ -28,7 +24,7 @@ namespace rah
 		* The file route
 		*
 		*/
-		void loadFromFile(GraphicDevice* _device, string _route);
+		void loadFromFile(std::string _route);
 
 		void Load() {};
 		void Unload() {};

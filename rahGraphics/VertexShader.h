@@ -29,7 +29,7 @@ namespace rah
 		* The shader model
 		*
 		*/
-		void createVertexShader(ID3D11Device* _device, WCHAR* _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel);
+		void createVertexShader(WCHAR* _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel);
 
 		ID3D11VertexShader* m_vertexShader;
 	};

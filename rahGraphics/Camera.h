@@ -2,6 +2,9 @@
 
 namespace rah
 {
+	/**
+	* Base class for a graphic camera.
+	*/
 	class Camera
 	{
 	public:

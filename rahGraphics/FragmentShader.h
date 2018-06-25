@@ -4,8 +4,6 @@
 
 namespace rah
 {
-	class GraphicDevice;
-
 	/**
 	* Create and manage a fragment shader
 	*/
@@ -31,7 +29,7 @@ namespace rah
 		* The shader model
 		*
 		*/
-		void createFragmentShader(const GraphicDevice* _device, WCHAR* _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel);
+		void createFragmentShader(WCHAR* _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel);
 
 		ID3D11PixelShader* m_fragmentShader;
 	};

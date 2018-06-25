@@ -1,8 +1,6 @@
 #include "GraphicTexture.h"
 #include <DirectXTex.h>
-#include "GraphicDevice.h"
-
-using std::wstring;
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -16,21 +14,22 @@ namespace rah
 
 	}
 
-	void GraphicTexture::loadFromFile(GraphicDevice* _device, string _route)
+	void GraphicTexture::loadFromFile(std::string _route)
 	{
+		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
 		if (_route.empty())
 		{
 			throw "Empty _route";
 		}
 
-		if (!_device)
+		if (!pD3DDevice)
 		{
 			throw "CreationFailed m_buffer";
 		}
-		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
-
+		
 		DirectX::ScratchImage Image;
-		wstring wide_string = wstring(_route.begin(), _route.end());
+		std::wstring wide_string = std::wstring(_route.begin(), _route.end());
 		const wchar_t* result = wide_string.c_str();
 		DirectX::LoadFromDDSFile(result, 0, nullptr, Image);
 		if (Image.GetImageCount() < 1)
@@ -38,7 +37,7 @@ namespace rah
 			throw "CreationFailed Image";
 		}
 
-		DirectX::CreateShaderResourceView(pDevice, Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &m_graphicTexture);
+		DirectX::CreateShaderResourceView(pD3DDevice, Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &m_graphicTexture);
 		if (!m_graphicTexture)
 		{
 			throw "CreationFailed m_texture";

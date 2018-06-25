@@ -1,4 +1,3 @@
-#include "GraphicDeviceContext.h"
 #include "Model.h"
 
 namespace rah
@@ -39,11 +38,11 @@ namespace rah
 		}
 	}
 
-	void Model::render(const GraphicDeviceContext* _immediateContext)
+	void Model::render()
 	{
 		for (UINT i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes.at(i)->render(_immediateContext);
+			m_meshes.at(i)->render();
 		}
 	}
 }

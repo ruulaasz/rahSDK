@@ -1,4 +1,5 @@
 #include "Plane.h"
+#include "PlatformMath.h"
 
 namespace rah
 {
@@ -11,7 +12,7 @@ namespace rah
 	{
 		m_normal = _Normal;
 		m_point = _Point;
-		m_length = m_point.length();
+		m_length = math::Length(m_point);
 	}
 
 	Plane::Plane(const Plane & _plane)

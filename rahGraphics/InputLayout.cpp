@@ -1,4 +1,5 @@
 #include "InputLayout.h"
+#include "GraphicManager.h"
 #include <d3dcompiler.h>
 
 namespace rah
@@ -20,7 +21,7 @@ namespace rah
 		}
 	}
 
-	void InputLayout::createInputLayoutFromVertexShaderSignature(ID3D11Device* _device, ID3DBlob* _pShaderBlob)
+	void InputLayout::createInputLayoutFromVertexShaderSignature(ID3DBlob* _pShaderBlob)
 	{
 		ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
 
@@ -85,12 +86,14 @@ namespace rah
 			throw "CreationFailed m_layoutArray";
 		}
 
-		createInputLayout(_device, _pShaderBlob);
+		createInputLayout(_pShaderBlob);
 	}
 
-	void InputLayout::createInputLayout(ID3D11Device* _device, ID3DBlob* _pVSBlob)
+	void InputLayout::createInputLayout(ID3DBlob* _pVSBlob)
 	{
-		_device->CreateInputLayout(m_layoutArray, m_layoutElements, _pVSBlob->GetBufferPointer(), _pVSBlob->GetBufferSize(), &m_inputLayout);
+		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
+		pD3DDevice->CreateInputLayout(m_layoutArray, m_layoutElements, _pVSBlob->GetBufferPointer(), _pVSBlob->GetBufferSize(), &m_inputLayout);
 		_pVSBlob->Release();
 
 		if (!m_inputLayout)

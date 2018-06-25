@@ -1,6 +1,4 @@
 // rahGRaphics_Test.cpp: define el punto de entrada de la aplicación.
-//
-
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
 
@@ -97,12 +95,12 @@ void LoadContent()
 {
 	g_renderTarget = rah::GraphicManager::GetInstance().m_renderTarget;
 
-	g_vertexShader.createVertexShader(g_pD3DDevice, L"Tutorial07.fx", "VS", "vs_4_0");
-	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_pD3DDevice, g_vertexShader.m_shaderBlob);
+	g_vertexShader.createVertexShader(L"Tutorial07.fx", "VS", "vs_4_0");
+	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexShader.m_shaderBlob);
 
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 
-	g_pixelShader.createFragmentShader(&rah::GraphicManager::GetInstance().m_device, L"Tutorial07.fx", "PS", "ps_4_0");
+	g_pixelShader.createFragmentShader(L"Tutorial07.fx", "PS", "ps_4_0");
 
 
 	// Create vertex buffer
@@ -149,7 +147,7 @@ void LoadContent()
 	ZeroMemory(&InitData, sizeof(InitData));
 	InitData.pSysMem = vertices;
 
-	g_pVertexBuffer.create(&rah::GraphicManager::GetInstance().m_device, &bd, &InitData);
+	g_pVertexBuffer.create(&bd, &InitData);
 
 	// Set vertex buffer
 	UINT stride = sizeof(SimpleVertex);
@@ -184,7 +182,7 @@ void LoadContent()
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	InitData.pSysMem = indices;
-	g_pIndexBuffer.create(&rah::GraphicManager::GetInstance().m_device, &bd, &InitData);
+	g_pIndexBuffer.create(&bd, &InitData);
 	
 	// Set index buffer
 	g_pDeviceContext->IASetIndexBuffer(g_pIndexBuffer.m_buffer, DXGI_FORMAT_R16_UINT, 0);
@@ -197,17 +195,17 @@ void LoadContent()
 	bd.ByteWidth = 64;//sizeof(CBView);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-	g_pCBView.create(&rah::GraphicManager::GetInstance().m_device, &bd);
+	g_pCBView.create(&bd);
 
 	bd.ByteWidth = 64;//sizeof(CBProj);
-	g_pCBProj.create(&rah::GraphicManager::GetInstance().m_device, &bd, nullptr);
+	g_pCBProj.create(&bd, nullptr);
 
 	bd.ByteWidth = 80;//sizeof(CBWorld);
-	g_pCBWorld.create(&rah::GraphicManager::GetInstance().m_device, &bd, nullptr);
+	g_pCBWorld.create(&bd, nullptr);
 
 	// Load the Texture
 	std::string path = "seafloor.dds";
-	g_texture.loadFromFile(&rah::GraphicManager::GetInstance().m_device, path);
+	g_texture.loadFromFile(path);
 
 	// Create the sample state
 	D3D11_SAMPLER_DESC sampDesc;
@@ -222,25 +220,23 @@ void LoadContent()
 	g_pD3DDevice->CreateSamplerState(&sampDesc, &g_pSamplerState);
 	
 	// Initialize the world matrices
-	g_World.identity();
+	g_World = rah::math::Identity4D();
 
 	// Initialize the view matrix
 	rah::Vector4D Eye(0.0f, 3.0f, -6.0f, 0.0f);
 	rah::Vector4D At(0.0f, 1.0f, 0.0f, 0.0f);
 	rah::Vector4D Up(0.0f, 1.0f, 0.0f, 0.0f);
-	g_View.lookAtLH(Eye, At, Up);
+	//g_View.lookAtLH(Eye, At, Up);
 
 	CBView cbview;
-	g_View.transpose();
-	cbview.mView = g_View;
+	cbview.mView = rah::math::Transpose(g_View);
 	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
 	// Initialize the projection matrix
-	g_Projection.perspectiveFovLH(rah::math::PI / 4, SCREEN_WIDTH / (FLOAT)SCREEN_HEIGHT, 0.01f, 100.0f);
+	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, SCREEN_WIDTH / (FLOAT)SCREEN_HEIGHT, 0.01f, 100.0f);
 
 	CBProj cbproj;
-	g_Projection.transpose();
-	cbproj.mProjection = g_Projection;
+	cbproj.mProjection = rah::math::Transpose(g_Projection);
 	g_pDeviceContext->UpdateSubresource(g_pCBProj.m_buffer, 0, NULL, &cbproj, 0, 0);
 }
 
@@ -279,8 +275,7 @@ void render()
 	// Update variables that change once per frame
 	//
 	CBWorld cb;
-	g_World.transpose();
-	cb.mWorld = g_World;
+	cb.mWorld = rah::math::Transpose(g_World);
 	cb.mColor = g_Color;
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cb, 0, 0);
 

@@ -1,5 +1,5 @@
-#include "GraphicDevice.h"
 #include "Texture2D.h"
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -13,9 +13,10 @@ namespace rah
 
 	}
 
-	void Texture2D::CreateAsRenderTarget(const GraphicDevice * _device, UINT _w, UINT _h)
+	void Texture2D::CreateAsRenderTarget(UINT _w, UINT _h)
 	{
-		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
+		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
 		if (!pDevice)
 		{
 			throw "NullPointer _device";
@@ -42,9 +43,9 @@ namespace rah
 		}
 	}
 
-	void Texture2D::CreateAsDepthStencil(const GraphicDevice* _device, UINT _w, UINT _h, UINT _MipLevels, UINT _ArraySize, UINT SampleDesc, UINT _CPUAccessFlags, UINT _MiscFlags)
+	void Texture2D::CreateAsDepthStencil(UINT _w, UINT _h, UINT _MipLevels, UINT _ArraySize, UINT SampleDesc, UINT _CPUAccessFlags, UINT _MiscFlags)
 	{
-		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
+		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
 		if (!m_texture)
 		{
 			throw "NullPointer m_texture";

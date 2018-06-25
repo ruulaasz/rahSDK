@@ -1,5 +1,5 @@
-#include "GraphicDeviceContext.h"
 #include "Mesh.h"
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -13,9 +13,10 @@ namespace rah
 
 	}
 
-	void Mesh::render(const GraphicDeviceContext* _immediateContext)
+	void Mesh::render()
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(_immediateContext->getPtr());
+		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+
 		if (!pDeviceContext)
 		{
 			throw "NullPointer pDeviceContext";

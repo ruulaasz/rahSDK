@@ -1,5 +1,5 @@
 #include "FragmentShader.h"
-#include "GraphicDevice.h"
+#include "GraphicManager.h"
 
 namespace rah
 {
@@ -13,9 +13,10 @@ namespace rah
 
 	}
 
-	void rah::FragmentShader::createFragmentShader(const GraphicDevice * _device, WCHAR * _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel)
+	void rah::FragmentShader::createFragmentShader(WCHAR * _szFileName, LPCSTR _szEntryPoint, LPCSTR _szShaderModel)
 	{
-		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(_device->getPtr());
+		ID3D11Device* pDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+
 		if (!pDevice)
 		{
 			throw "NullPointer _device";

@@ -26,7 +26,7 @@ namespace rah
 		* The blob with the vertex shader data
 		*
 		*/
-		void createInputLayoutFromVertexShaderSignature(ID3D11Device* _device, ID3DBlob* _pVSBlob);
+		void createInputLayoutFromVertexShaderSignature(ID3DBlob* _pVSBlob);
 
 		/**
 		* Creates an input layout using the previously filled data
@@ -38,7 +38,7 @@ namespace rah
 		* The blob with the vertex shader data
 		*
 		*/
-		void createInputLayout(ID3D11Device* _device, ID3DBlob* _pVSBlob);
+		void createInputLayout(ID3DBlob* _pVSBlob);
 
 		ID3D11InputLayout* m_inputLayout;
 

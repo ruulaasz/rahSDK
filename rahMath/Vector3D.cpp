@@ -1,5 +1,4 @@
 #include "Vector3D.h"
-#include "PlatformMath.h"
 
 namespace rah
 {
@@ -120,56 +119,5 @@ namespace rah
 	float & Vector3D::operator[](const int idx)
 	{
 		return (&x)[idx];
-	}
-
-	float Vector3D::dot(const Vector3D & _vector)
-	{
-		return (x * _vector.x) + (y * _vector.y) + (z * _vector.z);
-	}
-
-	Vector3D Vector3D::cross(const Vector3D & _vector)
-	{
-		return Vector3D(y * _vector.z - z * _vector.y, z * _vector.x - x * _vector.z, x * _vector.y - y * _vector.x);
-	}
-
-	float Vector3D::length()
-	{
-		return math::Sqrt(math::Square(x) + math::Square(y) + math::Square(z));
-	}
-
-	float Vector3D::lengthSquared()
-	{
-		return math::Square(x) + math::Square(y) + math::Square(z);
-	}
-
-	void Vector3D::normalize()
-	{
-		float length = this->length();
-
-		if (length != 0)
-		{
-			x /= length, y /= length, z /= length;
-		}
-	}
-
-	void Vector3D::escalate(float _scalar)
-	{
-		normalize();
-		*this *= _scalar;
-	}
-
-	void Vector3D::truncate(float _max)
-	{
-		float mag = this->length();
-
-		if (mag > _max)
-			escalate(_max);
-	}
-
-	void Vector3D::clear()
-	{
-		x = 0.f;
-		y = 0.f;
-		z = 0.f;
 	}
 }

@@ -74,11 +74,13 @@ namespace rah
 		{
 			throw "NullPointer _device";
 		}
+
 		IDXGISwapChain** pSwapChain = reinterpret_cast<IDXGISwapChain**>(m_swapchain.getReference());
 		if (!pSwapChain)
 		{
 			throw "NullPointer pSwapChain";
 		}
+
 		ID3D11DeviceContext** pDeviceContext = reinterpret_cast<ID3D11DeviceContext**>(m_deviceContext.getReference());
 		if (!pDeviceContext)
 		{

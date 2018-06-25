@@ -7,7 +7,6 @@
 
 namespace rah
 {
-	class GraphicDeviceContext;
 	/**
 	* Container for a mesh object
 	*/
@@ -24,7 +23,7 @@ namespace rah
 		* Reference to a graphic device context
 		*
 		*/
-		void render(const GraphicDeviceContext* _immediateContext);
+		void render();
 
 		/**
 		* Assign a new texture

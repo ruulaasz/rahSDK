@@ -1,14 +1,10 @@
 #pragma once
 
-#include <vector>
 #include "Mesh.h"
-
-using std::vector;
+#include <vector>
 
 namespace rah
 {
-	class GraphicDeviceContext;
-
 	/**
 	* Container for a model object
 	*/
@@ -52,12 +48,9 @@ namespace rah
 		* Reference to a graphic device context
 		*
 		*/
-		void render(const GraphicDeviceContext* _immediateContext);
+		void render();
 
-		void Load() {};
-		void Unload() {};
-
-		vector <Mesh* > m_meshes;
+		std::vector <Mesh* > m_meshes;
 		Matrix4D m_transform;
 	};
 }

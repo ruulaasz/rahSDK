@@ -1,5 +1,4 @@
 #include "Vector2D.h"
-#include "PlatformMath.h"
 
 namespace rah
 {
@@ -107,50 +106,5 @@ namespace rah
 	float & Vector2D::operator[](const int idx)
 	{
 		return (&x)[idx];
-	}
-
-	float Vector2D::dot(const Vector2D & _vector)
-	{
-		return (x * _vector.x) + (y * _vector.y);	
-	}
-
-	float Vector2D::length()
-	{
-		return math::Sqrt(math::Square(x) + math::Square(y));
-	}
-
-	float Vector2D::lengthSquared()
-	{
-		return math::Square(x) + math::Square(y);
-	}
-
-	void Vector2D::normalize()
-	{
-		float length = this->length();
-
-		if (length != 0)
-		{
-			x /= length, y /= length;
-		}
-	}
-
-	void Vector2D::escalate(float _scalar)
-	{
-		normalize();
-		*this *= _scalar;
-	}
-
-	void Vector2D::truncate(float _max)
-	{
-		float mag = this->length();
-
-		if (mag > _max)
-			escalate(_max);
-	}
-
-	void Vector2D::clear()
-	{
-		x = 0.f;
-		y = 0.f;
 	}
 }

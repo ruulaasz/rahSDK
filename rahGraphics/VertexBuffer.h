@@ -4,11 +4,8 @@
 #include <vector>
 #include <rahMath.h>
 
-using std::vector;
-
 namespace rah
 {
-	class GraphicDevice;
 	/**
 	* Data cointainer of a Vertex
 	*/
@@ -56,7 +53,7 @@ namespace rah
 		* Set of flags for the creation of the buffer
 		*
 		*/
-		void create(GraphicDevice* _device, unsigned int _creationFlags = VB_CREATE_DEFAULT | CPU_ACCESS_DEFAULT);
+		void create(unsigned int _creationFlags = VB_CREATE_DEFAULT | CPU_ACCESS_DEFAULT);
 
 		/**
 		* Adds a vertex to the vertex vector
@@ -77,6 +74,6 @@ namespace rah
 		size_t getVertexSize() { return m_vertexInfo.size(); }
 
 	private:
-		vector<VertexData> m_vertexInfo;
+		std::vector<VertexData> m_vertexInfo;
 	};
 }
