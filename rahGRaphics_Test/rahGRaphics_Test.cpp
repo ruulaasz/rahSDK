@@ -21,11 +21,6 @@ ID3D11DepthStencilView* g_pDepthStencilView;
 ID3D11SamplerState* g_pSamplerState;
 D3D11_VIEWPORT* g_pViewport;
 
-float g_deltaTime = 0.0f;
-float g_lastTime = 0.0f;
-float g_currentTime = 0.0f;
-int g_RasterizerState = 2;
-
 struct SimpleVertex
 {
 	rah::Vector3D Pos;
@@ -57,7 +52,7 @@ rah::ConstantBuffer g_pCBWorld;
 rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
-rah::Vector4D g_Color(1, 1, 1, 1);
+rah::Vector4D g_Color(1.f, 0.f, 0.f, 1.f);
 
 rah::RenderTarget g_renderTarget;
 rah::GraphicTexture g_texture;
@@ -86,8 +81,6 @@ RahResult InitD3D(HWND hWnd)
 	g_pDepthStencilView = reinterpret_cast<ID3D11DepthStencilView*>(rah::GraphicManager::GetInstance().m_depthStencilView.getPtr());
 	g_pSamplerState = reinterpret_cast<ID3D11SamplerState*>(rah::GraphicManager::GetInstance().m_samplerState.getPtr());
 	g_pViewport = reinterpret_cast<D3D11_VIEWPORT*>(rah::GraphicManager::GetInstance().m_viewport.getPtr());
-
-	g_lastTime = GetTickCount();
 
 	return RAH_SUCCESS;
 }
@@ -141,7 +134,7 @@ void LoadContent()
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 24;
+	bd.ByteWidth = 480;//sizeof(SimpleVertex) * 24;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
@@ -151,12 +144,11 @@ void LoadContent()
 	g_pVertexBuffer.create(&bd, &InitData);
 
 	// Set vertex buffer
-	UINT stride = sizeof(SimpleVertex);
+	UINT stride = 20;// sizeof(SimpleVertex);
 	UINT offset = 0;
 	g_pDeviceContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer.m_buffer, &stride, &offset);
 
 	// Create index buffer
-	// Create vertex buffer
 	WORD indices[] =
 	{
 		3,1,0,
@@ -224,21 +216,24 @@ void LoadContent()
 	g_World = rah::math::Identity4D();
 
 	// Initialize the view matrix
-	rah::Vector4D Eye(0.0f, 3.0f, -6.0f, 0.0f);
-	rah::Vector4D At(0.0f, 1.0f, 0.0f, 0.0f);
-	rah::Vector4D Up(0.0f, 1.0f, 0.0f, 0.0f);
-	//g_View.lookAtLH(Eye, At, Up);
+	rah::Vector3D Eye(0.0f, 3.0f, -6.0f);
+	rah::Vector3D At(0.0f, 1.0f, 0.0f);
+	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
+	g_View = rah::math::LookAtLH(Eye, At, Up);
 
 	CBView cbview;
 	cbview.mView = rah::math::Transpose(g_View);
 	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
 	// Initialize the projection matrix
-	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, SCREEN_WIDTH / (FLOAT)SCREEN_HEIGHT, 0.01f, 100.0f);
+	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, SCREEN_WIDTH / SCREEN_HEIGHT, 0.01f, 100.0f);
 
 	CBProj cbproj;
 	cbproj.mProjection = rah::math::Transpose(g_Projection);
 	g_pDeviceContext->UpdateSubresource(g_pCBProj.m_buffer, 0, NULL, &cbproj, 0, 0);
+
+	g_pDeviceContext->OMSetRenderTargets(1, &g_renderTarget.m_renderTarget, g_pDepthStencilView);
+	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 }
 
 void render()
@@ -287,10 +282,12 @@ void render()
 	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pCBView.m_buffer);
 	g_pDeviceContext->VSSetConstantBuffers(1, 1, &g_pCBProj.m_buffer);
 	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
+
 	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
 	g_pDeviceContext->PSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
 	g_pDeviceContext->PSSetShaderResources(0, 1, &g_texture.m_graphicTexture);
 	g_pDeviceContext->PSSetSamplers(0, 1, &g_pSamplerState);
+
 	g_pDeviceContext->DrawIndexed(36, 0, 0);
 
 	//

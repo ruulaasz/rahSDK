@@ -1,10 +1,11 @@
 #include "Matrix4D.h"
+#include "PlatformMath.h"
 
 namespace rah
 {
 	Matrix4D::Matrix4D()
 	{
-
+		math::Clear(*this);
 	}
 
 	rah::Matrix4D::Matrix4D(const Matrix4D & _matrix)

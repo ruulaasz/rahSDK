@@ -742,6 +742,50 @@ namespace rah
 			return MV;
 		}
 
+		static Matrix4D LookAtLH(Vector4D _Eye, Vector4D _Focus, Vector4D _Up)
+		{
+			//Direccion, que es una linea de ti al objeto, no esta perpendicular al vector y de vista
+			Vector4D vDir, vRight, vUp, vOffset;
+			vDir = _Focus - _Eye;
+			Normalize(vDir);
+
+			//Perpendicularizar el vector vista hacia up y vista
+			vRight = CrossProduct(_Up, vDir);
+			Normalize(vRight);
+
+			//Con esto, el productro cruz con derecha y arriva me da el nuevo vector arriva, que es perpendicular al vector que esta hacia el objeto
+			vUp = CrossProduct(vDir, vRight);
+
+			//Esta ultima transformacion terminara convirtiendo los objetos a mi origen, suponiendo que yo soy el origen
+			vOffset = Vector4D(
+				-Dot(vRight, _Eye), //Esta en sentido contrario porque queremos que se conviertan hacia la camara, no al revez
+				-Dot(vUp, _Eye),
+				-Dot(vDir, _Eye));
+
+			Matrix4D MV;
+			MV.m00 = vRight.x;
+			MV.m10 = vRight.y;
+			MV.m20 = vRight.z;
+			MV.m30 = vOffset.x;
+
+			MV.m01 = vUp.x;
+			MV.m11 = vUp.y;
+			MV.m21 = vUp.z;
+			MV.m31 = vOffset.y;
+
+			MV.m02 = vDir.x;
+			MV.m12 = vDir.y;
+			MV.m22 = vDir.z;
+			MV.m32 = vOffset.z;
+
+			MV.m03 = 0;
+			MV.m13 = 0;
+			MV.m23 = 0;
+			MV.m33 = 1;
+
+			return MV;
+		}
+
 		/**
 		* Matrix PerspectiveFovLH
 		*/

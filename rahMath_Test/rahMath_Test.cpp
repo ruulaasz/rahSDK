@@ -650,30 +650,30 @@ int main()
 
 	radiansTest();*/
 
-	DirectX::XMMATRIX TrueMatrix;
+	DirectX::XMMATRIX DirectxMatrix;
 
-	TrueMatrix.r[0].m128_f32[0] = 0;
-	TrueMatrix.r[0].m128_f32[1] = 1;
-	TrueMatrix.r[0].m128_f32[2] = 2;
-	TrueMatrix.r[0].m128_f32[3] = 3;
+	DirectxMatrix.r[0].m128_f32[0] = 0;
+	DirectxMatrix.r[0].m128_f32[1] = 1;
+	DirectxMatrix.r[0].m128_f32[2] = 2;
+	DirectxMatrix.r[0].m128_f32[3] = 3;
 	
-	TrueMatrix.r[1].m128_f32[0] = 4;
-	TrueMatrix.r[1].m128_f32[1] = 5;
-	TrueMatrix.r[1].m128_f32[2] = 6;
-	TrueMatrix.r[1].m128_f32[3] = 7;
-
-	TrueMatrix.r[2].m128_f32[0] = 8;
-	TrueMatrix.r[2].m128_f32[1] = 9;
-	TrueMatrix.r[2].m128_f32[2] = 10;
-	TrueMatrix.r[2].m128_f32[3] = 11;
+	DirectxMatrix.r[1].m128_f32[0] = 4;
+	DirectxMatrix.r[1].m128_f32[1] = 5;
+	DirectxMatrix.r[1].m128_f32[2] = 6;
+	DirectxMatrix.r[1].m128_f32[3] = 7;
 	
-	TrueMatrix.r[3].m128_f32[0] = 12;
-	TrueMatrix.r[3].m128_f32[1] = 13;
-	TrueMatrix.r[3].m128_f32[2] = 14;
-	TrueMatrix.r[3].m128_f32[3] = 15;
+	DirectxMatrix.r[2].m128_f32[0] = 8;
+	DirectxMatrix.r[2].m128_f32[1] = 9;
+	DirectxMatrix.r[2].m128_f32[2] = 10;
+	DirectxMatrix.r[2].m128_f32[3] = 11;
+	
+	DirectxMatrix.r[3].m128_f32[0] = 12;
+	DirectxMatrix.r[3].m128_f32[1] = 13;
+	DirectxMatrix.r[3].m128_f32[2] = 14;
+	DirectxMatrix.r[3].m128_f32[3] = 15;
 
-	rah::Matrix4D temp = XMtoRAH(TrueMatrix);
-	printf("XMMatrix:\n\n");
+	rah::Matrix4D temp = XMtoRAH(DirectxMatrix);
+	printf("DirectxMatrix:\n\n");
 	printMatrix(temp);
 
 	rah::Matrix4D RahMatrix;
@@ -700,6 +700,141 @@ int main()
 
 	printf("\n\nRahMatrix:\n\n");
 	printMatrix(RahMatrix);
+
+	//TRANSPOSE
+	DirectX::XMMATRIX resultX = DirectX::XMMatrixTranspose(DirectxMatrix);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectxTranspose:\n\n");
+	printMatrix(temp);
+
+	rah::Matrix4D resultR = rah::math::Transpose(RahMatrix);
+	printf("\n\nRahTranspose:\n\n");
+	printMatrix(resultR);
+
+	//IDENTITY
+	resultX = DirectX::XMMatrixIdentity();
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectxIdentity:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::Identity4D();
+	printf("\n\nRahIdentity:\n\n");
+	printMatrix(resultR);
+
+	//ScalarMAtrix
+	resultX = DirectX::XMMatrixScaling(5, 5, 5);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectxScalar:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::ScalarMatrix4x4(5, 5, 5);
+	printf("\n\nRahScalar:\n\n");
+	printMatrix(resultR);
+
+	//TranslationMAtrix*****
+	resultX = DirectX::XMMatrixTranslation(5, 5, 5);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectxTranslation:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::TranslationMatrix4x4(5, 5, 5);
+	printf("\n\nRahTranslation:\n\n");
+	printMatrix(resultR);
+
+	//RotationX Matrix
+	resultX = DirectX::XMMatrixRotationX(90);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectx RotationX:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::RotationMatrix4x4(90, rah::math::Axis_X);
+	printf("\n\nRah RotationX:\n\n");
+	printMatrix(resultR);
+
+	//RotationY Matrix
+	resultX = DirectX::XMMatrixRotationY(90);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectx RotationY:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::RotationMatrix4x4(90, rah::math::Axis_Y);
+	printf("\n\nRah RotationY:\n\n");
+	printMatrix(resultR);
+
+	//RotationZ Matrix
+	resultX = DirectX::XMMatrixRotationZ(90);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectx RotationZ:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::RotationMatrix4x4(90, rah::math::Axis_Z);
+	printf("\n\nRah RotationZ:\n\n");
+	printMatrix(resultR);
+
+	//Determinant Matrix
+	DirectX::XMVECTOR DirectxVector = DirectX::XMMatrixDeterminant(DirectxMatrix);
+	printf("\n\nDirectx Determinant:%.1f, %.1f, %.1f\n\n", DirectxVector.m128_f32[0], DirectxVector.m128_f32[1], DirectxVector.m128_f32[2]);
+
+	float fresult = rah::math::DeterminantMatrix(RahMatrix);
+	printf("Rah Determinant:%.1f", fresult);
+
+	//Inverse Matrix
+	resultX = DirectX::XMMatrixInverse(&DirectxVector, DirectxMatrix);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectx Inverse:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::InverseMatrix4D(RahMatrix);
+	printf("\n\nRah Inverse:\n\n");
+	printMatrix(resultR);
+
+	//LookAtLH Matrix
+	DirectX::XMVECTOR eye;
+	eye.m128_f32[0] = 0.f;
+	eye.m128_f32[1] = 3.f;
+	eye.m128_f32[2] = -6.f;
+	eye.m128_f32[3] = 0.f;
+	DirectX::XMVECTOR look;
+	look.m128_f32[0] = 0.f;
+	look.m128_f32[1] = 1.f;
+	look.m128_f32[2] = 0.f;
+	look.m128_f32[3] = 0.f;
+	DirectX::XMVECTOR up;
+	up.m128_f32[0] = 0.f;
+	up.m128_f32[1] = 1.f;
+	up.m128_f32[2] = 0.f;
+	up.m128_f32[3] = 0.f;
+	resultX = DirectX::XMMatrixLookAtLH(eye, look, up);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectx LookatLH:\n\n");
+	printMatrix(temp);
+
+	rah::Vector3D Eyer(0.0f, 3.0f, -6.0f);
+	rah::Vector3D Atr(0.0f, 1.0f, 0.0f);
+	rah::Vector3D Upr(0.0f, 1.0f, 0.0f);
+	resultR = rah::math::LookAtLH(Eyer, Atr, Upr);
+	printf("\n\nRah LookatLH:\n\n");
+	printMatrix(resultR);
+
+	//Perspective FOVLH Matrix
+	resultX = DirectX::XMMatrixPerspectiveFovLH(rah::math::PI / 4, 1280 / 720, 0.01f, 100.0f);
+
+	temp = XMtoRAH(resultX);
+	printf("\n\nDirectx PerspectoveFovLH:\n\n");
+	printMatrix(temp);
+
+	resultR = rah::math::PerspectiveFovLH(rah::math::PI / 4, 1280 / 720, 0.01f, 100.0f);
+	printf("\n\nRah PerspectoveFovLH:\n\n");
+	printMatrix(resultR);
 
 	getchar();
 
