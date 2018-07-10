@@ -11,7 +11,7 @@ namespace rah
 	public:
 		explicit Vector3D(float _x = 0.f, float _y = 0.f, float _z = 0.f);
 		Vector3D(const Vector3D &_vector);
-		virtual ~Vector3D();
+		~Vector3D();
 
 		/**
 		* Operator overload

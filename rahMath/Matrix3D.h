@@ -11,7 +11,7 @@ namespace rah
 	public:
 		Matrix3D();
 		Matrix3D(const Matrix3D &_matrix);
-		virtual ~Matrix3D();
+		~Matrix3D();
 
 		/**
 		* Matrix 3D structure

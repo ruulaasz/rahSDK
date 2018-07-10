@@ -11,7 +11,7 @@ namespace rah
 	public:
 		Matrix4D();
 		Matrix4D(const Matrix4D &_matrix);
-		virtual ~Matrix4D();
+		~Matrix4D();
 
 		union
 		{

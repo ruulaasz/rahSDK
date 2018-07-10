@@ -3,8 +3,8 @@
 #include "rahGRaphics_Test.h"
 #include <math.h>
 
-#define SCREEN_WIDTH  1280
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH  640
+#define SCREEN_HEIGHT 480
 #define MAX_LOADSTRING 100
 
 // Variables globales:
@@ -13,6 +13,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nombre de clase de la ventana
 
 HINSTANCE g_hInst = NULL;
 HWND g_hWnd = NULL;
+float g_aspectRatio;
 
 ID3D11Device* g_pD3DDevice;
 IDXGISwapChain* g_pSwapChain;
@@ -23,7 +24,7 @@ D3D11_VIEWPORT* g_pViewport;
 
 struct SimpleVertex
 {
-	rah::Vector3D Pos;
+	rah::Vector4D Pos;
 	rah::Vector2D Tex;
 };
 
@@ -52,7 +53,7 @@ rah::ConstantBuffer g_pCBWorld;
 rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
-rah::Vector4D g_Color(1.f, 0.f, 0.f, 1.f);
+rah::Vector4D g_Color(0.f, 0.f, 1.f, 1.f);
 
 rah::RenderTarget g_renderTarget;
 rah::GraphicTexture g_texture;
@@ -100,41 +101,41 @@ void LoadContent()
 	// Create vertex buffer
 	SimpleVertex vertices[] =
 	{
-		{ rah::Vector3D(-1.0f, 1.0f, -1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector3D(-1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-
-		{ rah::Vector3D(-1.0f, -1.0f, -1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector3D(-1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-
-		{ rah::Vector3D(-1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector3D(-1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector3D(-1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector3D(-1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-
-		{ rah::Vector3D(1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector3D(1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-
-		{ rah::Vector3D(-1.0f, -1.0f, -1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, -1.0f, -1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, 1.0f, -1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector3D(-1.0f, 1.0f, -1.0f), rah::Vector2D(0.0f, 1.0f) },
-
-		{ rah::Vector3D(-1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector3D(1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector3D(-1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+		{ rah::Vector4D(-1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector4D(-1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+					 
+		{ rah::Vector4D(-1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector4D(-1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+					 
+		{ rah::Vector4D(-1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector4D(-1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector4D(-1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector4D(-1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+					 
+		{ rah::Vector4D(1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector4D(1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+					 
+		{ rah::Vector4D(-1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector4D(-1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
+					 
+		{ rah::Vector4D(-1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
+		{ rah::Vector4D(1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
+		{ rah::Vector4D(-1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
 	};
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = 480;//sizeof(SimpleVertex) * 24;
+	bd.ByteWidth = sizeof(SimpleVertex) * 24;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
@@ -144,7 +145,7 @@ void LoadContent()
 	g_pVertexBuffer.create(&bd, &InitData);
 
 	// Set vertex buffer
-	UINT stride = 20;// sizeof(SimpleVertex);
+	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	g_pDeviceContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer.m_buffer, &stride, &offset);
 
@@ -185,15 +186,15 @@ void LoadContent()
 
 	// Create the constant buffers
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = 64;//sizeof(CBView);
+	bd.ByteWidth = sizeof(CBView);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
 	g_pCBView.create(&bd);
 
-	bd.ByteWidth = 64;//sizeof(CBProj);
+	bd.ByteWidth = sizeof(CBProj);
 	g_pCBProj.create(&bd, nullptr);
 
-	bd.ByteWidth = 80;//sizeof(CBWorld);
+	bd.ByteWidth = sizeof(CBWorld);
 	g_pCBWorld.create(&bd, nullptr);
 
 	// Load the Texture
@@ -226,7 +227,8 @@ void LoadContent()
 	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
 	// Initialize the projection matrix
-	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, SCREEN_WIDTH / SCREEN_HEIGHT, 0.01f, 100.0f);
+	g_aspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
+	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, g_aspectRatio, 0.01f, 100.0f);
 
 	CBProj cbproj;
 	cbproj.mProjection = rah::math::Transpose(g_Projection);
@@ -259,7 +261,7 @@ void render()
 	//
 	// Clear the back buffer
 	//
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+	float ClearColor[4] = { 1.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
 	g_pDeviceContext->ClearRenderTargetView(g_renderTarget.m_renderTarget, ClearColor);
 
 	//
@@ -383,7 +385,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	g_hInst = hInstance; // Almacenar identificador de instancia en una variable global
 
    g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, SCREEN_WIDTH, SCREEN_HEIGHT, nullptr, nullptr, hInstance, nullptr);
 
    if (!g_hWnd)
    {

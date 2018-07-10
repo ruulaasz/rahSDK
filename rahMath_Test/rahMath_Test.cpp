@@ -826,13 +826,13 @@ int main()
 	printMatrix(resultR);
 
 	//Perspective FOVLH Matrix
-	resultX = DirectX::XMMatrixPerspectiveFovLH(rah::math::PI / 4, 1280 / 720, 0.01f, 100.0f);
+	resultX = DirectX::XMMatrixPerspectiveFovLH(rah::math::PI / 4, 640 / 480, 0.01f, 100.0f);
 
 	temp = XMtoRAH(resultX);
 	printf("\n\nDirectx PerspectoveFovLH:\n\n");
 	printMatrix(temp);
 
-	resultR = rah::math::PerspectiveFovLH(rah::math::PI / 4, 1280 / 720, 0.01f, 100.0f);
+	resultR = rah::math::PerspectiveFovLH(rah::math::PI / 4, 640 / 480, 0.01f, 100.0f);
 	printf("\n\nRah PerspectoveFovLH:\n\n");
 	printMatrix(resultR);
 

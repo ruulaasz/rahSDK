@@ -11,7 +11,7 @@ namespace rah
 	public:
 		explicit Vector2D(float _x = 0.f, float _y = 0.f);
 		Vector2D(const Vector2D &_vector);
-		virtual ~Vector2D();
+		~Vector2D();
 
 		/**
 		* Operator overload
