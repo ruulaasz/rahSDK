@@ -13,7 +13,7 @@ namespace rah
 		Ray();
 		Ray(Vector3D _origin, Vector3D _direction);
 		Ray(const Ray &_ray);
-		virtual ~Ray();
+		~Ray();
 
 		Vector3D m_origin;
 		Vector3D m_direction;

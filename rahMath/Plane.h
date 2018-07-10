@@ -13,7 +13,7 @@ namespace rah
 		Plane();
 		Plane(Vector3D _Normal, Vector3D _Point);
 		Plane(const Plane& _plane);
-		virtual ~Plane();
+		~Plane();
 
 		Vector3D m_normal;			
 		Vector3D m_point;			

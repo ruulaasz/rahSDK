@@ -26,9 +26,6 @@ namespace rah
 		*/
 		void loadFromFile(std::string _route);
 
-		void Load() {};
-		void Unload() {};
-
 		ID3D11ShaderResourceView* m_graphicTexture;
 	};
 }

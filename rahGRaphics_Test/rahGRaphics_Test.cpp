@@ -3,8 +3,8 @@
 #include "rahGRaphics_Test.h"
 #include <math.h>
 
-#define SCREEN_WIDTH  640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH  1280
+#define SCREEN_HEIGHT 720
 #define MAX_LOADSTRING 100
 
 // Variables globales:
@@ -41,7 +41,7 @@ struct CBProj
 struct CBWorld
 {
 	rah::Matrix4D mWorld;
-	rah::Vector4D mColor;
+	rah::Color mColor;
 };
 
 rah::ConstantBuffer g_pVertexBuffer;
@@ -53,12 +53,15 @@ rah::ConstantBuffer g_pCBWorld;
 rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
-rah::Vector4D g_Color(0.f, 0.f, 1.f, 1.f);
+rah::Color g_meshColor(0.f, 0.f, 1.f, 1.f);
+rah::Color g_backgroundColor(0.0f, 0.1f, 0.0f, 1.0f);
 
 rah::RenderTarget g_renderTarget;
 rah::GraphicTexture g_texture;
 rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
+
+rah::Plane g_plane;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -86,7 +89,7 @@ RahResult InitD3D(HWND hWnd)
 	return RAH_SUCCESS;
 }
 
-void LoadContent()
+void LoadContentCube()
 {
 	g_renderTarget = rah::GraphicManager::GetInstance().m_renderTarget;
 
@@ -96,7 +99,6 @@ void LoadContent()
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 
 	g_pixelShader.createFragmentShader(L"Tutorial07.fx", "PS", "ps_4_0");
-
 
 	// Create vertex buffer
 	SimpleVertex vertices[] =
@@ -217,7 +219,7 @@ void LoadContent()
 	g_World = rah::math::Identity4D();
 
 	// Initialize the view matrix
-	rah::Vector3D Eye(0.0f, 3.0f, -6.0f);
+	rah::Vector3D Eye(0.0f, 3.0f, -9.0f);
 	rah::Vector3D At(0.0f, 1.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
 	g_View = rah::math::LookAtLH(Eye, At, Up);
@@ -235,33 +237,34 @@ void LoadContent()
 	g_pDeviceContext->UpdateSubresource(g_pCBProj.m_buffer, 0, NULL, &cbproj, 0, 0);
 
 	g_pDeviceContext->OMSetRenderTargets(1, &g_renderTarget.m_renderTarget, g_pDepthStencilView);
+	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 }
 
-void render()
+void renderCube()
 {
 	// Update our time
-	//static float t = 0.0f;
-	//
-	//static DWORD dwTimeStart = 0;
-	//DWORD dwTimeCur = GetTickCount();
-	//if (dwTimeStart == 0)
-	//	dwTimeStart = dwTimeCur;
-	//t = (dwTimeCur - dwTimeStart) / 1000.0f;
+	static float t = 0.0f;
+	
+	static DWORD dwTimeStart = 0;
+	DWORD dwTimeCur = GetTickCount();
+	if (dwTimeStart == 0)
+		dwTimeStart = dwTimeCur;
+	t = (dwTimeCur - dwTimeStart) / 1000.0f;
 	
 
 	// Rotate cube around the origin
-	//g_World = XMMatrixRotationY(t);
+	g_World = rah::math::RotationMatrix4x4(t, rah::math::Axis_Y);
 
 	// Modify the color
-	//g_Color.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-	//g_Color.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-	//g_Color.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+	g_meshColor.r = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+	g_meshColor.g = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+	g_meshColor.b = (sinf(t * 5.0f) + 1.0f) * 0.5f;
 
 	//
 	// Clear the back buffer
 	//
-	float ClearColor[4] = { 1.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+	float ClearColor[4] = { g_backgroundColor.r , g_backgroundColor.g , g_backgroundColor.b , g_backgroundColor.alpha }; 
 	g_pDeviceContext->ClearRenderTargetView(g_renderTarget.m_renderTarget, ClearColor);
 
 	//
@@ -274,7 +277,7 @@ void render()
 	//
 	CBWorld cb;
 	cb.mWorld = rah::math::Transpose(g_World);
-	cb.mColor = g_Color;
+	cb.mColor = g_meshColor;
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cb, 0, 0);
 
 	//
@@ -324,19 +327,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
 	InitD3D(g_hWnd);
-	LoadContent();
+	LoadContentCube();
 
-    // Bucle principal de mensajes:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-		render();
+	while (TRUE)
+	{
+		// Check to see if any messages are waiting in the queue
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			// translate keystroke messages into the right format
+			TranslateMessage(&msg);
 
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+			// send the message to the WindowProc function
+			DispatchMessage(&msg);
+
+			// check to see if it's time to quit
+			if (msg.message == WM_QUIT)
+				break;
+		}
+		else
+		{
+			renderCube();
+		}
+	}
 
 	rah::GraphicManager::CloseModule();
     return (int) msg.wParam;

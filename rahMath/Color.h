@@ -10,7 +10,7 @@ namespace rah
 	{
 	public:
 		explicit Color(float _r = 0.f, float _g = 0.f, float _b = 0.f, float _alpha = 1.f);
-		virtual ~Color();
+		~Color();
 
 		/**
 		* Operator overload

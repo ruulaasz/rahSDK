@@ -10,7 +10,7 @@ namespace rah
 		explicit Radians(float _value = 0.f);
 		Radians(const Radians& _radians);
 		Radians(const Degrees& _degrees);
-		virtual ~Radians();
+		~Radians();
 
 		void operator= (const Degrees& _degrees);
 		void operator= (const Radians& _radians);
