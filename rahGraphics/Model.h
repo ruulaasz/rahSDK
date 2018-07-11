@@ -8,7 +8,7 @@ namespace rah
 	/**
 	* Container for a model object
 	*/
-	class Model
+	class Model : public rahResource
 	{
 	public:
 		Model();
@@ -49,6 +49,12 @@ namespace rah
 		*
 		*/
 		void render();
+
+		/*
+		* Load is the obigatory function this should be called after initialize or during this
+		*
+		*/
+		virtual RahResult Load();
 
 		std::vector <Mesh* > m_meshes;
 		Matrix4D m_transform;

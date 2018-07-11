@@ -34,3 +34,4 @@ rahGraphics/rahGraphics.vcxproj.user
 lib/rahGraphics/x64/Debug/rahGraphics_Debug.lib
 lib/rahMath/Win32/Debug/rahMath_Debug.lib
 bin/
+rahGRaphics_Test/resources/

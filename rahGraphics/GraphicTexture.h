@@ -2,13 +2,14 @@
 
 #include <d3d11.h>
 #include <string>
+#include <rahResource.h>
 
 namespace rah
 {
 	/**
 	* Directx Texture
 	*/
-	class GraphicTexture
+	class GraphicTexture : public rahResource
 	{
 	public:
 		GraphicTexture();
@@ -25,6 +26,12 @@ namespace rah
 		*
 		*/
 		void loadFromFile(std::string _route);
+
+		/*
+		* Load is the obigatory function this should be called after initialize or during this
+		*
+		*/
+		virtual RahResult Load();
 
 		ID3D11ShaderResourceView* m_graphicTexture;
 	};

@@ -73,8 +73,8 @@
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <TargetExt>.lib</TargetExt>
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)DirectXTex/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)DirectXTex/include/;$(IncludePath);$(DEVLIBS)assimp/include/</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(PlatformTarget)/;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

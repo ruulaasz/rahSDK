@@ -11,7 +11,7 @@ namespace rah
 	*/
 	struct VertexData
 	{
-		Vector3D pos;
+		Vector4D pos;
 		Vector2D tex;
 		Vector3D norm;
 

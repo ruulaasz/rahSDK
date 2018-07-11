@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include <rahResource.h>
 
 namespace rah
 {
@@ -27,11 +28,13 @@ namespace rah
 	/**
 	* A container for a material object
 	*/
-	class Material
+	class Material: public rahResource
 	{
 	public:
 		Material();
 		~Material();
+
+		virtual RahResult Load();
 
 		ID3D11ShaderResourceView* m_textures[TextureType_MAXTEXTURES];
 	};

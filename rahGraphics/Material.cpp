@@ -14,4 +14,9 @@ namespace rah
 	{
 
 	}
+
+	RahResult Material::Load()
+	{
+		return RahResult();
+	}
 }

@@ -54,14 +54,14 @@ rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
 rah::Color g_meshColor(0.f, 0.f, 1.f, 1.f);
-rah::Color g_backgroundColor(0.0f, 0.1f, 0.0f, 1.0f);
+rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 rah::RenderTarget g_renderTarget;
 rah::GraphicTexture g_texture;
 rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
 
-rah::Plane g_plane;
+rah::Model g_Model;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -200,8 +200,12 @@ void LoadContentCube()
 	g_pCBWorld.create(&bd, nullptr);
 
 	// Load the Texture
-	std::string path = "seafloor.dds";
-	g_texture.loadFromFile(path);
+
+	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
+	rParams->fileName = "seafloor.dds";
+	g_texture.Initialize(rParams);
+	//std::string path = "seafloor.dds";
+	g_texture.Load();
 
 	// Create the sample state
 	D3D11_SAMPLER_DESC sampDesc;
@@ -328,6 +332,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	InitD3D(g_hWnd);
 	LoadContentCube();
+
+	std::string path = "resources\\models\\Bassilisk\\Basillisk.dae";
+	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
+	rParams->fileName = "resources\\models\\Bassilisk\\Basillisk.dae";
+	g_Model.Initialize(rParams);
+	g_Model.Load();
 
 	while (TRUE)
 	{

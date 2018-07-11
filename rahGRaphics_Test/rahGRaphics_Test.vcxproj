@@ -73,8 +73,8 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(DEVLIBS)assimp/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(DEVLIBS)assimp/lib/$(PlatformTarget)/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -104,13 +104,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)assimp/include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>rahMath_$(Configuration).lib;rahTools_$(Configuration).lib;rahGraphics_$(Configuration).lib;d3d11.lib;DirectXTexd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>rahMath_$(Configuration).lib;rahTools_$(Configuration).lib;rahGraphics_$(Configuration).lib;d3d11.lib;DirectXTexd.lib;assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

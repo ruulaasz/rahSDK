@@ -3,6 +3,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Material.h"
+#include <rahResource.h>
 #include "GraphicTexture.h"
 
 namespace rah
@@ -10,7 +11,7 @@ namespace rah
 	/**
 	* Container for a mesh object
 	*/
-	class Mesh
+	class Mesh : public rahResource
 	{
 	public:
 		Mesh();
@@ -45,6 +46,12 @@ namespace rah
 		*
 		*/
 		void assignNewMaterial(Material* _material);
+
+		/*
+		* Load is the obigatory function this should be called after initialize or during this
+		*
+		*/
+		virtual RahResult Load();
 
 		VertexBuffer m_vertexBuffer;
 		IndexBuffer m_indexBuffer;
