@@ -21,6 +21,8 @@ namespace rah
 		Radians operator- (const Degrees& _degrees);
 		Radians operator- (const Radians& _radians);
 
+		float operator/(const float _float);
+
 		void operator+= (const Degrees& _degrees);
 		void operator+= (const Radians& _radians);
 		

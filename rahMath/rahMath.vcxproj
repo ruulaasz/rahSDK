@@ -26,6 +26,7 @@
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PlatformMath.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Radians.h" />
     <ClInclude Include="rahMath.h" />
     <ClInclude Include="Ray.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Matrix4D.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Radians.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Sphere.cpp" />

@@ -129,7 +129,22 @@ namespace rah
 		*/
 		template<>
 		static float ArcTan(float _value) { return atanf(_value); };
-	
+
+		/**
+		* Returns the arctan2 of a float value
+		* Works in radians
+		*
+		*/
+		template<typename T>
+		static float ArcTan2(T _t0, T _t1) { return atan2f(_t0, _t1); };
+		/**
+		* Returns the arctan2 of a float value
+		* Works in radians
+		*
+		*/
+		template<>
+		static float ArcTan2(float _t0, float _t1) { return atan2f(_t0, _t1); };
+
 		/**
 		* Returns the squareroot of any given value
 		*

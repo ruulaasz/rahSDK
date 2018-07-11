@@ -54,6 +54,11 @@ namespace rah
 		return Radians(m_radians - _radians.m_radians);
 	}
 
+	float Radians::operator/(const float _float)
+	{
+		return m_radians / _float;
+	}
+
 	void Radians::operator+=(const Degrees & _degrees)
 	{
 		m_radians += (_degrees.m_degrees * math::DEG_TO_RAD);

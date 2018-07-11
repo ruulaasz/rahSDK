@@ -9,6 +9,7 @@
 #include "Radians.h"
 #include "Matrix3D.h"
 #include "Matrix4D.h"
+#include "Quaternion.h"
 #include "OBB.h"
 #include "Plane.h"
 #include "Sphere.h"
