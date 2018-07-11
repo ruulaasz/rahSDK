@@ -22,12 +22,6 @@ ID3D11DepthStencilView* g_pDepthStencilView;
 ID3D11SamplerState* g_pSamplerState;
 D3D11_VIEWPORT* g_pViewport;
 
-struct SimpleVertex
-{
-	rah::Vector4D Pos;
-	rah::Vector2D Tex;
-};
-
 struct CBView
 {
 	rah::Matrix4D mView;
@@ -41,27 +35,31 @@ struct CBProj
 struct CBWorld
 {
 	rah::Matrix4D mWorld;
+};
+
+struct CBColor
+{
 	rah::Color mColor;
 };
 
-rah::ConstantBuffer g_pVertexBuffer;
-rah::ConstantBuffer g_pIndexBuffer;
 rah::ConstantBuffer g_pCBView;
 rah::ConstantBuffer g_pCBProj;
 rah::ConstantBuffer g_pCBWorld;
+rah::ConstantBuffer g_pCBColor;
 
 rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
-rah::Color g_meshColor(0.f, 0.f, 1.f, 1.f);
-rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-rah::RenderTarget g_renderTarget;
-rah::GraphicTexture g_texture;
+rah::Color g_meshColor(0.f, 0.f, 1.f, 1.f);
+rah::Color g_backgroundColor(1.0f, 0.0f, 0.0f, 1.0f);
+
 rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
 
 rah::Model g_Model;
+
+float g_deltaTime = 0.0f;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -91,101 +89,15 @@ RahResult InitD3D(HWND hWnd)
 
 void LoadContentCube()
 {
-	g_renderTarget = rah::GraphicManager::GetInstance().m_renderTarget;
-
-	g_vertexShader.createVertexShader(L"Tutorial07.fx", "VS", "vs_4_0");
+	g_vertexShader.createVertexShader(L"shaders.fx", "VS", "vs_5_0");
 	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexShader.m_shaderBlob);
 
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 
-	g_pixelShader.createFragmentShader(L"Tutorial07.fx", "PS", "ps_4_0");
-
-	// Create vertex buffer
-	SimpleVertex vertices[] =
-	{
-		{ rah::Vector4D(-1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector4D(-1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-					 
-		{ rah::Vector4D(-1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector4D(-1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-					 
-		{ rah::Vector4D(-1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector4D(-1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector4D(-1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector4D(-1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-					 
-		{ rah::Vector4D(1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector4D(1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-					 
-		{ rah::Vector4D(-1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, -1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector4D(-1.0f, 1.0f, -1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-					 
-		{ rah::Vector4D(-1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, -1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 0.0f) },
-		{ rah::Vector4D(1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(1.0f, 1.0f) },
-		{ rah::Vector4D(-1.0f, 1.0f, 1.0f, 1.0f), rah::Vector2D(0.0f, 1.0f) },
-	};
+	g_pixelShader.createFragmentShader(L"shaders.fx", "PS", "ps_5_0");
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 24;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-
-	g_pVertexBuffer.create(&bd, &InitData);
-
-	// Set vertex buffer
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	g_pDeviceContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer.m_buffer, &stride, &offset);
-
-	// Create index buffer
-	WORD indices[] =
-	{
-		3,1,0,
-		2,1,3,
-
-		6,4,5,
-		7,4,6,
-
-		11,9,8,
-		10,9,11,
-
-		14,12,13,
-		15,12,14,
-
-		19,17,16,
-		18,17,19,
-
-		22,20,21,
-		23,20,22
-	};
-
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 36;
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	InitData.pSysMem = indices;
-	g_pIndexBuffer.create(&bd, &InitData);
-	
-	// Set index buffer
-	g_pDeviceContext->IASetIndexBuffer(g_pIndexBuffer.m_buffer, DXGI_FORMAT_R16_UINT, 0);
-
-	// Set primitive topology
-	g_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	// Create the constant buffers
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(CBView);
@@ -199,13 +111,8 @@ void LoadContentCube()
 	bd.ByteWidth = sizeof(CBWorld);
 	g_pCBWorld.create(&bd, nullptr);
 
-	// Load the Texture
-
-	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
-	rParams->fileName = "seafloor.dds";
-	g_texture.Initialize(rParams);
-	//std::string path = "seafloor.dds";
-	g_texture.Load();
+	bd.ByteWidth = sizeof(CBColor);
+	g_pCBColor.create(&bd, nullptr);
 
 	// Create the sample state
 	D3D11_SAMPLER_DESC sampDesc;
@@ -223,7 +130,7 @@ void LoadContentCube()
 	g_World = rah::math::Identity4D();
 
 	// Initialize the view matrix
-	rah::Vector3D Eye(0.0f, 3.0f, -9.0f);
+	rah::Vector3D Eye(0.0f, 3.0f, -6.0f);
 	rah::Vector3D At(0.0f, 1.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
 	g_View = rah::math::LookAtLH(Eye, At, Up);
@@ -239,70 +146,57 @@ void LoadContentCube()
 	CBProj cbproj;
 	cbproj.mProjection = rah::math::Transpose(g_Projection);
 	g_pDeviceContext->UpdateSubresource(g_pCBProj.m_buffer, 0, NULL, &cbproj, 0, 0);
-
-	g_pDeviceContext->OMSetRenderTargets(1, &g_renderTarget.m_renderTarget, g_pDepthStencilView);
-	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
-	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 }
 
 void renderCube()
 {
 	// Update our time
-	static float t = 0.0f;
-	
+
 	static DWORD dwTimeStart = 0;
 	DWORD dwTimeCur = GetTickCount();
 	if (dwTimeStart == 0)
 		dwTimeStart = dwTimeCur;
-	t = (dwTimeCur - dwTimeStart) / 1000.0f;
-	
+	g_deltaTime = (dwTimeCur - dwTimeStart) / 1000.0f;
 
-	// Rotate cube around the origin
-	g_World = rah::math::RotationMatrix4x4(t, rah::math::Axis_Y);
+	g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
+	g_pDeviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
+	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[2]);
+	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 
-	// Modify the color
-	g_meshColor.r = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-	g_meshColor.g = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-	g_meshColor.b = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+	float colorbk[4] = { g_backgroundColor.r, g_backgroundColor.g, g_backgroundColor.b, g_backgroundColor.alpha };
 
-	//
-	// Clear the back buffer
-	//
-	float ClearColor[4] = { g_backgroundColor.r , g_backgroundColor.g , g_backgroundColor.b , g_backgroundColor.alpha }; 
-	g_pDeviceContext->ClearRenderTargetView(g_renderTarget.m_renderTarget, ClearColor);
+	rah::GraphicManager::GetInstance().clearScreen(&rah::GraphicManager::GetInstance().m_renderTarget, const_cast<float*>(colorbk));
 
-	//
-	// Clear the depth buffer to 1.0 (max depth)
-	//
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	//
-	// Update variables that change once per frame
-	//
-	CBWorld cb;
-	cb.mWorld = rah::math::Transpose(g_World);
-	cb.mColor = g_meshColor;
-	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cb, 0, 0);
+	g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
 
-	//
-	// Render the cube
-	//
-	g_pDeviceContext->VSSetShader(g_vertexShader.m_vertexShader, NULL, 0);
+	// Update variables that change once per frame
+	CBWorld cbWorld;
+	cbWorld.mWorld = rah::math::Transpose(g_World);
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	CBColor cbColor;
+	cbColor.mColor = rah::Color(1.0f, 1.0f, 1.0f, 1.0f);
+	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
+
 	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pCBView.m_buffer);
 	g_pDeviceContext->VSSetConstantBuffers(1, 1, &g_pCBProj.m_buffer);
 	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
+	g_pDeviceContext->VSSetConstantBuffers(3, 1, &g_pCBColor.m_buffer);
 
-	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
-	g_pDeviceContext->PSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
-	g_pDeviceContext->PSSetShaderResources(0, 1, &g_texture.m_graphicTexture);
 	g_pDeviceContext->PSSetSamplers(0, 1, &g_pSamplerState);
 
-	g_pDeviceContext->DrawIndexed(36, 0, 0);
+	g_pDeviceContext->VSSetShader(g_vertexShader.m_vertexShader, NULL, 0);
+	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
+	//Seteamos el PShader Perteneciente al modelo
+	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
 
-	//
-	// Present our back buffer to our front buffer
-	//
+	g_Model.render();
+
+	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
+
 }
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
