@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vector>
 #include <vld.h>
+#include <string>
+#include <stdio.h>
+
 struct TestResourceParams : public rah::BasicResourceParams
 {
 	int x, y;
@@ -79,6 +82,22 @@ public:
 int main()
 {
 	/************************************************************************/
+	/* Debug test                                                           */
+	/************************************************************************/
+	RAH_DEBUGER_MODULE_DECLARATION();
+
+	RAH_LOG("Test");
+	RAH_BASICLOG("Test2");
+
+	RAH_SAVELOG_FILE("Test", "test2.txt");
+	RAH_SAVEBASICLOG_FILE("Test2", "test2.txt");
+
+	RAH_SAVELOG("Test");
+	RAH_SAVEBASICLOG("Test2");
+
+	RAH_OUTPUTLOG("Test");
+	RAH_BASICOUTPUTLOG("Test2");
+	/************************************************************************/
 	/* Modululo test                                                        */
 	/************************************************************************/
 	InitStruct newinitstruct;
@@ -139,6 +158,7 @@ int main()
 	/************************************************************************/
 	PoolTest.destroy();//aqui se hace la pprueba para eliminar el array
 	TestClassModule::CloseModule();
+	rah::debug::Debug::CloseModule();
     return 0;
 }
 

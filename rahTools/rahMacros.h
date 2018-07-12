@@ -15,7 +15,8 @@
 enum RahResult
 {
 	RAH_ERROR = -1,
-	RAH_SUCCESS = 0
+	RAH_SUCCESS = 0,
+	RAH_ALREADY_DECLARATE = 20
 };
 template<class t>
 /*

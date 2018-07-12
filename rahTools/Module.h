@@ -13,6 +13,9 @@ namespace rah
 	public:
 		static RahResult StartModule(structInit initValue)
 		{
+			if (instance() != NULL)
+				return RAH_ALREADY_DECLARATE;
+
 			instance() = new _type();
 			return instance()->Initialize(initValue);
 		}

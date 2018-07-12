@@ -157,6 +157,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="rahMacros.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="rahTools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="rahMacros.cpp" />
     <ClCompile Include="rahResource.cpp" />
