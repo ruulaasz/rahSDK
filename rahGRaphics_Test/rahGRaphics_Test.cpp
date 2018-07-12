@@ -1,7 +1,6 @@
 // rahGRaphics_Test.cpp: define el punto de entrada de la aplicación.
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
-#include <math.h>
 
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
@@ -51,8 +50,8 @@ rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
 
-rah::Color g_meshColor(0.f, 0.f, 1.f, 1.f);
-rah::Color g_backgroundColor(1.0f, 0.0f, 0.0f, 1.0f);
+rah::Color g_meshColor(0.2f, 0.0f, 0.0f, 1.f);
+rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
@@ -177,7 +176,7 @@ void renderCube()
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
 	CBColor cbColor;
-	cbColor.mColor = rah::Color(1.0f, 1.0f, 1.0f, 1.0f);
+	cbColor.mColor = g_meshColor;
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
 	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pCBView.m_buffer);
