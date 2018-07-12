@@ -11,6 +11,7 @@
 #include "GraphicSamplerState.h"
 #include "GraphicViewport.h"
 #include <rahTools.h>
+#include <Color.h>
 
 namespace rah
 {
@@ -125,7 +126,7 @@ namespace rah
 		* The color of the cleaned screen
 		*
 		*/
-		void clearScreen(RenderTarget* _renderTarget, float _color[4] = {});
+		void clearScreen(RenderTarget* _renderTarget, Color _color);
 
 		/**
 		* Releases all objects memory

@@ -13,6 +13,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nombre de clase de la ventana
 HINSTANCE g_hInst = NULL;
 HWND g_hWnd = NULL;
 float g_aspectRatio;
+int g_rasterState = 2;
 
 ID3D11Device* g_pD3DDevice;
 IDXGISwapChain* g_pSwapChain;
@@ -88,16 +89,15 @@ RahResult InitD3D(HWND hWnd)
 
 void LoadContentCube()
 {
+	//load shaders
 	g_vertexShader.createVertexShader(L"shaders.fx", "VS", "vs_5_0");
 	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexShader.m_shaderBlob);
-
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
-
 	g_pixelShader.createFragmentShader(L"shaders.fx", "PS", "ps_5_0");
 
+	// Create the constant buffers
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
-	// Create the constant buffers
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(CBView);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -145,26 +145,26 @@ void LoadContentCube()
 	CBProj cbproj;
 	cbproj.mProjection = rah::math::Transpose(g_Projection);
 	g_pDeviceContext->UpdateSubresource(g_pCBProj.m_buffer, 0, NULL, &cbproj, 0, 0);
+
+	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pCBView.m_buffer);
+	g_pDeviceContext->VSSetConstantBuffers(1, 1, &g_pCBProj.m_buffer);
+
+	g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
+	g_pDeviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
+	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[g_rasterState]);
+	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 }
 
 void renderCube()
 {
 	// Update our time
-
 	static DWORD dwTimeStart = 0;
 	DWORD dwTimeCur = GetTickCount();
 	if (dwTimeStart == 0)
 		dwTimeStart = dwTimeCur;
 	g_deltaTime = (dwTimeCur - dwTimeStart) / 1000.0f;
 
-	g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
-	g_pDeviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
-	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[2]);
-	g_pDeviceContext->RSSetViewports(1, g_pViewport);
-
-	float colorbk[4] = { g_backgroundColor.r, g_backgroundColor.g, g_backgroundColor.b, g_backgroundColor.alpha };
-
-	rah::GraphicManager::GetInstance().clearScreen(&rah::GraphicManager::GetInstance().m_renderTarget, const_cast<float*>(colorbk));
+	rah::GraphicManager::GetInstance().clearScreen(&rah::GraphicManager::GetInstance().m_renderTarget, g_backgroundColor);
 
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -175,12 +175,14 @@ void renderCube()
 	cbWorld.mWorld = rah::math::Transpose(g_World);
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
+	g_meshColor.r = (rah::math::Sin(g_deltaTime * 1.0f) + 1.0f) * 0.5f;
+	g_meshColor.g = (rah::math::Cos(g_deltaTime * 3.0f ) + 1.0f ) * 0.5f;
+	g_meshColor.b = (rah::math::Sin(g_deltaTime * 5.0f ) + 1.0f ) * 0.5f;
+
 	CBColor cbColor;
 	cbColor.mColor = g_meshColor;
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
-	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pCBView.m_buffer);
-	g_pDeviceContext->VSSetConstantBuffers(1, 1, &g_pCBProj.m_buffer);
 	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
 	g_pDeviceContext->VSSetConstantBuffers(3, 1, &g_pCBColor.m_buffer);
 
@@ -188,14 +190,12 @@ void renderCube()
 
 	g_pDeviceContext->VSSetShader(g_vertexShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
-	//Seteamos el PShader Perteneciente al modelo
 	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
 
 	g_Model.render();
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
-
 }
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -220,13 +220,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_RAHGRAPHICS_TEST));
-
     MSG msg;
 
 	InitD3D(g_hWnd);
 	LoadContentCube();
 
-	std::string path = "resources\\models\\Bassilisk\\Basillisk.dae";
 	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
 	rParams->fileName = "resources\\models\\Bassilisk\\Basillisk.dae";
 	g_Model.Initialize(rParams);

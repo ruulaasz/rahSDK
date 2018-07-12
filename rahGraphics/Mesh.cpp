@@ -176,5 +176,7 @@ namespace rah
 
 			pMesh->m_indexBuffer.create();
 		}
+
+		return RAH_SUCCESS;
 	}
 }

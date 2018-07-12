@@ -289,7 +289,7 @@ namespace rah
 		m_viewport.Set(pViewport);
 	}
 
-	void GraphicManager::clearScreen(RenderTarget* _renderTarget, float _color[4])
+	void GraphicManager::clearScreen(RenderTarget* _renderTarget, Color _color)
 	{
 		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(m_deviceContext.getPtr());
 		if (!pDeviceContext)
@@ -302,7 +302,9 @@ namespace rah
 			throw "NullPointer _renderTarget";
 		}
 
-		pDeviceContext->ClearRenderTargetView(_renderTarget->m_renderTarget, _color);
+		float color[4] = { _color.r, _color.g, _color.b, _color.alpha };
+
+		pDeviceContext->ClearRenderTargetView(_renderTarget->m_renderTarget, color);
 	}
 
 	void GraphicManager::cleanDevice()
