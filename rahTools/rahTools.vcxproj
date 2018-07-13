@@ -169,8 +169,6 @@
   <ItemGroup>
     <ClCompile Include="BasicResourceFabric.cpp" />
     <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="Pool.cpp" />
-    <ClCompile Include="rahMacros.cpp" />
     <ClCompile Include="rahResource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
   </ItemGroup>

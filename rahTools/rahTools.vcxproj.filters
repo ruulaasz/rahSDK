@@ -44,12 +44,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="rahMacros.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="rahResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

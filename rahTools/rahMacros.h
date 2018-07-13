@@ -1,5 +1,6 @@
 #pragma once
-
+#include <string>
+#include <algorithm>
 /*Use macros or classes for any #define for general use*/
 
 /************************************************************************/
@@ -16,8 +17,10 @@ enum RahResult
 {
 	RAH_ERROR = -1,
 	RAH_SUCCESS = 0,
-	RAH_NOT_DECLARATE = 20,
-	RAH_ALREADY_DECLARATE = 21,
+	RAH_NOT_DECLARATE,
+	RAH_ALREADY_DECLARATE,
+	RAH_INVALID_RESOURCE_TYPE,
+	RAH_FILE_PATH_EMPTY,
 	RAH_IS_DELETE = 999
 };
 template<class t>
@@ -66,3 +69,26 @@ public:
 	*/
 	~SecuredVar() {};
 };
+
+namespace rah
+{
+	/*
+	* Separator for the getFileName
+	*
+	*/
+	struct MatchPathSeparator
+	{
+		bool operator()(char _char) const
+		{
+			return _char == '/';
+		}
+	};
+	/*
+	* get the name in the string
+	*
+	*/
+	static std::string GetFileNameFromPath(std::string _filePath)
+	{
+		return std::string( std::find_if(_filePath.rbegin(), _filePath.rend(), MatchPathSeparator()).base(), _filePath.end());
+	}
+}

@@ -90,6 +90,12 @@ public:
 int main()
 {
 	/************************************************************************/
+	/* prueba de getfileName                                                */
+	/************************************************************************/
+	std::string filePathtest;
+	filePathtest = "debug/test/tripas.obb";
+	filePathtest = rah::GetFileNameFromPath(filePathtest);
+	/************************************************************************/
 	/* prueba de recurso basica                                             */
 	/************************************************************************/
 	rah::ResourceManagerInit tempresourcemanagerinit;

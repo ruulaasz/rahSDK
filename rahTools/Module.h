@@ -15,7 +15,7 @@ namespace rah
 			return lastError;
 		}
 	public:
-		static RahResult GetLastError()
+		static RahResult& GetLastError()
 		{
 			return LastError();
 		}

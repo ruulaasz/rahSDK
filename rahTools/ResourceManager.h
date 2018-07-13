@@ -17,11 +17,12 @@ namespace rah
 	protected:
 		std::unordered_map<unsigned int,std::vector<rahResource*>*> m_resources;
 		BasicResourceFabric* m_fabric;
+		unsigned int m_automaticID;
 	public:
 		SecuredVar<std::string> m_name;
 	public:
 		RahResult Initialize(ResourceManagerInit _params);
-		rahResource* LoadResource(BasicResourceParams _params, unsigned int _resourceType);
+		rahResource* LoadResource(BasicResourceParams _params, ResourceTypes _resourceType);
 		void Release();
 	public:
 		ResourceManager();

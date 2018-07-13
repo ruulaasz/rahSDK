@@ -5,7 +5,7 @@ namespace rah
 	class BasicResourceFabric
 	{
 	public:
-		virtual rahResource* GetMemory(int _type) = 0;
+		virtual rahResource* GetMemory(ResourceTypes _type) = 0;
 		BasicResourceFabric();
 		virtual ~BasicResourceFabric();
 	};
