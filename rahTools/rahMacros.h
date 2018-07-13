@@ -16,7 +16,9 @@ enum RahResult
 {
 	RAH_ERROR = -1,
 	RAH_SUCCESS = 0,
-	RAH_ALREADY_DECLARATE = 20
+	RAH_NOT_DECLARATE = 20,
+	RAH_ALREADY_DECLARATE = 21,
+	RAH_IS_DELETE = 999
 };
 template<class t>
 /*

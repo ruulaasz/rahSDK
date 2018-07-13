@@ -109,7 +109,9 @@ int main()
 	newinitstruct.w = 0;
 	FakeStruct fakestruct;
 	fakestruct.id = 1000;
+	RahResult temporlaresoult = TestClassModule::GetLastError();
 	TestClassModule::StartModule(newinitstruct);
+	temporlaresoult = TestClassModule::GetLastError();
 
 	/************************************************************************/
 	/* Pool test                                                            */
