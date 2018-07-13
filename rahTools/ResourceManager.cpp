@@ -19,9 +19,9 @@ namespace rah
 	}
 	void ResourceManager::Release()
 	{
-		for (unsigned int i = RAH_TOTAL; i >= 0; i--)
+		for (int i = RAH_TOTAL - 1; i >= 0; i--)
 		{
-			while (!m_resources.at(i)->empty())
+			while (!m_resources[i]->empty())
 			{
 				m_resources[i]->back()->Release();
 				RAH_SAFE_DELETE(m_resources[i]->back());
