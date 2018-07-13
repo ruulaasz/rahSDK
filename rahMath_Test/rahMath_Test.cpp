@@ -652,25 +652,25 @@ int main()
 
 	DirectX::XMMATRIX DirectxMatrix;
 
-	DirectxMatrix.r[0].m128_f32[0] = 0;
-	DirectxMatrix.r[0].m128_f32[1] = 1;
-	DirectxMatrix.r[0].m128_f32[2] = 2;
+	DirectxMatrix.r[0].m128_f32[0] = 0.52;
+	DirectxMatrix.r[0].m128_f32[1] = 1.23;
+	DirectxMatrix.r[0].m128_f32[2] = 0.2;
 	DirectxMatrix.r[0].m128_f32[3] = 3;
 	
 	DirectxMatrix.r[1].m128_f32[0] = 4;
-	DirectxMatrix.r[1].m128_f32[1] = 5;
-	DirectxMatrix.r[1].m128_f32[2] = 6;
-	DirectxMatrix.r[1].m128_f32[3] = 7;
+	DirectxMatrix.r[1].m128_f32[1] = 5.3;
+	DirectxMatrix.r[1].m128_f32[2] = 1.25;
+	DirectxMatrix.r[1].m128_f32[3] = 2;
 	
 	DirectxMatrix.r[2].m128_f32[0] = 8;
 	DirectxMatrix.r[2].m128_f32[1] = 9;
-	DirectxMatrix.r[2].m128_f32[2] = 10;
+	DirectxMatrix.r[2].m128_f32[2] = 6.699;
 	DirectxMatrix.r[2].m128_f32[3] = 11;
 	
 	DirectxMatrix.r[3].m128_f32[0] = 12;
 	DirectxMatrix.r[3].m128_f32[1] = 13;
-	DirectxMatrix.r[3].m128_f32[2] = 14;
-	DirectxMatrix.r[3].m128_f32[3] = 15;
+	DirectxMatrix.r[3].m128_f32[2] = 15.26;
+	DirectxMatrix.r[3].m128_f32[3] = 1.1;
 
 	rah::Matrix4D temp = XMtoRAH(DirectxMatrix);
 	printf("DirectxMatrix:\n\n");
@@ -678,25 +678,25 @@ int main()
 
 	rah::Matrix4D RahMatrix;
 
-	RahMatrix.m00 = 0;
-	RahMatrix.m01 = 1;
-	RahMatrix.m02 = 2;
+	RahMatrix.m00 = 0.52;
+	RahMatrix.m01 = 1.23;
+	RahMatrix.m02 = 0.2;
 	RahMatrix.m03 = 3;
 	
 	RahMatrix.m10 = 4;
-	RahMatrix.m11 = 5;
-	RahMatrix.m12 = 6;
-	RahMatrix.m13 = 7;
+	RahMatrix.m11 = 5.3;
+	RahMatrix.m12 = 1.25;
+	RahMatrix.m13 = 2;
 	
 	RahMatrix.m20 = 8;
 	RahMatrix.m21 = 9;
-	RahMatrix.m22 = 10;
+	RahMatrix.m22 = 6.699;
 	RahMatrix.m23 = 11;
 	
 	RahMatrix.m30 = 12;
 	RahMatrix.m31 = 13;
-	RahMatrix.m32 = 14;
-	RahMatrix.m33 = 15;
+	RahMatrix.m32 = 15.26;
+	RahMatrix.m33 = 1.1;
 
 	printf("\n\nRahMatrix:\n\n");
 	printMatrix(RahMatrix);
