@@ -1,7 +1,7 @@
 // rahGRaphics_Test.cpp: define el punto de entrada de la aplicación.
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
-
+#include <vld.h>
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
 #define MAX_LOADSTRING 100
