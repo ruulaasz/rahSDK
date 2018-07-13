@@ -19,4 +19,7 @@ namespace rah
 	{
 		return RahResult();
 	}
+	void Material::Release()
+	{
+	}
 }

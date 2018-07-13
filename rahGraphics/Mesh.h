@@ -52,6 +52,7 @@ namespace rah
 		*
 		*/
 		virtual RahResult Load();
+		virtual void Release();
 
 		VertexBuffer m_vertexBuffer;
 		IndexBuffer m_indexBuffer;

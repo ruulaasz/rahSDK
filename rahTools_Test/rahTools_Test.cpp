@@ -39,6 +39,10 @@ public:
 	{
 		return RahResult::RAH_SUCCESS;
 	}
+	virtual void Release()
+	{
+
+	}
 	resourceTest(){}
 	~resourceTest(){}
 };
@@ -75,12 +79,22 @@ public:
 		m_vector[3] = ptr.w;
 		return RAH_SUCCESS;
 	}
+	void Release()
+	{
+
+	}
 	TestClassModule() {};
 	~TestClassModule() {};
 };
 
 int main()
 {
+	/************************************************************************/
+	/* prueba de recurso basica                                             */
+	/************************************************************************/
+	rah::ResourceManagerInit tempresourcemanagerinit;
+	tempresourcemanagerinit.Fabric = NULL;
+	rah::ResourceManager::StartModule(tempresourcemanagerinit);
 	/************************************************************************/
 	/* Debug test                                                           */
 	/************************************************************************/
@@ -147,7 +161,7 @@ int main()
 	/* Pruebas de recursos                                                  */
 	/************************************************************************/
 	TestResourceParams testParams;
-	testParams.fileName = "dir/here";
+	testParams.filePath = "dir/here";
 	testParams.id = 1;
 	testParams.name = "newTest";
 	testParams.x = 10;
@@ -161,6 +175,7 @@ int main()
 	PoolTest.destroy();//aqui se hace la pprueba para eliminar el array
 	TestClassModule::CloseModule();
 	rah::debug::Debug::CloseModule();
+	rah::ResourceManager::CloseModule();
     return 0;
 }
 

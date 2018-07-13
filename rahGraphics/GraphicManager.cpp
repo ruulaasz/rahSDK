@@ -331,4 +331,7 @@ namespace rah
 		createRazterizerStates();
 		createViewport();
 	}
+	void GraphicManager::Release()
+	{
+	}
 }

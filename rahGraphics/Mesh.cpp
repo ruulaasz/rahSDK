@@ -58,7 +58,7 @@ namespace rah
 
 	RahResult Mesh::Load()
 	{
-		std::string texturesPath = m_fileName.Get();
+		std::string texturesPath = m_filePath.Get();
 		VertexData myVertex;
 		Mesh* pMesh = new Mesh();
 
@@ -152,7 +152,7 @@ namespace rah
 						// Load the Texture
 						GraphicTexture* newTexture = new GraphicTexture();
 						rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
-						rParams->fileName = finalPath;
+						rParams->filePath = finalPath;
 						newTexture->Initialize(rParams);
 						newTexture->Load();
 
@@ -178,5 +178,8 @@ namespace rah
 		}
 
 		return RAH_SUCCESS;
+	}
+	void Mesh::Release()
+	{
 	}
 }

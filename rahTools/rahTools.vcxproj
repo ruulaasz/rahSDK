@@ -157,18 +157,22 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasicResourceFabric.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="rahMacros.h" />
     <ClInclude Include="rahResource.h" />
     <ClInclude Include="rahTools.h" />
+    <ClInclude Include="ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BasicResourceFabric.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="rahMacros.cpp" />
     <ClCompile Include="rahResource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -57,6 +57,11 @@ namespace rah
 			*
 			*/
 			void OutputLog(std::string _text, int _line, char* _function, char* _file);
+			/*
+			* Empty function no had memory to delete
+			*
+			*/
+			void Release() {}
 		private:
 			/*
 			* Create a path if not exist

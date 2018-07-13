@@ -53,6 +53,7 @@ public:
 	t operator=(t _other)
 	{
 		Var = _other;
+		return Var;
 	}
 	/*
 	* Empty constructor

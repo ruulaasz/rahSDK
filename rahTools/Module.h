@@ -45,6 +45,7 @@ namespace rah
 		}
 		static void CloseModule()
 		{
+			instance()->Release();
 			LastError() = RAH_IS_DELETE;
 			delete instance();
 			instance() = NULL;

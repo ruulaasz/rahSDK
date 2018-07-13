@@ -226,7 +226,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	LoadContentCube();
 
 	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
-	rParams->fileName = "resources\\models\\Bassilisk\\Basillisk.dae";
+	rParams->filePath = "resources\\models\\Bassilisk\\Basillisk.dae";
 	g_Model.Initialize(rParams);
 	g_Model.Load();
 

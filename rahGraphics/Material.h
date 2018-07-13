@@ -35,7 +35,7 @@ namespace rah
 		~Material();
 
 		virtual RahResult Load();
-
+		virtual void Release();
 		ID3D11ShaderResourceView* m_textures[TextureType_MAXTEXTURES];
 	};
 }

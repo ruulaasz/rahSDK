@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "Model.h"
 #include <Importer.hpp>
 #include <postprocess.h>
 #include <scene.h>
@@ -51,7 +52,7 @@ namespace rah
 
 	RahResult Model::Load()
 	{
-		std::string texturesPath = m_fileName.Get();
+		std::string texturesPath = m_filePath.Get();
 		VertexData myVertex;
 
 		Assimp::Importer g_importer;
@@ -148,7 +149,7 @@ namespace rah
 							// Load the Texture
 							GraphicTexture* newTexture = new GraphicTexture();
 							rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
-							rParams->fileName = finalPath;
+							rParams->filePath = finalPath;
 							newTexture->Initialize(rParams);
 							newTexture->Load();
 
@@ -175,5 +176,8 @@ namespace rah
 		}
 
 		return RahResult();
+	}
+	void Model::Release()
+	{
 	}
 }

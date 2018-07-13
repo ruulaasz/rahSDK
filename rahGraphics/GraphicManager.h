@@ -142,7 +142,7 @@ namespace rah
 		*
 		*/
 		void init(HWND _hwnd);
-
+		void Release();
 		GraphicSwapChain m_swapchain;
 		GraphicDevice m_device;
 		GraphicDeviceContext m_deviceContext;

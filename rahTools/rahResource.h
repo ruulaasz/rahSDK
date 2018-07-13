@@ -4,13 +4,26 @@
 namespace rah
 {
 	/*
+	* enmum of all resources
+	*
+	*/
+	enum ResourceTypes
+	{
+		RAH_DEFAULT = 0,
+		RAH_GraphicTexture,
+		RAH_Material,
+		RAH_Mesh,
+		RAH_Model,
+		RAH_TOTAL
+	};
+	/*
 	* Basic struct to generate any resource
 	*
 	*/
 	struct BasicResourceParams
 	{
 		std::string name;
-		std::string fileName;
+		std::string filePath;
 		int id;
 	};
 	/*
@@ -21,7 +34,7 @@ namespace rah
 	{
 	public:
 		SecuredVar<std::string> m_name;
-		SecuredVar<std::string> m_fileName;
+		SecuredVar<std::string> m_filePath;
 		SecuredVar<int> m_referenceCount;
 		SecuredVar<int> m_id;
 	public:
@@ -40,6 +53,11 @@ namespace rah
 		*
 		*/
 		virtual RahResult Load() = 0;
+		/*
+		* Relese is the obligatory function this si should called in shutdown of the manager
+		*
+		*/
+		virtual void Release() = 0;
 		rahResource();
 		rahResource(BasicResourceParams* _params);
 		rahResource(BasicResourceParams _params);

@@ -55,6 +55,7 @@ namespace rah
 		*
 		*/
 		virtual RahResult Load();
+		virtual void Release();
 
 		std::vector <Mesh* > m_meshes;
 		Matrix4D m_transform;

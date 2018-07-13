@@ -32,7 +32,7 @@ namespace rah
 		*
 		*/
 		virtual RahResult Load();
-
+		virtual void Release();
 		ID3D11ShaderResourceView* m_graphicTexture;
 	};
 }

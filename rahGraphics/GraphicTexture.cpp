@@ -48,7 +48,7 @@ namespace rah
 	{
 		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
 
-		std::string fileName = m_fileName.Get();
+		std::string fileName = m_filePath.Get();
 
 		if (fileName.empty())
 		{
@@ -76,5 +76,8 @@ namespace rah
 		}
 
 		return RahResult();
+	}
+	void GraphicTexture::Release()
+	{
 	}
 }
