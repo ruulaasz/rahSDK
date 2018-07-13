@@ -42,3 +42,4 @@ rahTools_Test/test2.txt
 rahTools_Test/Log/test.txt
 rahGRaphics_Test/resources.rar
 lib/rahMath/Win32/Release/rahMath_Release.lib
+lib/rahEngine/Win32/Debug/rahEngine_Debug.lib
