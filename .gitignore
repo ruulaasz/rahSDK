@@ -43,3 +43,11 @@ rahTools_Test/Log/test.txt
 rahGRaphics_Test/resources.rar
 lib/rahMath/Win32/Release/rahMath_Release.lib
 lib/rahEngine/Win32/Debug/rahEngine_Debug.lib
+rahTools_Test/Log/Jul 16 2018.txt
+lib/rahGraphics/x64/Release/rahGraphics_Release.lib
+lib/rahGraphics/Win32/Release/rahGraphics_Release.lib
+lib/rahEngine/Win32/Release/rahEngine_Release.lib
+lib/rahTools/x64/Release/rahTools_Release.lib
+lib/rahMath/x64/Release/rahMath_Release.lib
+lib/rahEngine/x64/Release/rahEngine_Release.lib
+lib/rahEngine/x64/Debug/rahEngine_Debug.lib
