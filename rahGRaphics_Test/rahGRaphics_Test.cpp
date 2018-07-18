@@ -57,7 +57,7 @@ rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
 
-rah::Model g_Model;
+rah::Model* g_Model;
 
 float g_deltaTime = 0.0f;
 
@@ -76,6 +76,12 @@ RahResult InitD3D(HWND hWnd)
 	rah::GraphicManager::StartModule(init);
 
 	rah::GraphicManager::GetInstance().init(hWnd);
+
+	rah::ResourceManagerInit resourceInit;
+	resourceInit.Fabric = new rah::ResourceFabric();
+	rah::ResourceManager::StartModule(resourceInit);
+
+	RAH_DEBUGER_MODULE_DECLARATION();
 
 	g_pD3DDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
 	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
@@ -192,7 +198,7 @@ void renderCube()
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
 
-	g_Model.render();
+	g_Model->render();
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
@@ -224,11 +230,29 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	InitD3D(g_hWnd);
 	LoadContentCube();
-
+	/************************************************************************/
+	/* Prueba de inicializacion de recursos                                 */
+	/************************************************************************/
 	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
 	rParams->filePath = "resources\\models\\Bassilisk\\Basillisk.dae";
-	g_Model.Initialize(rParams);
-	g_Model.Load();
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
+
+	/************************************************************************/
+	/* Pruebas de busqeudas                                                 */
+	/************************************************************************/
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByFilePath(rParams->filePath);
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByFilePath(rParams->filePath, rah::ResourceTypes::RAH_Model);
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByFilePath(rParams->filePath, rah::ResourceTypes::RAH_GraphicTexture);
+
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByName(rParams->name);
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByName(rParams->name, rah::ResourceTypes::RAH_GraphicTexture);
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByName(rParams->name, rah::ResourceTypes::RAH_Model);
+	
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByID(rParams->id);
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByID(rParams->id, rah::ResourceTypes::RAH_GraphicTexture);
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByID(rParams->id, rah::ResourceTypes::RAH_Model);
+
+	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
 
 	while (TRUE)
 	{

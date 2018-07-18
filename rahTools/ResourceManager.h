@@ -22,7 +22,7 @@ namespace rah
 		SecuredVar<std::string> m_name;
 	public:
 		RahResult Initialize(ResourceManagerInit _params);
-		rahResource* LoadResource(BasicResourceParams _params, ResourceTypes _resourceType);
+		rahResource* LoadResource(BasicResourceParams* _params, ResourceTypes _resourceType);
 		rahResource* GetResourceByName(std::string _name, ResourceTypes _resourceType = RAH_DEFAULT);
 		rahResource* GetResourceByFilePath(std::string _filePath, ResourceTypes _resourceType = RAH_DEFAULT);
 		rahResource* GetResourceByID(int _id, ResourceTypes _resourceType = RAH_DEFAULT);

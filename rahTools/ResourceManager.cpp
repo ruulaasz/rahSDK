@@ -14,7 +14,7 @@ namespace rah
 		m_automaticID = 0;
 		return RAH_SUCCESS;
 	}
-	rahResource* ResourceManager::LoadResource(BasicResourceParams _params, ResourceTypes _resourceType)
+	rahResource* ResourceManager::LoadResource(BasicResourceParams* _params, ResourceTypes _resourceType)
 	{
 		if (_resourceType == RAH_DEFAULT || _resourceType == RAH_TOTAL)
 		{
@@ -25,7 +25,7 @@ namespace rah
 			return NULL;
 		}
 
-		if (_params.filePath.empty())
+		if (_params->filePath.empty())
 		{
 			GetLastError() = RAH_FILE_PATH_EMPTY;
 			std::string logtxt;
@@ -34,22 +34,19 @@ namespace rah
 			return NULL;
 		}
 
-		std::string nameResource = rah::StringUtils::GetFileNameFromPath(_params.filePath);
-		for (unsigned int i = 0; i < m_resources[_resourceType]->size(); i++)
-		{
-			if (m_resources[_resourceType]->at(i)->m_name.Get() == nameResource)
-			{
-				return m_resources[_resourceType]->at(i);
-			}
-		}
+		std::string nameResource = rah::StringUtils::GetFileNameFromPath(_params->filePath);
 
-		if(_params.name.empty())
-			_params.name = nameResource;
-		_params.id = m_automaticID;
+		rahResource* resultresourse = GetResourceByName(nameResource, _resourceType);
+		if (resultresourse != NULL)
+			return resultresourse;
+
+		if(_params->name.empty())
+			_params->name = nameResource;
+		_params->id = m_automaticID;
 		m_automaticID++;
-		rahResource* resultresourse = m_fabric->GetMemory(_resourceType);
+		resultresourse = m_fabric->GetMemory(_resourceType);
 		RahResult resulttmp;
-		resulttmp = resultresourse->Initialize(&_params);
+		resulttmp = resultresourse->Initialize(_params);
 		if (resulttmp != RAH_SUCCESS)
 		{
 			std::string logtxt;
@@ -65,6 +62,7 @@ namespace rah
 			RAH_SAVELOG(logtxt);
 			return NULL;
 		}
+		m_resources[_resourceType]->push_back(resultresourse);
 		return resultresourse;
 	}
 	rahResource * ResourceManager::GetResourceByName(std::string _name, ResourceTypes _resourceType)

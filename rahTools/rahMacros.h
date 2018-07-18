@@ -82,7 +82,7 @@ namespace rah
 	{
 		bool operator()(char _char) const
 		{
-			return _char == '/';
+			return (_char == '/' || _char == '\\');
 		}
 	};
 	/*
