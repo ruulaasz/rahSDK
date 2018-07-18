@@ -67,6 +67,132 @@ namespace rah
 		}
 		return resultresourse;
 	}
+	rahResource * ResourceManager::GetResourceByName(std::string _name, ResourceTypes _resourceType)
+	{
+		rahResource* returnResource = NULL;
+		if (_resourceType == RAH_TOTAL)
+		{
+			GetLastError() = RAH_RESOURCE_TYPE_TOTAL;
+			std::string logtxt;
+			logtxt = "Cant get Resource type: " + std::to_string(RAH_RESOURCE_TYPE_TOTAL);
+			RAH_SAVELOG(logtxt);
+			return returnResource;
+		}
+		if (_resourceType != RAH_DEFAULT)
+		{
+			for (size_t i = 0; i < m_resources[_resourceType]->size(); i++)
+			{
+				if (m_resources[_resourceType]->at(i)->m_name.Get() == _name)
+				{
+					returnResource = m_resources[_resourceType]->at(i);
+					return returnResource;
+				}
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < RAH_TOTAL; i++)
+			{
+				for (size_t j = 0; j < m_resources[i]->size(); j++)
+				{
+					if (m_resources[i]->at(j)->m_name.Get() == _name)
+					{
+						returnResource = m_resources[i]->at(j);
+						return returnResource;
+					}
+				}
+			}
+		}
+		GetLastError() = RAH_CANT_GET_RESOURCE;
+		std::string logtxt;
+		logtxt = "Cant get Resource type: " + std::to_string(RAH_CANT_GET_RESOURCE);
+		RAH_SAVELOG(logtxt);
+		return returnResource;
+	}
+	rahResource * ResourceManager::GetResourceByFilePath(std::string _filePath, ResourceTypes _resourceType)
+	{
+		rahResource* returnResource = NULL;
+		if (_resourceType == RAH_TOTAL)
+		{
+			GetLastError() = RAH_RESOURCE_TYPE_TOTAL;
+			std::string logtxt;
+			logtxt = "Cant get Resource type: " + std::to_string(RAH_RESOURCE_TYPE_TOTAL);
+			RAH_SAVELOG(logtxt);
+			return returnResource;
+		}
+		if (_resourceType != RAH_DEFAULT)
+		{
+			for (size_t i = 0; i < m_resources[_resourceType]->size(); i++)
+			{
+				if (m_resources[_resourceType]->at(i)->m_filePath.Get() == _filePath)
+				{
+					returnResource = m_resources[_resourceType]->at(i);
+					return returnResource;
+				}
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < RAH_TOTAL; i++)
+			{
+				for (size_t j = 0; j < m_resources[i]->size(); j++)
+				{
+					if (m_resources[i]->at(j)->m_filePath.Get() == _filePath)
+					{
+						returnResource = m_resources[i]->at(j);
+						return returnResource;
+					}
+				}
+			}
+		}
+		GetLastError() = RAH_CANT_GET_RESOURCE;
+		std::string logtxt;
+		logtxt = "Cant get Resource type: " + std::to_string(RAH_CANT_GET_RESOURCE);
+		RAH_SAVELOG(logtxt);
+		return returnResource;
+	}
+	rahResource * ResourceManager::GetResourceByID(int _id, ResourceTypes _resourceType)
+	{
+		rahResource* returnResource = NULL;
+		if (_resourceType == RAH_TOTAL)
+		{
+			GetLastError() = RAH_RESOURCE_TYPE_TOTAL;
+			std::string logtxt;
+			logtxt = "Cant get Resource type: " + std::to_string(RAH_RESOURCE_TYPE_TOTAL);
+			RAH_SAVELOG(logtxt);
+			return returnResource;
+		}
+		if (_resourceType != RAH_DEFAULT)
+		{
+			for (size_t i = 0; i < m_resources[_resourceType]->size(); i++)
+			{
+				if (m_resources[_resourceType]->at(i)->m_id.Get() == _id)
+				{
+					returnResource = m_resources[_resourceType]->at(i);
+					return returnResource;
+				}
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < RAH_TOTAL; i++)
+			{
+				for (size_t j = 0; j < m_resources[i]->size(); j++)
+				{
+					if (m_resources[i]->at(j)->m_id.Get() == _id)
+					{
+						returnResource = m_resources[i]->at(j);
+						return returnResource;
+					}
+				}
+			}
+		}
+		GetLastError() = RAH_CANT_GET_RESOURCE;
+		std::string logtxt;
+		logtxt = "Cant get Resource type: " + std::to_string(RAH_CANT_GET_RESOURCE);
+		RAH_SAVELOG(logtxt);
+		return returnResource;
+	}
 	void ResourceManager::Release()
 	{
 		for (int i = RAH_TOTAL - 1; i >= 0; i--)
