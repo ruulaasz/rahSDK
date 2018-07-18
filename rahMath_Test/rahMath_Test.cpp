@@ -652,25 +652,25 @@ int main()
 
 	DirectX::XMMATRIX DirectxMatrix;
 
-	DirectxMatrix.r[0].m128_f32[0] = 0.52;
-	DirectxMatrix.r[0].m128_f32[1] = 1.23;
-	DirectxMatrix.r[0].m128_f32[2] = 0.2;
-	DirectxMatrix.r[0].m128_f32[3] = 3;
+	DirectxMatrix.r[0].m128_f32[0] = 0.52f;
+	DirectxMatrix.r[0].m128_f32[1] = 1.23f;
+	DirectxMatrix.r[0].m128_f32[2] = 0.2f;
+	DirectxMatrix.r[0].m128_f32[3] = 3.f;
 	
-	DirectxMatrix.r[1].m128_f32[0] = 4;
-	DirectxMatrix.r[1].m128_f32[1] = 5.3;
-	DirectxMatrix.r[1].m128_f32[2] = 1.25;
-	DirectxMatrix.r[1].m128_f32[3] = 2;
+	DirectxMatrix.r[1].m128_f32[0] = 4.f;
+	DirectxMatrix.r[1].m128_f32[1] = 5.3f;
+	DirectxMatrix.r[1].m128_f32[2] = 1.25f;
+	DirectxMatrix.r[1].m128_f32[3] = 2.f;
 	
-	DirectxMatrix.r[2].m128_f32[0] = 8;
-	DirectxMatrix.r[2].m128_f32[1] = 9;
-	DirectxMatrix.r[2].m128_f32[2] = 6.699;
-	DirectxMatrix.r[2].m128_f32[3] = 11;
+	DirectxMatrix.r[2].m128_f32[0] = 8.f;
+	DirectxMatrix.r[2].m128_f32[1] = 9.f;
+	DirectxMatrix.r[2].m128_f32[2] = 6.699f;
+	DirectxMatrix.r[2].m128_f32[3] = 11.f;
 	
-	DirectxMatrix.r[3].m128_f32[0] = 12;
-	DirectxMatrix.r[3].m128_f32[1] = 13;
-	DirectxMatrix.r[3].m128_f32[2] = 15.26;
-	DirectxMatrix.r[3].m128_f32[3] = 1.1;
+	DirectxMatrix.r[3].m128_f32[0] = 12.f;
+	DirectxMatrix.r[3].m128_f32[1] = 13.f;
+	DirectxMatrix.r[3].m128_f32[2] = 15.26f;
+	DirectxMatrix.r[3].m128_f32[3] = 1.1f;
 
 	rah::Matrix4D temp = XMtoRAH(DirectxMatrix);
 	printf("DirectxMatrix:\n\n");
@@ -678,25 +678,25 @@ int main()
 
 	rah::Matrix4D RahMatrix;
 
-	RahMatrix.m00 = 0.52;
-	RahMatrix.m01 = 1.23;
-	RahMatrix.m02 = 0.2;
-	RahMatrix.m03 = 3;
+	RahMatrix.m00 = 0.52f;
+	RahMatrix.m01 = 1.23f;
+	RahMatrix.m02 = 0.2f;
+	RahMatrix.m03 = 3.f;
 	
-	RahMatrix.m10 = 4;
-	RahMatrix.m11 = 5.3;
-	RahMatrix.m12 = 1.25;
-	RahMatrix.m13 = 2;
+	RahMatrix.m10 = 4.f;
+	RahMatrix.m11 = 5.3f;
+	RahMatrix.m12 = 1.25f;
+	RahMatrix.m13 = 2.f;
 	
-	RahMatrix.m20 = 8;
-	RahMatrix.m21 = 9;
-	RahMatrix.m22 = 6.699;
-	RahMatrix.m23 = 11;
+	RahMatrix.m20 = 8.f;
+	RahMatrix.m21 = 9.f;
+	RahMatrix.m22 = 6.699f;
+	RahMatrix.m23 = 11.f;
 	
-	RahMatrix.m30 = 12;
-	RahMatrix.m31 = 13;
-	RahMatrix.m32 = 15.26;
-	RahMatrix.m33 = 1.1;
+	RahMatrix.m30 = 12.f;
+	RahMatrix.m31 = 13.f;
+	RahMatrix.m32 = 15.26f;
+	RahMatrix.m33 = 1.1f;
 
 	printf("\n\nRahMatrix:\n\n");
 	printMatrix(RahMatrix);

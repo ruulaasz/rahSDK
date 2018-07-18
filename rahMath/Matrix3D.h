@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning(disable : 4201)
 namespace rah
 {
 	/**
@@ -17,7 +17,7 @@ namespace rah
 		* Matrix 3D structure
 		*
 		*/
-		union
+		union 
 		{
 			struct
 			{
@@ -38,3 +38,4 @@ namespace rah
 		void operator-=		(const Matrix3D& _Matrix3x3);
 	};
 }
+#pragma warning(default : 4201)

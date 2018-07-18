@@ -20,7 +20,7 @@ namespace rah
 
 	Matrix4D rah::Matrix4D::operator+(const Matrix4D & _Matrix4x4)
 	{
-		Matrix4D AditionMatrix;
+		Matrix4D AditionMatrix = _Matrix4x4;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -35,7 +35,7 @@ namespace rah
 
 	Matrix4D rah::Matrix4D::operator-(const Matrix4D & _Matrix4x4)
 	{
-		Matrix4D AditionMatrix;
+		Matrix4D AditionMatrix = _Matrix4x4;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -50,7 +50,7 @@ namespace rah
 
 	Matrix4D rah::Matrix4D::operator*(const Matrix4D & _Matrix4x4)
 	{
-		Matrix4D MultiplicationMatrix;
+		Matrix4D MultiplicationMatrix = _Matrix4x4;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -87,7 +87,7 @@ namespace rah
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				Line[j][i] += (Line[j][i]);
+				Line[j][i] += (_Matrix4x4.Line[j][i]);
 			}
 		}
 	}
@@ -98,7 +98,7 @@ namespace rah
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				Line[j][i] -= (Line[j][i]);
+				Line[j][i] -= (_Matrix4x4.Line[j][i]);
 			}
 		}
 	}

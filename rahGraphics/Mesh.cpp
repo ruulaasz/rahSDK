@@ -62,7 +62,8 @@ namespace rah
 		VertexData myVertex;
 		Mesh* pMesh = new Mesh();
 
-		ID3D11Device* pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
+		ID3D11Device* pD3DDevice = NULL;
+		pD3DDevice = reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr());
 
 		Assimp::Importer g_importer;
 		const aiScene* g_scene;

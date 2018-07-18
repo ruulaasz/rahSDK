@@ -32,6 +32,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahGRaphics_Test", "rahGRap
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahEngine", "rahEngine\rahEngine.vcxproj", "{C201799F-CBC0-4764-BE27-9E859E36A5AF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
+		{779B72E6-24EE-4831-AE6E-5BAB3120D8C9} = {779B72E6-24EE-4831-AE6E-5BAB3120D8C9}
+		{C060AAF4-5132-4923-B401-11B4BF36ABB3} = {C060AAF4-5132-4923-B401-11B4BF36ABB3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -25,40 +25,40 @@ namespace rah
 
 	Color Color::operator+(const Color & _Color)
 	{
-		Color r(r+_Color.r, g + _Color.g, b + _Color.b, alpha + _Color.alpha);
+		Color color(r+_Color.r, g + _Color.g, b + _Color.b, alpha + _Color.alpha);
 
-		if (r.r > 1.f)
-			r.r = 1.f;
+		if (color.r > 1.f)
+			color.r = 1.f;
 
-		if (r.g > 1.f)
-			r.g = 1.f;
+		if (color.g > 1.f)
+			color.g = 1.f;
 
-		if (r.b > 1.f)
-			r.b = 1.f;
+		if (color.b > 1.f)
+			color.b = 1.f;
 
-		if (r.alpha > 1.f)
-			r.alpha = 1.f;
+		if (color.alpha > 1.f)
+			color.alpha = 1.f;
 
-		return r;
+		return color;
 	}
 
 	Color Color::operator-(const Color & _Color)
 	{
-		Color r(r - _Color.r, g - _Color.g, b - _Color.b, alpha - _Color.alpha);
+		Color color(r - _Color.r, g - _Color.g, b - _Color.b, alpha - _Color.alpha);
 
-		if (r.r < 0.f)
-			r.r = 0.f;
+		if (color.r < 0.f)
+			color.r = 0.f;
 
-		if (r.g < 0.f)
-			r.g = 0.f;
+		if (color.g < 0.f)
+			color.g = 0.f;
 
-		if (r.b < 0.f)
-			r.b = 0.f;
+		if (color.b < 0.f)
+			color.b = 0.f;
 
-		if (r.alpha < 0.f)
-			r.alpha = 0.f;
+		if (color.alpha < 0.f)
+			color.alpha = 0.f;
 
-		return r;
+		return color;
 	}
 
 	void Color::operator+=(const Color & _Color)

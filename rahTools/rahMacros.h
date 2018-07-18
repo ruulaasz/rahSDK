@@ -87,8 +87,15 @@ namespace rah
 	* get the name in the string
 	*
 	*/
-	static std::string GetFileNameFromPath(std::string _filePath)
+	class StringUtils
 	{
-		return std::string( std::find_if(_filePath.rbegin(), _filePath.rend(), MatchPathSeparator()).base(), _filePath.end());
-	}
+	public:
+		static std::string GetFileNameFromPath(std::string _filePath)
+		{
+			return std::string(std::find_if(_filePath.rbegin(), _filePath.rend(), MatchPathSeparator()).base(), _filePath.end());
+		}
+
+		StringUtils() {};
+		~StringUtils() {};
+	};
 }

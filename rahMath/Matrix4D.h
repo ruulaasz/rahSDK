@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning(disable : 4201)
 namespace rah
 {
 	/**
@@ -34,3 +34,4 @@ namespace rah
 		void operator-=		(const Matrix4D& _Matrix4x4);
 	};
 }
+#pragma warning(default : 4201)

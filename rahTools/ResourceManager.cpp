@@ -34,7 +34,7 @@ namespace rah
 			return NULL;
 		}
 
-		std::string nameResource = rah::GetFileNameFromPath(_params.filePath);
+		std::string nameResource = rah::StringUtils::GetFileNameFromPath(_params.filePath);
 		for (unsigned int i = 0; i < m_resources[_resourceType]->size(); i++)
 		{
 			if (m_resources[_resourceType]->at(i)->m_name.Get() == nameResource)

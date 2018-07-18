@@ -53,7 +53,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float Sin(float _value) { return sinf(_value); };
+		float Sin(float _value) { return sinf(_value); };
 
 		/**
 		* Returns the cos of any given value
@@ -68,7 +68,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float Cos(float _value) { return cosf(_value); };	
+		float Cos(float _value) { return cosf(_value); };	
 
 		/**
 		* Returns the tan of any given value
@@ -83,7 +83,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float Tan(float _value) { return tanf(_value); };	
+		float Tan(float _value) { return tanf(_value); };	
 
 		/**
 		* Returns the arcsin of any given value
@@ -98,7 +98,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float ArcSin(float _value) { return asinf(_value); };
+		inline float ArcSin(float _value) { return asinf(_value); };
 
 		/**
 		* Returns the arccos of any given value
@@ -113,7 +113,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float ArcCos(float _value) { return acosf(_value); };
+		inline float ArcCos(float _value) { return acosf(_value); };
 
 		/**
 		* Returns the arctan of any given value
@@ -128,7 +128,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float ArcTan(float _value) { return atanf(_value); };
+		inline float ArcTan(float _value) { return atanf(_value); };
 
 		/**
 		* Returns the arctan2 of a float value
@@ -143,7 +143,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float ArcTan2(float _t0, float _t1) { return atan2f(_t0, _t1); };
+		inline float ArcTan2(float _t0, float _t1) { return atan2f(_t0, _t1); };
 
 		/**
 		* Returns the squareroot of any given value
@@ -156,7 +156,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float Sqrt(float _value)		
+		float Sqrt(float _value)		
 		{
 			return sqrt(_value);			
 		}
@@ -172,7 +172,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float InvSqrt(float _value) { return (1 / sqrt(_value)); };
+		inline float InvSqrt(float _value) { return (1 / sqrt(_value)); };
 
 		/**
 		* Returns the square of any given value
@@ -185,7 +185,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float Square(float _value)							
+		float Square(float _value)							
 		{
 			return (_value*_value);			
 		}
@@ -201,7 +201,7 @@ namespace rah
 		*
 		*/
 		template<>
-		static float Pow(float _value, int _power) { return pow(_value, _power); };
+		inline float Pow(float _value, int _power) { return pow(_value, _power); };
 
 		/**
 		* Calculates the factorial of a given value
@@ -246,17 +246,17 @@ namespace rah
 		/**
 		* Vector Length
 		*/
-		static float Length(Vector2D& _Vector)
+		static inline  float Length(Vector2D& _Vector)
 		{
 			return Sqrt(Square(_Vector.x) + Square(_Vector.y));
 		}
 
-		static float Length(Vector3D& _Vector)
+		static inline  float Length(Vector3D& _Vector)
 		{
 			return Sqrt(Square(_Vector.x) + Square(_Vector.y) + Square(_Vector.z));
 		}
 
-		static float Length(Vector4D& _Vector)
+		static inline  float Length(Vector4D& _Vector)
 		{
 			return Sqrt(Square(_Vector.x) + Square(_Vector.y) + Square(_Vector.z) + Square(_Vector.w));
 		}
@@ -264,17 +264,17 @@ namespace rah
 		/**
 		* Vector Length Squared
 		*/
-		static float LengthSquared(Vector2D& _Vector)
+		static inline  float LengthSquared(Vector2D& _Vector)
 		{
 			return Square(_Vector.x) + Square(_Vector.y);
 		}
 
-		static float LengthSquared(Vector3D& _Vector)
+		static inline  float LengthSquared(Vector3D& _Vector)
 		{
 			return Square(_Vector.x) + Square(_Vector.y) + Square(_Vector.z);
 		}
 
-		static float LengthSquared(Vector4D& _Vector)
+		static inline  float LengthSquared(Vector4D& _Vector)
 		{
 			return Square(_Vector.x) + Square(_Vector.y) + Square(_Vector.z) + Square(_Vector.w);
 		}
@@ -282,17 +282,17 @@ namespace rah
 		/**
 		* Vector Dot
 		*/
-		static float Dot(Vector2D& _Vector, Vector2D& _Vector2)
+		static inline  float Dot(Vector2D& _Vector, Vector2D& _Vector2)
 		{
 			return((_Vector.x * _Vector2.x) + (_Vector.y * _Vector2.y));
 		}
 
-		static float Dot(Vector3D& _Vector, Vector3D& _Vector2)
+		static inline  float Dot(Vector3D& _Vector, Vector3D& _Vector2)
 		{
 			return((_Vector.x * _Vector2.x) + (_Vector.y * _Vector2.y) + (_Vector.z * _Vector2.z));
 		}
 
-		static float Dot(Vector4D& _Vector, Vector4D& _Vector2)
+		static inline  float Dot(Vector4D& _Vector, Vector4D& _Vector2)
 		{
 			return((_Vector.x * _Vector2.x) + (_Vector.y * _Vector2.y) + (_Vector.z * _Vector2.z) + (_Vector.w * _Vector2.w));
 		}
@@ -300,7 +300,7 @@ namespace rah
 		/**
 		* Vector Normalize
 		*/
-		static void Normalize(Vector2D& _Vector)
+		static inline  void Normalize(Vector2D& _Vector)
 		{
 			float length = Length(_Vector);
 
@@ -308,7 +308,7 @@ namespace rah
 				_Vector.x /= length, _Vector.y /= length;
 		}
 
-		static void Normalize(Vector3D& _Vector)
+		static inline  void Normalize(Vector3D& _Vector)
 		{
 			float length = Length(_Vector);
 
@@ -316,7 +316,7 @@ namespace rah
 				_Vector.x /= length, _Vector.y /= length, _Vector.z /= length;
 		}
 
-		static void Normalize(Vector4D& _Vector)
+		static inline  void Normalize(Vector4D& _Vector)
 		{
 			float length = Length(_Vector);
 
@@ -327,21 +327,21 @@ namespace rah
 		/**
 		* Vector Escalate
 		*/
-		static void Escalate(Vector2D& _Vector, float _scalar)
+		static inline  void Escalate(Vector2D& _Vector, float _scalar)
 		{
 			Normalize(_Vector);
 
 			_Vector.x *= _scalar, _Vector.y *= _scalar;
 		}
 
-		static void Escalate(Vector3D& _Vector, float _scalar)
+		static inline  void Escalate(Vector3D& _Vector, float _scalar)
 		{
 			Normalize(_Vector);
 
 			_Vector.x *= _scalar, _Vector.y *= _scalar, _Vector.z *= _scalar;
 		}
 
-		static void Escalate(Vector4D& _Vector, float _scalar)
+		static inline  void Escalate(Vector4D& _Vector, float _scalar)
 		{
 			Normalize(_Vector);
 
@@ -351,7 +351,7 @@ namespace rah
 		/**
 		* Vector Truncate
 		*/
-		static void Truncate(Vector2D& _Vector, float _max)
+		static inline  void Truncate(Vector2D& _Vector, float _max)
 		{
 			float mag = Length(_Vector);
 
@@ -359,7 +359,7 @@ namespace rah
 				Escalate(_Vector, _max);
 		}
 
-		static void Truncate(Vector3D& _Vector, float _max)
+		static inline  void Truncate(Vector3D& _Vector, float _max)
 		{
 			float mag = Length(_Vector);
 
@@ -367,7 +367,7 @@ namespace rah
 				Escalate(_Vector, _max);
 		}
 
-		static void Truncate(Vector4D& _Vector, float _max)
+		static inline  void Truncate(Vector4D& _Vector, float _max)
 		{
 			float mag = Length(_Vector);
 
@@ -378,7 +378,7 @@ namespace rah
 		/**
 		* Vector Cross
 		*/
-		static Vector3D CrossProduct(const Vector3D& _Vector, const Vector3D& _Vector2)
+		static inline  Vector3D CrossProduct(const Vector3D& _Vector, const Vector3D& _Vector2)
 		{
 			return Vector3D
 			{
@@ -388,7 +388,7 @@ namespace rah
 			};
 		}
 
-		static Vector4D CrossProduct(const Vector4D& _Vector, const Vector4D& _Vector2)
+		static inline  Vector4D CrossProduct(const Vector4D& _Vector, const Vector4D& _Vector2)
 		{
 			return Vector4D
 			{
@@ -401,17 +401,17 @@ namespace rah
 		/**
 		* Vector Clear
 		*/
-		static void Clear(Vector2D& _Vector)
+		static inline  void Clear(Vector2D& _Vector)
 		{
 			memset(&_Vector, 0, sizeof(Vector2D));
 		}
 
-		static void Clear(Vector3D& _Vector)
+		static inline  void Clear(Vector3D& _Vector)
 		{
 			memset(&_Vector, 0, sizeof(Vector3D));
 		}
 
-		static void Clear(Vector4D& _Vector)
+		static inline  void Clear(Vector4D& _Vector)
 		{
 			memset(&_Vector, 0, sizeof(Vector4D));
 		}
@@ -419,12 +419,12 @@ namespace rah
 		/**
 		* Matrix Clear
 		*/
-		static void Clear(Matrix3D& _Matrix)
+		static inline  void Clear(Matrix3D& _Matrix)
 		{
 			memset(&_Matrix, 0, sizeof(Matrix3D));
 		}
 
-		static void Clear(Matrix4D& _Matrix)
+		static inline  void Clear(Matrix4D& _Matrix)
 		{
 			memset(&_Matrix, 0, sizeof(Matrix4D));
 		}
@@ -432,7 +432,7 @@ namespace rah
 		/**
 		* Matrix Identity
 		*/
-		static Matrix3D Identity3D()
+		static inline  Matrix3D Identity3D()
 		{
 			Matrix3D IdentityMatrix;
 
@@ -445,7 +445,7 @@ namespace rah
 			return IdentityMatrix;
 		}
 
-		static Matrix4D Identity4D()
+		static inline  Matrix4D Identity4D()
 		{
 			Matrix4D IdentityMatrix;
 
@@ -462,7 +462,7 @@ namespace rah
 		/**
 		* Matrix Transpose
 		*/
-		static Matrix3D Transpose(const Matrix3D& _Matrix3x3)
+		static inline  Matrix3D Transpose(const Matrix3D& _Matrix3x3)
 		{
 			Matrix3D TransposeMatrix;
 
@@ -477,7 +477,7 @@ namespace rah
 			return TransposeMatrix;
 		}
 
-		static Matrix4D Transpose(const Matrix4D& _Matrix4x4)															
+		static inline  Matrix4D Transpose(const Matrix4D& _Matrix4x4)
 		{
 			Matrix4D TransposeMatrix;
 
@@ -495,7 +495,7 @@ namespace rah
 		/**
 		* Matrix Scalar
 		*/
-		static Matrix3D ScalarMatrix3x3(float _X, float _Y, float _Z)
+		static inline  Matrix3D ScalarMatrix3x3(float _X, float _Y, float _Z)
 		{
 			Matrix3D ScalarMatrix = Identity3D();
 
@@ -506,7 +506,7 @@ namespace rah
 			return ScalarMatrix;
 		}
 
-		static Matrix4D ScalarMatrix4x4(float _X, float _Y, float _Z)
+		static inline  Matrix4D ScalarMatrix4x4(float _X, float _Y, float _Z)
 		{
 			Matrix4D ScalarMatrix = Identity4D();
 
@@ -520,7 +520,7 @@ namespace rah
 		/**
 		* Matrix Translation
 		*/
-		static Matrix4D TranslationMatrix4x4(float _X, float _Y, float _Z)
+		static inline  Matrix4D TranslationMatrix4x4(float _X, float _Y, float _Z)
 		{
 			Matrix4D TranslationMatrix = Identity4D();
 
@@ -534,7 +534,7 @@ namespace rah
 		/**
 		* Matrix Rotation
 		*/
-		static Matrix3D RotationMatrix3x3(float _radians, Axis _Axis)
+		static inline  Matrix3D RotationMatrix3x3(float _radians, Axis _Axis)
 		{
 			Matrix3D RotationMatrix = Identity3D();
 
@@ -568,7 +568,7 @@ namespace rah
 			return Matrix3D(RotationMatrix);
 		}
 
-		static Matrix4D RotationMatrix4x4(float _radians, Axis _Axis)
+		static inline  Matrix4D RotationMatrix4x4(float _radians, Axis _Axis)
 		{
 			Matrix4D RotationMatrix = Identity4D();
 
@@ -605,13 +605,13 @@ namespace rah
 		/**
 		* Matrix Determinant
 		*/
-		static float DeterminantMatrix(const Matrix3D& _Matrix3x3)	
+		static inline  float DeterminantMatrix(const Matrix3D& _Matrix3x3)
 		{
 			return	((_Matrix3x3.m00 * _Matrix3x3.m11 * _Matrix3x3.m22) + (_Matrix3x3.m01 * _Matrix3x3.m12 * _Matrix3x3.m20) + (_Matrix3x3.m02 * _Matrix3x3.m10 * _Matrix3x3.m21)) -
 				((_Matrix3x3.m02 * _Matrix3x3.m11 * _Matrix3x3.m20) + (_Matrix3x3.m01 * _Matrix3x3.m10 * _Matrix3x3.m22) + (_Matrix3x3.m00 * _Matrix3x3.m12 * _Matrix3x3.m21));
 		}
 
-		static float DeterminantMatrix(const Matrix4D& _Matrix4x4)					
+		static inline  float DeterminantMatrix(const Matrix4D& _Matrix4x4)
 		{
 			return  _Matrix4x4.m03 * _Matrix4x4.m12 * _Matrix4x4.m21 * _Matrix4x4.m30 - _Matrix4x4.m02 * _Matrix4x4.m13 * _Matrix4x4.m21 * _Matrix4x4.m30 -
 				_Matrix4x4.m03 * _Matrix4x4.m11 * _Matrix4x4.m22 * _Matrix4x4.m30 + _Matrix4x4.m01 * _Matrix4x4.m13 * _Matrix4x4.m22 * _Matrix4x4.m30 +
@@ -630,7 +630,7 @@ namespace rah
 		/**
 		* Matrix Inverse
 		*/
-		static Matrix4D InverseMatrix4D(Matrix4D& _Matrix4x4)
+		static inline  Matrix4D InverseMatrix4D(Matrix4D& _Matrix4x4)
 		{
 			float d = ((_Matrix4x4.m00 * _Matrix4x4.m11 - _Matrix4x4.m01 * _Matrix4x4.m10) * (_Matrix4x4.m22 * _Matrix4x4.m33 - _Matrix4x4.m23 * _Matrix4x4.m32) -
 				(_Matrix4x4.m00 *_Matrix4x4.m12 - _Matrix4x4.m02 * _Matrix4x4.m10) * (_Matrix4x4.m21 * _Matrix4x4.m33 - _Matrix4x4.m23 * _Matrix4x4.m31) +
@@ -713,7 +713,7 @@ namespace rah
 		/**
 		* Matrix LookAtLH
 		*/
-		static Matrix4D LookAtLH(Vector3D _Eye, Vector3D _Focus, Vector3D _Up)
+		static inline  Matrix4D LookAtLH(Vector3D _Eye, Vector3D _Focus, Vector3D _Up)
 		{
 			//Direccion, que es una linea de ti al objeto, no esta perpendicular al vector y de vista
 			Vector3D vDir, vRight, vUp, vOffset;
@@ -757,7 +757,7 @@ namespace rah
 			return MV;
 		}
 
-		static Matrix4D LookAtLH(Vector4D _Eye, Vector4D _Focus, Vector4D _Up)
+		static inline  Matrix4D LookAtLH(Vector4D _Eye, Vector4D _Focus, Vector4D _Up)
 		{
 			//Direccion, que es una linea de ti al objeto, no esta perpendicular al vector y de vista
 			Vector4D vDir, vRight, vUp, vOffset;
@@ -804,7 +804,7 @@ namespace rah
 		/**
 		* Matrix PerspectiveFovLH
 		*/
-		static Matrix4D PerspectiveFovLH(float _FovAngleY, float _AspectRatio, float _NearZ, float _FarZ)
+		static inline  Matrix4D PerspectiveFovLH(float _FovAngleY, float _AspectRatio, float _NearZ, float _FarZ)
 		{
 			//Vamos a comprimir, entre mas sea el angulo, metemos mas geometria a la pantalla
 			Matrix4D MP;

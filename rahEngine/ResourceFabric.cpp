@@ -22,7 +22,6 @@ namespace rah
 		default:
 			return NULL;
 		}
-		return NULL;
 	}
 	ResourceFabric::ResourceFabric()
 	{

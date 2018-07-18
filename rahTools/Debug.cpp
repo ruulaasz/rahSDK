@@ -118,8 +118,8 @@ namespace rah
 			// Create the path //
 			while (strPath.length())
 			{
-				nStart1 = (int)strPath.find('/'); if (nStart1 == std::string::npos) nStart1 = INT_MAX;
-				nStart2 = (int)strPath.find('\\'); if (nStart2 == std::string::npos) nStart2 = INT_MAX;
+				nStart1 = (int)strPath.find('/'); if (nStart1 == (int)std::string::npos) nStart1 = INT_MAX;
+				nStart2 = (int)strPath.find('\\'); if (nStart2 == (int)std::string::npos) nStart2 = INT_MAX;
 				nStart = min(nStart1, nStart2);
 				if (nStart == INT_MAX) break;
 				strCurrent += strPath.substr(0, nStart) + "\\";
