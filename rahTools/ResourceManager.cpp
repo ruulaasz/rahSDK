@@ -38,7 +38,10 @@ namespace rah
 
 		rahResource* resultresourse = GetResourceByName(nameResource, _resourceType);
 		if (resultresourse != NULL)
+		{
+			resultresourse->m_referenceCount.Set(resultresourse->m_referenceCount.Get() + 1);
 			return resultresourse;
+		}
 
 		if(_params->name.empty())
 			_params->name = nameResource;
