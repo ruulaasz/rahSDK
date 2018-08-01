@@ -51,3 +51,4 @@ lib/rahTools/x64/Release/rahTools_Release.lib
 lib/rahMath/x64/Release/rahMath_Release.lib
 lib/rahEngine/x64/Release/rahEngine_Release.lib
 lib/rahEngine/x64/Debug/rahEngine_Debug.lib
+rahGRaphics_Test/Log/

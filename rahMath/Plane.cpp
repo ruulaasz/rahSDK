@@ -8,22 +8,34 @@ namespace rah
 
 	}
 
-	Plane::Plane(Vector3D _Normal, Vector3D _Point)
+	Plane::Plane(Vector3D _A, Vector3D _B, Vector3D _C)
 	{
-		m_normal = _Normal;
-		m_point = _Point;
-		m_length = math::Length(m_point);
+		initFromVectors(_A, _B, _C);
 	}
 
 	Plane::Plane(const Plane & _plane)
 	{
-		m_normal = _plane.m_normal;
-		m_point = _plane.m_point;
-		m_length = _plane.m_length;
+		a = _plane.a;
+		b = _plane.b;
+		c = _plane.c;
+		d = _plane.d;
 	}
 
 	Plane::~Plane()
 	{
 
+	}
+
+	void Plane::render()
+	{
+
+	}
+
+	void Plane::initFromVectors(Vector3D _A, Vector3D _B, Vector3D _C)
+	{
+		a = ((_B.y - _A.y) * (_C.z - _A.z)) - ((_C.y - _A.y) * (_B.z - _A.z));
+		b = ((_B.z - _A.z) * (_C.x - _A.x)) - ((_C.z - _A.z) * (_B.x - _A.x));
+		c = ((_B.x - _A.x) * (_C.y - _A.y)) - ((_C.x - _A.x) * (_B.y - _A.y));
+		d = -((a * _A.x) + (b * _A.y) + (c * _A.z));
 	}
 }

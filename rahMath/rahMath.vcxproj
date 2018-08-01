@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="Degrees.h" />
+    <ClInclude Include="Frustum.h" />
     <ClInclude Include="Matrix3D.h" />
     <ClInclude Include="Matrix4D.h" />
     <ClInclude Include="OBB.h" />
@@ -38,6 +39,7 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Degrees.cpp" />
+    <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="Matrix3D.cpp" />
     <ClCompile Include="Matrix4D.cpp" />
     <ClCompile Include="OBB.cpp" />

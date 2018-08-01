@@ -1,7 +1,7 @@
 // rahGRaphics_Test.cpp: define el punto de entrada de la aplicación.
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
-#include <vld.h>
+//#include <vld.h>
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
 #define MAX_LOADSTRING 100
@@ -13,7 +13,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nombre de clase de la ventana
 HINSTANCE g_hInst = NULL;
 HWND g_hWnd = NULL;
 float g_aspectRatio;
-int g_rasterState = 2;
+int g_rasterState = 1;
 
 ID3D11Device* g_pD3DDevice;
 IDXGISwapChain* g_pSwapChain;
@@ -58,6 +58,8 @@ rah::VertexShader g_vertexShader;
 rah::FragmentShader g_pixelShader;
 
 rah::Model* g_Model;
+
+rah::Frustum g_frustum;
 
 float g_deltaTime = 0.0f;
 
@@ -147,6 +149,8 @@ void LoadContentCube()
 	// Initialize the projection matrix
 	g_aspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
 	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, g_aspectRatio, 0.01f, 100.0f);
+
+	g_frustum.calculateFrustum(g_Projection, g_View);
 
 	CBProj cbproj;
 	cbproj.mProjection = rah::math::Transpose(g_Projection);

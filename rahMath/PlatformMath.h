@@ -26,7 +26,7 @@ namespace rah
 		* PI Constant
 		*
 		*/
-		static const float PI = atan(1.0f) * 4;
+		static const float PI = 3.1415926f;
 
 		/**
 		* Degrees to radians constant

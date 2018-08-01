@@ -11,12 +11,19 @@ namespace rah
 	{
 	public:
 		Plane();
-		Plane(Vector3D _Normal, Vector3D _Point);
+		Plane(Vector3D _A, Vector3D _B, Vector3D _C);
 		Plane(const Plane& _plane);
 		~Plane();
 
-		Vector3D m_normal;			
-		Vector3D m_point;			
-		float m_length;
+		//normal
+		float a;
+		float b;
+		float c;
+
+		//distancia al origen
+		float d;
+
+		void render();
+		void initFromVectors(Vector3D _A, Vector3D _B, Vector3D _C);
 	};
 }
