@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
 //#include <vld.h>
+
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
 #define MAX_LOADSTRING 100
@@ -13,7 +14,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nombre de clase de la ventana
 HINSTANCE g_hInst = NULL;
 HWND g_hWnd = NULL;
 float g_aspectRatio;
-int g_rasterState = 1;
+int g_rasterState = 2;
 
 ID3D11Device* g_pD3DDevice;
 IDXGISwapChain* g_pSwapChain;
@@ -59,7 +60,7 @@ rah::FragmentShader g_pixelShader;
 
 rah::Model* g_Model;
 
-rah::Frustum g_frustum;
+rah::CameraDebug g_camera;
 
 float g_deltaTime = 0.0f;
 
@@ -140,6 +141,8 @@ void LoadContentCube()
 	rah::Vector3D Eye(0.0f, 3.0f, -6.0f);
 	rah::Vector3D At(0.0f, 1.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
+	g_camera.PositionCamera(Eye, At, Up);
+
 	g_View = rah::math::LookAtLH(Eye, At, Up);
 
 	CBView cbview;
@@ -149,8 +152,6 @@ void LoadContentCube()
 	// Initialize the projection matrix
 	g_aspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
 	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, g_aspectRatio, 0.01f, 100.0f);
-
-	g_frustum.calculateFrustum(g_Projection, g_View);
 
 	CBProj cbproj;
 	cbproj.mProjection = rah::math::Transpose(g_Projection);
@@ -178,16 +179,24 @@ void renderCube()
 
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
+	g_camera.Update();
+	g_View = rah::math::LookAtLH(g_camera.m_vPosition, g_camera.m_vView, g_camera.m_vUpVector);
+	g_camera.m_frustum.calculateFrustum(g_Projection, g_View);
+
+	CBView cbview;
+	cbview.mView = rah::math::Transpose(g_View);
+	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
+
+	//g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
 
 	// Update variables that change once per frame
 	CBWorld cbWorld;
 	cbWorld.mWorld = rah::math::Transpose(g_World);
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	g_meshColor.r = (rah::math::Sin(g_deltaTime * 1.0f) + 1.0f) * 0.5f;
-	g_meshColor.g = (rah::math::Cos(g_deltaTime * 3.0f ) + 1.0f ) * 0.5f;
-	g_meshColor.b = (rah::math::Sin(g_deltaTime * 5.0f ) + 1.0f ) * 0.5f;
+	//g_meshColor.r = (rah::math::Sin(g_deltaTime * 1.0f) + 1.0f) * 0.5f;
+	//g_meshColor.g = (rah::math::Cos(g_deltaTime * 3.0f ) + 1.0f ) * 0.5f;
+	//g_meshColor.b = (rah::math::Sin(g_deltaTime * 5.0f ) + 1.0f ) * 0.5f;
 
 	CBColor cbColor;
 	cbColor.mColor = g_meshColor;
@@ -230,6 +239,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
     }
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_RAHGRAPHICS_TEST));
+	hAccelTable;
     MSG msg;
 
 	InitD3D(g_hWnd);
@@ -374,10 +384,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
+			hdc;
             // TODO: Agregar cualquier código de dibujo que use hDC aquí...
             EndPaint(hWnd, &ps);
         }
         break;
+	case WM_KEYDOWN:
+		if (wParam == VK_ESCAPE)
+			PostQuitMessage(WM_QUIT);
+
+		if (wParam == 0x57)
+			g_camera.MoveCamera(0.5f);
+
+		if (wParam == 0x53)
+			g_camera.MoveCamera(-0.5f);
+
+		if (wParam == 0x41)
+			g_camera.StrafeCamera(0.5f);
+
+		if (wParam == 0x44)
+			g_camera.StrafeCamera(-0.5f);
+		break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;

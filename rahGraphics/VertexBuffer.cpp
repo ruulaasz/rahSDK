@@ -39,7 +39,7 @@ namespace rah
 		}
 
 		bd.Usage = static_cast<D3D11_USAGE>(UsageFlag);
-		bd.ByteWidth = m_vertexInfo.size() * sizeof(VertexData);
+		bd.ByteWidth = (m_vertexInfo.size() * sizeof(VertexData);
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = CPUAccess;
 

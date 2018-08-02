@@ -10,7 +10,12 @@ namespace rah
 
 	Frustum::Frustum(const Frustum & _frustum)
 	{
-
+		m_planes[0] = _frustum.m_planes[0];
+		m_planes[1] = _frustum.m_planes[1];
+		m_planes[2] = _frustum.m_planes[2];
+		m_planes[3] = _frustum.m_planes[3];
+		m_planes[4] = _frustum.m_planes[4];
+		m_planes[5] = _frustum.m_planes[5];
 	}
 
 	Frustum::~Frustum()

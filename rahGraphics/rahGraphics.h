@@ -7,3 +7,4 @@
 #include "ConstantBuffer.h"
 #include <DirectXTex.h>
 #include "Camera.h"
+#include "CameraDebug.h"
