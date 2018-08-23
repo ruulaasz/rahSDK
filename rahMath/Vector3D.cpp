@@ -21,6 +21,13 @@ namespace rah
 
 	}
 
+	void Vector3D::Set(float _x, float _y, float _z) 
+	{
+		x = _x;
+		y = _y;
+		z = _z;
+	}
+
 	Vector3D Vector3D::operator-(const Vector3D & _vector)
 	{
 		Vector3D result;

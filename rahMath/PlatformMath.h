@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <memory.h>
+#include <limits>
 #include "Vector2D.h"
 #include "Vector3D.h"
 #include "Vector4D.h"
@@ -39,6 +40,9 @@ namespace rah
 		*
 		*/
 		static const float RAD_TO_DEG = 180 / PI;
+
+		static const float fEpsilon = std::numeric_limits<float>::epsilon();
+		static const double dEpsilon = std::numeric_limits<float>::epsilon();
 
 		/**
 		* Returns the sin of any given value
@@ -188,6 +192,21 @@ namespace rah
 		float Square(float _value)							
 		{
 			return (_value*_value);			
+		}
+		/**
+		* Returns the abs of the value
+		*
+		*/
+		template<typename T>
+		static T Abs(T _value) { return std::abs(_value); };
+		/**
+		* Returns the abs of the value
+		*
+		*/
+		template<>
+		float Abs(float _value)
+		{
+			return std::abs(_value);
 		}
 
 		/**
