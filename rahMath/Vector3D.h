@@ -13,6 +13,11 @@ namespace rah
 		Vector3D(const Vector3D &_vector);
 		~Vector3D();
 
+		/*
+		* Set fucntion to make more faster to fill
+		*
+		*/
+		void Set(float _x, float _y, float _z);
 		/**
 		* Operator overload
 		*

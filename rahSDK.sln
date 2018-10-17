@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahMath", "rahMath\rahMath.vcxproj", "{107DC226-69AE-42EA-8019-53DCE19968EA}"
 EndProject
@@ -36,6 +36,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahEngine", "rahEngine\rahE
 		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
 		{779B72E6-24EE-4831-AE6E-5BAB3120D8C9} = {779B72E6-24EE-4831-AE6E-5BAB3120D8C9}
 		{C060AAF4-5132-4923-B401-11B4BF36ABB3} = {C060AAF4-5132-4923-B401-11B4BF36ABB3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahMathCollisions_Test", "rahMathCollisions_Test\rahMathCollisions_Test.vcxproj", "{0376BB6D-155F-40C1-829B-FEF303D9A262}"
+	ProjectSection(ProjectDependencies) = postProject
+		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
 	EndProjectSection
 EndProject
 Global
@@ -102,6 +107,14 @@ Global
 		{C201799F-CBC0-4764-BE27-9E859E36A5AF}.Release|x64.Build.0 = Release|x64
 		{C201799F-CBC0-4764-BE27-9E859E36A5AF}.Release|x86.ActiveCfg = Release|Win32
 		{C201799F-CBC0-4764-BE27-9E859E36A5AF}.Release|x86.Build.0 = Release|Win32
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Debug|x64.ActiveCfg = Debug|x64
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Debug|x64.Build.0 = Debug|x64
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Debug|x86.ActiveCfg = Debug|Win32
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Debug|x86.Build.0 = Debug|Win32
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x64.ActiveCfg = Release|x64
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x64.Build.0 = Release|x64
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x86.ActiveCfg = Release|Win32
+		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
