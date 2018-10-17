@@ -52,7 +52,7 @@ rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
 
-rah::Color g_meshColor(0.2f, 0.0f, 0.0f, 1.f);
+rah::Color g_meshColor(0.2f, 0.2f, 0.2f, 1.f);
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 rah::VertexShader g_vertexShader;

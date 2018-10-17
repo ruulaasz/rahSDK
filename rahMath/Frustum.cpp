@@ -20,6 +20,7 @@ namespace rah
 
 	Frustum::~Frustum()
 	{
+
 	}
 
 	void Frustum::normalizePlane(FrustumSide _side)
