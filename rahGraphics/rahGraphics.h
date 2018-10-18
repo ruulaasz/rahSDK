@@ -8,3 +8,4 @@
 #include <DirectXTex.h>
 #include "Camera.h"
 #include "CameraDebug.h"
+#include "RenderManager.h"

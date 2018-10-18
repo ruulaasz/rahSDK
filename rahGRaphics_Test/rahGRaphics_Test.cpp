@@ -70,6 +70,8 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+rah::OBB g_OBB(rah::Vector3D(0,0,0), rah::Vector3D(50, 50, 50), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+
 // this function initializes and prepares Direct3D for use
 RahResult InitD3D(HWND hWnd)
 {
@@ -84,6 +86,9 @@ RahResult InitD3D(HWND hWnd)
 	resourceInit.Fabric = new rah::ResourceFabric();
 	rah::ResourceManager::StartModule(resourceInit);
 
+	rah::GStruct renderInit;
+	rah::RenderManager::StartModule(renderInit);
+
 	RAH_DEBUGER_MODULE_DECLARATION();
 
 	g_pD3DDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
@@ -93,10 +98,11 @@ RahResult InitD3D(HWND hWnd)
 	g_pSamplerState = reinterpret_cast<ID3D11SamplerState*>(rah::GraphicManager::GetInstance().m_samplerState.getPtr());
 	g_pViewport = reinterpret_cast<D3D11_VIEWPORT*>(rah::GraphicManager::GetInstance().m_viewport.getPtr());
 
+
 	return RAH_SUCCESS;
 }
 
-void LoadContentCube()
+void LoadGraphicResources()
 {
 	//load shaders
 	g_vertexShader.createVertexShader(L"shaders.fx", "VS", "vs_5_0");
@@ -138,7 +144,7 @@ void LoadContentCube()
 	g_World = rah::math::Identity4D();
 
 	// Initialize the view matrix
-	rah::Vector3D Eye(0.0f, 3.0f, -6.0f);
+	rah::Vector3D Eye(0.0f, 1.0f, -6.0f);
 	rah::Vector3D At(0.0f, 1.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
 	g_camera.PositionCamera(Eye, At, Up);
@@ -166,7 +172,7 @@ void LoadContentCube()
 	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 }
 
-void renderCube()
+void renderModels()
 {
 	// Update our time
 	static DWORD dwTimeStart = 0;
@@ -211,7 +217,8 @@ void renderCube()
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
 
-	g_Model->render();
+	//g_Model->render();
+	rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color());
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
@@ -243,29 +250,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
 	InitD3D(g_hWnd);
-	LoadContentCube();
+	LoadGraphicResources();
 	/************************************************************************/
 	/* Prueba de inicializacion de recursos                                 */
 	/************************************************************************/
 	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
 	rParams->filePath = "resources\\models\\Bassilisk\\Basillisk.dae";
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
-
-	/************************************************************************/
-	/* Pruebas de busqeudas                                                 */
-	/************************************************************************/
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByFilePath(rParams->filePath);
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByFilePath(rParams->filePath, rah::ResourceTypes::RAH_Model);
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByFilePath(rParams->filePath, rah::ResourceTypes::RAH_GraphicTexture);
-
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByName(rParams->name);
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByName(rParams->name, rah::ResourceTypes::RAH_GraphicTexture);
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByName(rParams->name, rah::ResourceTypes::RAH_Model);
-	
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByID(rParams->id);
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByID(rParams->id, rah::ResourceTypes::RAH_GraphicTexture);
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().GetResourceByID(rParams->id, rah::ResourceTypes::RAH_Model);
-
 	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
 
 	while (TRUE)
@@ -285,15 +275,15 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			renderCube();
+			renderModels();
+			//rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color());
 		}
 	}
 
 	rah::GraphicManager::CloseModule();
+	rah::RenderManager::CloseModule();
     return (int) msg.wParam;
 }
-
-
 
 //
 //  FUNCIÓN: MyRegisterClass()
