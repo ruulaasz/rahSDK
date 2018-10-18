@@ -52,7 +52,7 @@ rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
 
-rah::Color g_meshColor(0.2f, 0.2f, 0.2f, 1.f);
+rah::Color g_meshColor(1.0f, 0.0f, 0.0f, 1.f);
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 rah::VertexShader g_vertexShader;
@@ -70,7 +70,7 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-rah::OBB g_OBB(rah::Vector3D(0,0,0), rah::Vector3D(50, 50, 50), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::OBB g_OBB(rah::Vector3D(0,0,0), rah::Vector3D(5, 5, 5), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
 // this function initializes and prepares Direct3D for use
 RahResult InitD3D(HWND hWnd)
@@ -105,10 +105,10 @@ RahResult InitD3D(HWND hWnd)
 void LoadGraphicResources()
 {
 	//load shaders
-	g_vertexShader.createVertexShader(L"shaders.fx", "VS", "vs_5_0");
+	g_vertexShader.createVertexShader(L"shaders.fx", "VSGeometry", "vs_5_0");
 	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexShader.m_shaderBlob);
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
-	g_pixelShader.createFragmentShader(L"shaders.fx", "PS", "ps_5_0");
+	g_pixelShader.createFragmentShader(L"shaders.fx", "PSGeometry", "ps_5_0");
 
 	// Create the constant buffers
 	D3D11_BUFFER_DESC bd;
@@ -150,10 +150,6 @@ void LoadGraphicResources()
 	g_camera.PositionCamera(Eye, At, Up);
 
 	g_View = rah::math::LookAtLH(Eye, At, Up);
-
-	CBView cbview;
-	cbview.mView = rah::math::Transpose(g_View);
-	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
 	// Initialize the projection matrix
 	g_aspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
@@ -217,8 +213,8 @@ void renderModels()
 	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
 
-	//g_Model->render();
-	rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color());
+	g_Model->render();
+	rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color(255,0,0,1));
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
@@ -276,7 +272,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		else
 		{
 			renderModels();
-			//rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color());
 		}
 	}
 

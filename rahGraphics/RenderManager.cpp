@@ -33,28 +33,26 @@ namespace rah
 		VertexBuffer vertexBuffer;
 		VertexData myVertex;
 
-		myVertex.pos = Vector4D(-1.f, -1.f, -1.f, 0.f);
+		float x = _obb.m_position.x + _obb.m_dimentions.x;
+		float y = _obb.m_position.y + _obb.m_dimentions.y;
+		float z = _obb.m_position.z + _obb.m_dimentions.z;
+
+		myVertex.pos = Vector4D(-x, y, -z, 0.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(x, y, -z, 0.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(-x, -y, -z, 0.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(x, -y, -z, 0.f);
 		vertexBuffer.addVertex(myVertex);
 
-		myVertex.pos = Vector4D(1.f, -1.f, -1.f, 0.f);
+		myVertex.pos = Vector4D(-x, y, z, 0.f);
 		vertexBuffer.addVertex(myVertex);
-
-		myVertex.pos = Vector4D(1.f, -1.f, 1.f, 0.f);
+		myVertex.pos = Vector4D(x, y, z, 0.f);
 		vertexBuffer.addVertex(myVertex);
-
-		myVertex.pos = Vector4D(-1.f, -1.f, 1.f, 0.f);
+		myVertex.pos = Vector4D(-x, -y, z, 0.f);
 		vertexBuffer.addVertex(myVertex);
-
-		myVertex.pos = Vector4D(-1.f, 1.f, -1.f, 0.f);
-		vertexBuffer.addVertex(myVertex);
-	
-		myVertex.pos = Vector4D(1.f, 1.f, -1.f, 0.f);
-		vertexBuffer.addVertex(myVertex);
-
-		myVertex.pos = Vector4D(1.f, 1.f, 1.f, 0.f);
-		vertexBuffer.addVertex(myVertex);
-
-		myVertex.pos = Vector4D(-1.f, 1.f, 1.f, 0.f);
+		myVertex.pos = Vector4D(x, -y, z, 0.f);
 		vertexBuffer.addVertex(myVertex);
 
 		vertexBuffer.create();
@@ -64,32 +62,53 @@ namespace rah
 
 		indexBuffer.addIndex(0);
 		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(2);
+
+		indexBuffer.addIndex(2);
 		indexBuffer.addIndex(1);
-		indexBuffer.addIndex(2);
-		indexBuffer.addIndex(2);
 		indexBuffer.addIndex(3);
 
-		indexBuffer.addIndex(3);
-		indexBuffer.addIndex(0);
-		indexBuffer.addIndex(4);
-		indexBuffer.addIndex(5);
-		indexBuffer.addIndex(5);
-		indexBuffer.addIndex(6);
-
-		indexBuffer.addIndex(6);
-		indexBuffer.addIndex(7);
-		indexBuffer.addIndex(7);
 		indexBuffer.addIndex(4);
 		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(6);
+
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(2);
+
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(6);
+
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(5);
 		indexBuffer.addIndex(4);
 
-		indexBuffer.addIndex(1);
-		indexBuffer.addIndex(2);
-		indexBuffer.addIndex(2);
-		indexBuffer.addIndex(6);
 		indexBuffer.addIndex(3);
+		indexBuffer.addIndex(1);
 		indexBuffer.addIndex(7);
 
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(5);
+
+		indexBuffer.addIndex(4);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(0);
+
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(1);
+
+		indexBuffer.addIndex(3);
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(2);
+
+		indexBuffer.addIndex(2);
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(6);
+
+		indexBuffer.create();
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
