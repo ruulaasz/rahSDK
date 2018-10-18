@@ -15,8 +15,8 @@ namespace rah
 		OBB(const OBB &_obb);
 		~OBB();
 
-		Vector3D m_position;
-		Vector3D m_dimentions;
-		Vector3D m_axis[3];
+		Vector3D m_position; // OBB center point
+		Vector3D m_dimentions; // Positive halfwidth extents of OBB along each axis
+		Vector3D m_axis[3]; // Local x-, y-, and z-axes
 	};
 }
