@@ -53,3 +53,4 @@ lib/rahEngine/x64/Release/rahEngine_Release.lib
 lib/rahEngine/x64/Debug/rahEngine_Debug.lib
 rahGRaphics_Test/Log/
 /rahMathCollisions_Test/rahMathCollisions_Test.vcxproj.user
+rahGRaphics_Test/shapes.fx

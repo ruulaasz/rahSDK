@@ -52,11 +52,14 @@ rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
 
-rah::Color g_meshColor(1.0f, 0.0f, 0.0f, 1.f);
+rah::Color g_meshColor(0.2f, 0.0f, 0.0f, 1.f);
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-rah::VertexShader g_vertexShader;
-rah::FragmentShader g_pixelShader;
+rah::VertexShader g_vertexModelShader;
+rah::FragmentShader g_pixelModelShader;
+
+rah::VertexShader g_vertexShapeShader;
+rah::FragmentShader g_pixelShapeShader;
 
 rah::Model* g_Model;
 
@@ -70,7 +73,7 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-rah::OBB g_OBB(rah::Vector3D(0,0,0), rah::Vector3D(5, 5, 5), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::OBB g_OBB(rah::Vector3D(1, 2, 4), rah::Vector3D(1, 1, 1), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
 // this function initializes and prepares Direct3D for use
 RahResult InitD3D(HWND hWnd)
@@ -105,10 +108,15 @@ RahResult InitD3D(HWND hWnd)
 void LoadGraphicResources()
 {
 	//load shaders
-	g_vertexShader.createVertexShader(L"shaders.fx", "VSGeometry", "vs_5_0");
-	g_vertexShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexShader.m_shaderBlob);
-	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
-	g_pixelShader.createFragmentShader(L"shaders.fx", "PSGeometry", "ps_5_0");
+	g_vertexModelShader.createVertexShader(L"shaders.fx", "VS", "vs_5_0");
+	g_vertexModelShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexModelShader.m_shaderBlob);
+	g_pDeviceContext->IASetInputLayout(g_vertexModelShader.m_inputLayout.m_inputLayout);
+	g_pixelModelShader.createFragmentShader(L"shaders.fx", "PS", "ps_5_0");
+
+	g_vertexShapeShader.createVertexShader(L"shapes.fx", "VS", "vs_5_0");
+	g_vertexShapeShader.m_inputLayout.createInputLayoutFromVertexShaderSignature(g_vertexShapeShader.m_shaderBlob);
+	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
+	g_pixelShapeShader.createFragmentShader(L"shapes.fx", "PS", "ps_5_0");
 
 	// Create the constant buffers
 	D3D11_BUFFER_DESC bd;
@@ -209,11 +217,16 @@ void renderModels()
 
 	g_pDeviceContext->PSSetSamplers(0, 1, &g_pSamplerState);
 
-	g_pDeviceContext->VSSetShader(g_vertexShader.m_vertexShader, NULL, 0);
-	g_pDeviceContext->IASetInputLayout(g_vertexShader.m_inputLayout.m_inputLayout);
-	g_pDeviceContext->PSSetShader(g_pixelShader.m_fragmentShader, NULL, 0);
+	g_pDeviceContext->VSSetShader(g_vertexModelShader.m_vertexShader, NULL, 0);
+	g_pDeviceContext->IASetInputLayout(g_vertexModelShader.m_inputLayout.m_inputLayout);
+	g_pDeviceContext->PSSetShader(g_pixelModelShader.m_fragmentShader, NULL, 0);
 
 	g_Model->render();
+
+	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
+	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
+	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
+
 	rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color(255,0,0,1));
 
 	// switch the back buffer and the front buffer

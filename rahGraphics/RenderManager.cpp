@@ -37,22 +37,26 @@ namespace rah
 		float y = _obb.m_position.y + _obb.m_dimentions.y;
 		float z = _obb.m_position.z + _obb.m_dimentions.z;
 
-		myVertex.pos = Vector4D(-x, y, -z, 0.f);
+		float xm = _obb.m_position.x - _obb.m_dimentions.x;
+		float ym = _obb.m_position.y - _obb.m_dimentions.y;
+		float zm = _obb.m_position.z - _obb.m_dimentions.z;
+
+		myVertex.pos = Vector4D(xm, y, zm, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, y, -z, 0.f);
+		myVertex.pos = Vector4D(x, y, zm, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(-x, -y, -z, 0.f);
+		myVertex.pos = Vector4D(xm, ym, zm, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, -y, -z, 0.f);
+		myVertex.pos = Vector4D(x, ym, zm, 1.f);
 		vertexBuffer.addVertex(myVertex);
 
-		myVertex.pos = Vector4D(-x, y, z, 0.f);
+		myVertex.pos = Vector4D(xm, y, z, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, y, z, 0.f);
+		myVertex.pos = Vector4D(x, y, z, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(-x, -y, z, 0.f);
+		myVertex.pos = Vector4D(xm, ym, z, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, -y, z, 0.f);
+		myVertex.pos = Vector4D(x, ym, z, 1.f);
 		vertexBuffer.addVertex(myVertex);
 
 		vertexBuffer.create();

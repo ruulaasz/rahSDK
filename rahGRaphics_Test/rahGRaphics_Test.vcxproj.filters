@@ -59,5 +59,8 @@
     <FxCompile Include="shaders.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shapes.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
