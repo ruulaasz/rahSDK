@@ -45,7 +45,11 @@ namespace rah
 		* Max value of float 32
 		*
 		*/
+<<<<<<< HEAD
 		static const float MAX_FLOAT_VALUE = 0;// std::numeric_limits<float>::max();
+=======
+		static float MAX_FLOAT_VALUE = FLT_MAX;
+>>>>>>> alex
 
 		static const float fEpsilon = std::numeric_limits<float>::epsilon();
 		static const double dEpsilon = std::numeric_limits<float>::epsilon();
