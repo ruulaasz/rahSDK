@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Degrees.h" />
     <ClInclude Include="Frustum.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="Vector4D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Degrees.cpp" />
     <ClCompile Include="Frustum.cpp" />

@@ -25,6 +25,8 @@ namespace rah
 
 		Frustum m_frustum;
 
+		bool m_stopMoving;
+
 		// This changes the position, view, and up vector of the camera.
 		// This is primarily used for initialization
 		void PositionCamera(Vector3D _eye, Vector3D _at, Vector3D _up);

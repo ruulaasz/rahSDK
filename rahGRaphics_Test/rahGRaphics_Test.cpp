@@ -68,6 +68,7 @@ rah::CameraDebug g_camera;
 
 rah::Model* g_Model;
 rah::OBB g_OBB(rah::Vector3D(1, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::OBB g_OBB1(rah::Vector3D(2, 2, 8), rah::Vector3D(0.5, 0.4f, 0.5), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
 float g_deltaTime = 0.0f;
 
@@ -210,7 +211,14 @@ void renderModels()
 	//g_meshColor.b = (rah::math::Sin(g_deltaTime * 5.0f ) + 1.0f ) * 0.5f;
 
 	CBColor cbColor;
-	cbColor.mColor = g_meshColor;
+	if (rah::Intersection::OBBIntersection(g_OBB, g_OBB1))
+	{
+		cbColor.mColor = rah::Color(0.f,1.f,0.f);
+	}
+	else
+	{
+		cbColor.mColor = g_meshColor;
+	}
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
 	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
@@ -246,6 +254,21 @@ void renderModels()
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
 	rah::RenderManager::GetInstance().renderShape(g_OBB);
+
+	// Update variables that change once per frame
+	g_Scale = rah::math::ScalarMatrix4x4(g_OBB1.m_dimentions.x, g_OBB1.m_dimentions.y, g_OBB1.m_dimentions.z);
+
+	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[0].x).getRadians(), rah::math::Axis_X);
+	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[1].y).getRadians(), rah::math::Axis_Y);
+	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[2].z).getRadians(), rah::math::Axis_Z);
+
+	g_Translation = rah::math::TranslationMatrix4x4(g_OBB1.m_position.x, g_OBB1.m_position.y, g_OBB1.m_position.z);
+
+	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
+
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	rah::RenderManager::GetInstance().renderShape(g_OBB1);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
@@ -420,6 +443,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		if (wParam == 0x44)
 			g_camera.StrafeCamera(-0.5f);
+
+		if (wParam == 0x5A)//Z
+			g_camera.m_stopMoving = !g_camera.m_stopMoving;
 		break;
     case WM_DESTROY:
         PostQuitMessage(0);

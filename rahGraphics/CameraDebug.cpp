@@ -6,7 +6,7 @@ namespace rah
 {
 	CameraDebug::CameraDebug()
 	{
-
+		m_stopMoving = false;
 	}
 
 	CameraDebug::~CameraDebug()
@@ -175,6 +175,7 @@ namespace rah
 		m_vStrafe = vCross;
 
 		// Move the camera's view by the mouse
-		SetViewByMouse();
+		if(!m_stopMoving)
+			SetViewByMouse();
 	}
 }

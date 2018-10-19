@@ -11,6 +11,7 @@
 #include "Matrix4D.h"
 #include "Quaternion.h"
 #include "OBB.h"
+#include "AABB.h"
 #include "Plane.h"
 #include "Sphere.h"
 #include "Ray.h"

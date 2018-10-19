@@ -66,6 +66,9 @@
     <ClInclude Include="Intersection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3D.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intersection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include "OBB.h"
 #include "Ray.h"
 #include "Plane.h"
+#include "AABB.h"
 namespace rah
 {
 	/*
@@ -29,6 +30,8 @@ namespace rah
 		static bool SphereNOBBIntersection(Sphere s, OBB b);
 		static void ClosestPtPointOBB(Vector3D p, OBB b, Vector3D &q);
 		static bool RayNPlaneIntersection(Ray _ray, Plane _plane);
+		static bool AABBIntersection(AABB _a, AABB _b);
+		static bool AABBNSphereIntersection(AABB _a, Sphere _s);
 	public:
 		Intersection();
 		~Intersection();

@@ -40,7 +40,9 @@ namespace rah
 		{
 			ra = a.m_dimentions[0] * absR.Line[0][i] + a.m_dimentions[1] * absR.Line[1][i] + b.m_dimentions[2] * absR.Line[2][i];
 			rb = b.m_dimentions[i];
-			if (math::Abs(transalte[0] * R.Line[0][i] + transalte[1] * R.Line[1][i] + transalte[2] * R.Line[2][i]) > ra + rb)
+			float p = math::Abs(transalte[0] * R.Line[0][i] + transalte[1] * R.Line[1][i] + transalte[2] * R.Line[2][i]);
+			float c = ra + rb;
+			if (p > c)
 				return false;
 		}
 
@@ -132,6 +134,42 @@ namespace rah
 		float t = (_plane.d - math::Dot(planeNormal, _ray.m_origin)) / math::Dot(planeNormal, ray);
 
 		if (t >= 0.0f && t <= 1.0f)
+		{
+			return true;
+		}
+		return false;
+	}
+	bool Intersection::AABBIntersection(AABB _a, AABB _b)
+	{
+		if (_a.m_max.x < _b.m_min.x || _a.m_min.x > _b.m_max.x) 
+			return false;
+		if (_a.m_max.y < _b.m_min.y || _a.m_min.y > _b.m_max.y) 
+			return false;
+		if (_a.m_max.z < _b.m_min.z || _a.m_min.z > _b.m_max.z) 
+			return false;
+
+		return true;
+	}
+	bool Intersection::AABBNSphereIntersection(AABB _a, Sphere _s)
+	{
+		float fSquareDistance = 0.0f;
+
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			float v = Vector3D(_s.m_center)[i];
+
+			if (v < _a.m_min[i])
+			{
+				fSquareDistance += math::Square(_a.m_min[i] - v);
+			}
+
+			if (v > _a.m_max[i])
+			{
+				fSquareDistance += math::Square(v - _a.m_max[i]);
+			}
+		}
+
+		if (fSquareDistance <= math::Square(_s.m_radius))
 		{
 			return true;
 		}

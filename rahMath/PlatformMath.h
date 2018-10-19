@@ -215,6 +215,11 @@ namespace rah
 			return std::abs(_value);
 		}
 
+		static float AbsVec3D(Vector3D _vec)
+		{
+			return Sqrt(Square(_vec.x) + Square(_vec.y) + Square(_vec.z));
+		}
+
 		/**
 		* Elevates a given value to a given power
 		*
