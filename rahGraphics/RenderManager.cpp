@@ -20,7 +20,7 @@ namespace rah
 		return RahResult();
 	}
 
-	void rah::RenderManager::renderShape(const OBB & _obb, Color _color)
+	void rah::RenderManager::renderShape(const OBB & _obb)
 	{
 		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
 
@@ -33,30 +33,22 @@ namespace rah
 		VertexBuffer vertexBuffer;
 		VertexData myVertex;
 
-		float x = _obb.m_position.x + _obb.m_dimentions.x;
-		float y = _obb.m_position.y + _obb.m_dimentions.y;
-		float z = _obb.m_position.z + _obb.m_dimentions.z;
-
-		float xm = _obb.m_position.x - _obb.m_dimentions.x;
-		float ym = _obb.m_position.y - _obb.m_dimentions.y;
-		float zm = _obb.m_position.z - _obb.m_dimentions.z;
-
-		myVertex.pos = Vector4D(xm, y, zm, 1.f);
+		myVertex.pos = Vector4D(-1.f, 1.f, -1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, y, zm, 1.f);
+		myVertex.pos = Vector4D(1.f, 1.f, -1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(xm, ym, zm, 1.f);
+		myVertex.pos = Vector4D(-1.f, -1.f, -1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, ym, zm, 1.f);
+		myVertex.pos = Vector4D(1.f, -1.f, -1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
 
-		myVertex.pos = Vector4D(xm, y, z, 1.f);
+		myVertex.pos = Vector4D(-1.f, 1.f, 1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, y, z, 1.f);
+		myVertex.pos = Vector4D(1.f, 1.f, 1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(xm, ym, z, 1.f);
+		myVertex.pos = Vector4D(-1.f, -1.f, 1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(x, ym, z, 1.f);
+		myVertex.pos = Vector4D(1.f, -1.f, 1.f, 1.f);
 		vertexBuffer.addVertex(myVertex);
 
 		vertexBuffer.create();

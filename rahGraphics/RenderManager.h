@@ -5,6 +5,8 @@
 
 namespace rah
 {
+
+
 	struct GStruct
 	{
 
@@ -20,6 +22,6 @@ namespace rah
 
 		void Release() {};
 
-		void renderShape(const OBB& _obb, Color _color);
+		void renderShape(const OBB& _obb);
 	};
 }

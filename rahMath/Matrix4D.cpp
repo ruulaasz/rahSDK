@@ -50,7 +50,7 @@ namespace rah
 
 	Matrix4D rah::Matrix4D::operator*(const Matrix4D & _Matrix4x4)
 	{
-		Matrix4D MultiplicationMatrix = _Matrix4x4;
+		Matrix4D MultiplicationMatrix;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -58,12 +58,30 @@ namespace rah
 			{
 				for (int k = 0; k < 4; k++)
 				{
-					MultiplicationMatrix.Line[j][i] += (Line[k][i] * Line[j][k]);
+					MultiplicationMatrix.Line[j][i] += (Line[k][i] * _Matrix4x4.Line[j][k]);
 				}
 			}
 		}
 
 		return MultiplicationMatrix;
+	}
+
+	void Matrix4D::operator*=(const Matrix4D & _Matrix4x4)
+	{
+		Matrix4D MultiplicationMatrix;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int k = 0; k < 4; k++)
+				{
+					MultiplicationMatrix.Line[j][i] += (Line[k][i] * _Matrix4x4.Line[j][k]);
+				}
+			}
+		}
+
+		*this = MultiplicationMatrix;
 	}
 
 	Matrix4D rah::Matrix4D::operator*(float _Value)

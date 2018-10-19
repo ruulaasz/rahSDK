@@ -14,7 +14,6 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nombre de clase de la ventana
 HINSTANCE g_hInst = NULL;
 HWND g_hWnd = NULL;
 float g_aspectRatio;
-int g_rasterState = 2;
 
 ID3D11Device* g_pD3DDevice;
 IDXGISwapChain* g_pSwapChain;
@@ -52,6 +51,10 @@ rah::Matrix4D  g_World;
 rah::Matrix4D  g_View;
 rah::Matrix4D  g_Projection;
 
+rah::Matrix4D g_Scale;
+rah::Matrix4D g_Translation;
+rah::Matrix4D g_Rotation;
+
 rah::Color g_meshColor(0.2f, 0.0f, 0.0f, 1.f);
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -61,9 +64,10 @@ rah::FragmentShader g_pixelModelShader;
 rah::VertexShader g_vertexShapeShader;
 rah::FragmentShader g_pixelShapeShader;
 
-rah::Model* g_Model;
-
 rah::CameraDebug g_camera;
+
+rah::Model* g_Model;
+rah::OBB g_OBB(rah::Vector3D(1, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
 float g_deltaTime = 0.0f;
 
@@ -72,8 +76,6 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-
-rah::OBB g_OBB(rah::Vector3D(1, 2, 4), rah::Vector3D(1, 1, 1), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
 // this function initializes and prepares Direct3D for use
 RahResult InitD3D(HWND hWnd)
@@ -100,7 +102,6 @@ RahResult InitD3D(HWND hWnd)
 	g_pDepthStencilView = reinterpret_cast<ID3D11DepthStencilView*>(rah::GraphicManager::GetInstance().m_depthStencilView.getPtr());
 	g_pSamplerState = reinterpret_cast<ID3D11SamplerState*>(rah::GraphicManager::GetInstance().m_samplerState.getPtr());
 	g_pViewport = reinterpret_cast<D3D11_VIEWPORT*>(rah::GraphicManager::GetInstance().m_viewport.getPtr());
-
 
 	return RAH_SUCCESS;
 }
@@ -172,7 +173,7 @@ void LoadGraphicResources()
 
 	g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
 	g_pDeviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
-	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[g_rasterState]);
+	
 	g_pDeviceContext->RSSetViewports(1, g_pViewport);
 }
 
@@ -197,7 +198,7 @@ void renderModels()
 	cbview.mView = rah::math::Transpose(g_View);
 	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
-	//g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
+	g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
 
 	// Update variables that change once per frame
 	CBWorld cbWorld;
@@ -220,14 +221,31 @@ void renderModels()
 	g_pDeviceContext->VSSetShader(g_vertexModelShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexModelShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelModelShader.m_fragmentShader, NULL, 0);
+	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[2]);
 
 	g_Model->render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
+	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 
-	rah::RenderManager::GetInstance().renderShape(g_OBB, rah::Color(255,0,0,1));
+	g_World = rah::math::Identity4D();
+
+	// Update variables that change once per frame
+	g_Scale = rah::math::ScalarMatrix4x4(g_OBB.m_dimentions.x, g_OBB.m_dimentions.y, g_OBB.m_dimentions.z);
+
+	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[0].x).getRadians(), rah::math::Axis_X);
+	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[1].y).getRadians(), rah::math::Axis_Y);
+	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[2].z).getRadians(), rah::math::Axis_Z);
+
+	g_Translation = rah::math::TranslationMatrix4x4(g_OBB.m_position.x, g_OBB.m_position.y, g_OBB.m_position.z);
+
+	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
+	
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	rah::RenderManager::GetInstance().renderShape(g_OBB);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);

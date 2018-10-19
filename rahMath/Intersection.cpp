@@ -86,7 +86,8 @@ namespace rah
 
 		ra = a.m_dimentions[0] * absR.Line[1][2] + a.m_dimentions[1] * absR.Line[0][2];
 		rb = b.m_dimentions[0] * absR.Line[2][1] + b.m_dimentions[1] * absR.Line[2][0];
-		if (math::Abs(transalte[1] * R.Line[0][2] - transalte[0] * R.Line[1][2]) > ra + rb)			return false;
+		if (math::Abs(transalte[1] * R.Line[0][2] - transalte[0] * R.Line[1][2]) > ra + rb)
+			return false;
 
 		return true;
 	}
