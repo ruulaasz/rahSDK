@@ -68,8 +68,10 @@ rah::CameraDebug g_camera;
 
 rah::Model* g_Model;
 
-rah::OBB g_OBB(rah::Vector3D(1, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::OBB g_OBB(rah::Vector3D(8, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 rah::OBB g_OBB2(rah::Vector3D(5, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+
+rah::Sphere g_Sphere(1, rah::Vector3D(1, 2, 8));
 
 float g_deltaTime = 0.0f;
 
@@ -268,6 +270,20 @@ void renderModels()
 
 	rah::RenderManager::GetInstance().renderShape(g_OBB2);
 
+	g_World = rah::math::Identity4D();
+	rah::math::Clear(g_Rotation);
+	// Update variables that change once per frame
+	g_Scale = rah::math::ScalarMatrix4x4(g_Sphere.m_radius, g_Sphere.m_radius, g_Sphere.m_radius);
+
+	g_Translation = rah::math::TranslationMatrix4x4(g_Sphere.m_center.x, g_Sphere.m_center.y, g_Sphere.m_center.z);
+
+	g_World = g_Scale * g_Rotation * g_Translation;
+
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	rah::RenderManager::GetInstance().renderShape(g_Sphere);
+
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
 }
@@ -328,7 +344,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	rah::GraphicManager::CloseModule();
-	rah::RenderManager::CloseModule();
+	//rah::RenderManager::CloseModule();
     return (int) msg.wParam;
 }
 
