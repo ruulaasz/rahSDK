@@ -2,6 +2,7 @@
 #include "GraphicManager.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "ConstantBuffer.h"
 
 namespace rah
 {
@@ -113,5 +114,10 @@ namespace rah
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+	}
+
+	void RenderManager::renderShape(const Sphere & _sphere)
+	{
+
 	}
 }

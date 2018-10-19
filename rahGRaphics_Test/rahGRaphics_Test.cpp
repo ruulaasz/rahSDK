@@ -67,7 +67,9 @@ rah::FragmentShader g_pixelShapeShader;
 rah::CameraDebug g_camera;
 
 rah::Model* g_Model;
+
 rah::OBB g_OBB(rah::Vector3D(1, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::OBB g_OBB2(rah::Vector3D(5, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
 float g_deltaTime = 0.0f;
 
@@ -241,11 +243,30 @@ void renderModels()
 
 	g_Translation = rah::math::TranslationMatrix4x4(g_OBB.m_position.x, g_OBB.m_position.y, g_OBB.m_position.z);
 
-	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
-	
+	g_World = g_Scale * g_Rotation * g_Translation;
+
+	cbWorld.mWorld = g_World;
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
 	rah::RenderManager::GetInstance().renderShape(g_OBB);
+
+	g_World = rah::math::Identity4D();
+
+	// Update variables that change once per frame
+	g_Scale = rah::math::ScalarMatrix4x4(g_OBB2.m_dimentions.x, g_OBB2.m_dimentions.y, g_OBB2.m_dimentions.z);
+
+	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB2.m_axis[0].x).getRadians(), rah::math::Axis_X);
+	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB2.m_axis[1].y).getRadians(), rah::math::Axis_Y);
+	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB2.m_axis[2].z).getRadians(), rah::math::Axis_Z);
+
+	g_Translation = rah::math::TranslationMatrix4x4(g_OBB2.m_position.x, g_OBB2.m_position.y, g_OBB2.m_position.z);
+
+	g_World = g_Scale * g_Rotation * g_Translation;
+
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	rah::RenderManager::GetInstance().renderShape(g_OBB2);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
