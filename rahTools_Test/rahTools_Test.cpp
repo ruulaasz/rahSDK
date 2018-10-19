@@ -94,7 +94,7 @@ int main()
 	/************************************************************************/
 	std::string filePathtest;
 	filePathtest = "debug/test/tripas.obb";
-	filePathtest = rah::GetFileNameFromPath(filePathtest);
+	filePathtest = rah::StringUtils::GetFileNameFromPath(filePathtest);
 	/************************************************************************/
 	/* prueba de recurso basica                                             */
 	/************************************************************************/
