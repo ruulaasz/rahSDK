@@ -28,7 +28,11 @@ namespace rah
 		*
 		*/
 		static const float PI = 3.1415926f;
-
+		/**
+		* Double of PI
+		*
+		*/
+		static const float DOUBLE_PI = PI * 2;
 		/**
 		* Degrees to radians constant
 		*

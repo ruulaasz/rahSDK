@@ -23,6 +23,5 @@ namespace rah
 		void Release() {};
 
 		void renderShape(const OBB& _obb);
-		void renderShape(const Sphere& _sphere, unsigned int _faces = 16);
 	};
 }

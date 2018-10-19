@@ -70,6 +70,8 @@ rah::Model* g_Model;
 rah::OBB g_OBB(rah::Vector3D(1, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 rah::OBB g_OBB1(rah::Vector3D(2, 2, 8), rah::Vector3D(0.5, 0.4f, 0.5), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 
+rah::Sphere g_sphere(2, rah::Vector3D(1, 2, 8));
+
 float g_deltaTime = 0.0f;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
@@ -199,7 +201,7 @@ void renderModels()
 	cbview.mView = rah::math::Transpose(g_View);
 	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
-	g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
+	//g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
 
 	// Update variables that change once per frame
 	CBWorld cbWorld;
@@ -238,10 +240,12 @@ void renderModels()
 	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
 	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 
-	g_World = rah::math::Identity4D();
 
-	// Update variables that change once per frame
-	g_Scale = rah::math::ScalarMatrix4x4(g_OBB.m_dimentions.x, g_OBB.m_dimentions.y, g_OBB.m_dimentions.z);
+	
+	g_World = rah::math::Identity4D();
+	rah::RenderManager::GetInstance().renderShape(g_sphere, 16);
+	//// Update variables that change once per frame
+	/*g_Scale = rah::math::ScalarMatrix4x4(g_OBB.m_dimentions.x, g_OBB.m_dimentions.y, g_OBB.m_dimentions.z);
 
 	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[0].x).getRadians(), rah::math::Axis_X);
 	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[1].y).getRadians(), rah::math::Axis_Y);
@@ -253,22 +257,22 @@ void renderModels()
 	
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	rah::RenderManager::GetInstance().renderShape(g_OBB);
+	rah::RenderManager::GetInstance().renderShape(g_OBB);*/
 
-	// Update variables that change once per frame
-	g_Scale = rah::math::ScalarMatrix4x4(g_OBB1.m_dimentions.x, g_OBB1.m_dimentions.y, g_OBB1.m_dimentions.z);
+	//// Update variables that change once per frame
+	//g_Scale = rah::math::ScalarMatrix4x4(g_OBB1.m_dimentions.x, g_OBB1.m_dimentions.y, g_OBB1.m_dimentions.z);
 
-	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[0].x).getRadians(), rah::math::Axis_X);
-	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[1].y).getRadians(), rah::math::Axis_Y);
-	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[2].z).getRadians(), rah::math::Axis_Z);
+	//g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[0].x).getRadians(), rah::math::Axis_X);
+	//g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[1].y).getRadians(), rah::math::Axis_Y);
+	//g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB1.m_axis[2].z).getRadians(), rah::math::Axis_Z);
 
-	g_Translation = rah::math::TranslationMatrix4x4(g_OBB1.m_position.x, g_OBB1.m_position.y, g_OBB1.m_position.z);
+	//g_Translation = rah::math::TranslationMatrix4x4(g_OBB1.m_position.x, g_OBB1.m_position.y, g_OBB1.m_position.z);
 
-	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
+	//cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
 
-	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+	//g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	rah::RenderManager::GetInstance().renderShape(g_OBB1);
+	//rah::RenderManager::GetInstance().renderShape(g_OBB1);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
