@@ -19,7 +19,7 @@ namespace rah
 		w = _vector.w;
 	}
 
-	Vector4D::Vector4D(Vector3D & _vector)
+	Vector4D::Vector4D(const Vector3D & _vector)
 	{
 		x = _vector.x;
 		y = _vector.y;

@@ -13,7 +13,7 @@ namespace rah
 	public:
 		explicit Vector4D(float _x = 0.f, float _y = 0.f, float _z = 0.f, float _w = 0.f);
 		Vector4D(const Vector4D &_vector);
-		Vector4D(Vector3D& _vector);
+		Vector4D(const Vector3D& _vector);
 		~Vector4D();
 
 		/**

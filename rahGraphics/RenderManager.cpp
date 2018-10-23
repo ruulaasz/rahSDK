@@ -115,6 +115,132 @@ namespace rah
 
 		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
+
+	void RenderManager::renderShape(const AABB & _aabb)
+	{
+		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+
+		if (!pDeviceContext)
+		{
+			throw "NullPointer pDeviceContext";
+		}
+
+		//vertex buffer
+		VertexBuffer vertexBuffer;
+		VertexData myVertex;
+
+		myVertex.pos = Vector4D(-1.f, 1.f, -1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(1.f, 1.f, -1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(-1.f, -1.f, -1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(1.f, -1.f, -1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+
+		myVertex.pos = Vector4D(-1.f, 1.f, 1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(1.f, 1.f, 1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(-1.f, -1.f, 1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(1.f, -1.f, 1.f, 1.f);
+		vertexBuffer.addVertex(myVertex);
+
+		vertexBuffer.create();
+
+		//index buffer
+		IndexBuffer indexBuffer;
+
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(2);
+
+		indexBuffer.addIndex(2);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(3);
+
+		indexBuffer.addIndex(4);
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(6);
+
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(2);
+
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(6);
+
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(4);
+
+		indexBuffer.addIndex(3);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(7);
+
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(5);
+
+		indexBuffer.addIndex(4);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(0);
+
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(1);
+
+		indexBuffer.addIndex(3);
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(2);
+
+		indexBuffer.addIndex(2);
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(6);
+
+		indexBuffer.create();
+
+		UINT stride = sizeof(VertexData);
+		UINT offset = 0;
+		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
+		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
+		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+	}
+
+	void RenderManager::renderShape(const Ray & _ray)
+	{
+		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+
+		if (!pDeviceContext)
+		{
+			throw "NullPointer pDeviceContext";
+		}
+
+		//vertex buffer
+		VertexBuffer vertexBuffer;
+		VertexData myVertex;
+
+		myVertex.pos = Vector4D(_ray.m_origin);
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = Vector4D(_ray.m_direction) * 20;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		vertexBuffer.create();
+
+		UINT stride = sizeof(VertexData);
+		UINT offset = 0;
+		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+	}
+
 	void RenderManager::renderShape(const Sphere & _sphere, unsigned int _faces)
 	{
 		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
@@ -178,6 +304,7 @@ namespace rah
 				lastIndex = (lastIndex + 2);
 			}
 		}
+
 		vertexBuffer.create();
 		indexBuffer.create();
 		UINT stride = sizeof(VertexData);

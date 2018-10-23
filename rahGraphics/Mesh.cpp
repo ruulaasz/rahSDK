@@ -33,6 +33,8 @@ namespace rah
 		pDeviceContext->IASetIndexBuffer(m_indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[2]);
+
 		pDeviceContext->DrawIndexed(m_indexBuffer.getIndexSize(), 0, 0);
 	}
 

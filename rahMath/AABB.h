@@ -1,15 +1,18 @@
 #pragma once
+
 #include "Vector3D.h"
+#include "Vector4D.h"
+
 namespace rah
 {
 	class AABB
 	{
 	public:
-		Vector3D m_center;
-		Vector3D m_min;
-		Vector3D m_max;
+		Vector4D m_center;
+		Vector4D m_min;
+		Vector4D m_max;
 		AABB();
-		AABB(Vector3D _center, Vector3D _min, Vector3D _max);
+		AABB(Vector4D _center, Vector4D _min, Vector4D _max);
 		~AABB();
 	};
 }

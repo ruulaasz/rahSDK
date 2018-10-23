@@ -67,10 +67,12 @@ rah::FragmentShader g_pixelShapeShader;
 rah::CameraDebug g_camera;
 
 rah::Model* g_Model;
-rah::OBB g_OBB(rah::Vector3D(1, 2, 8), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::OBB g_OBB(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 rah::OBB g_OBB1(rah::Vector3D(2, 2, 8), rah::Vector3D(0.5, 0.4f, 0.5), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
+rah::AABB g_AABB(rah::Vector4D(1, 1, 4, 1.f), rah::Vector4D(-0.5f, -0.5f, -0.5f, 1.0f), rah::Vector4D(0.5f, 0.5f, 0.5f, 1.0f));
+rah::Sphere g_sphere(1, rah::Vector3D(1, 2, 8));
 
-rah::Sphere g_sphere(2, rah::Vector3D(1, 2, 8));
+rah::Ray g_Ray(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 2, 5));
 
 float g_deltaTime = 0.0f;
 
@@ -197,22 +199,17 @@ void renderModels()
 	g_View = rah::math::LookAtLH(g_camera.m_vPosition, g_camera.m_vView, g_camera.m_vUpVector);
 	g_camera.m_frustum.calculateFrustum(g_Projection, g_View);
 
+	// Update variables that change once per frame
 	CBView cbview;
 	cbview.mView = rah::math::Transpose(g_View);
 	g_pDeviceContext->UpdateSubresource(g_pCBView.m_buffer, 0, NULL, &cbview, 0, 0);
 
-	//g_World = rah::math::RotationMatrix4x4(g_deltaTime, rah::math::Axis_Y);
-
-	// Update variables that change once per frame
 	CBWorld cbWorld;
 	cbWorld.mWorld = rah::math::Transpose(g_World);
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	//g_meshColor.r = (rah::math::Sin(g_deltaTime * 1.0f) + 1.0f) * 0.5f;
-	//g_meshColor.g = (rah::math::Cos(g_deltaTime * 3.0f ) + 1.0f ) * 0.5f;
-	//g_meshColor.b = (rah::math::Sin(g_deltaTime * 5.0f ) + 1.0f ) * 0.5f;
-
 	CBColor cbColor;
+
 	if (rah::Intersection::OBBIntersection(g_OBB, g_OBB1))
 	{
 		cbColor.mColor = rah::Color(0.f,1.f,0.f);
@@ -221,6 +218,7 @@ void renderModels()
 	{
 		cbColor.mColor = g_meshColor;
 	}
+
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
 	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
@@ -231,21 +229,20 @@ void renderModels()
 	g_pDeviceContext->VSSetShader(g_vertexModelShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexModelShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelModelShader.m_fragmentShader, NULL, 0);
-	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[2]);
 
 	g_Model->render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
-	g_pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 
-
-	
 	g_World = rah::math::Identity4D();
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 	rah::RenderManager::GetInstance().renderShape(g_sphere, 16);
+
 	//// Update variables that change once per frame
-	/*g_Scale = rah::math::ScalarMatrix4x4(g_OBB.m_dimentions.x, g_OBB.m_dimentions.y, g_OBB.m_dimentions.z);
+	g_Scale = rah::math::ScalarMatrix4x4(g_OBB.m_dimentions.x, g_OBB.m_dimentions.y, g_OBB.m_dimentions.z);
 
 	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[0].x).getRadians(), rah::math::Axis_X);
 	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[1].y).getRadians(), rah::math::Axis_Y);
@@ -257,7 +254,7 @@ void renderModels()
 	
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	rah::RenderManager::GetInstance().renderShape(g_OBB);*/
+	rah::RenderManager::GetInstance().renderShape(g_OBB);
 
 	//// Update variables that change once per frame
 	//g_Scale = rah::math::ScalarMatrix4x4(g_OBB1.m_dimentions.x, g_OBB1.m_dimentions.y, g_OBB1.m_dimentions.z);
@@ -273,6 +270,23 @@ void renderModels()
 	//g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
 	//rah::RenderManager::GetInstance().renderShape(g_OBB1);
+
+	g_World = rah::math::Identity4D();
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+	rah::RenderManager::GetInstance().renderShape(g_Ray);
+
+	g_Scale = rah::math::ScalarMatrix4x4(g_AABB.m_max.x - g_AABB.m_min.x, g_AABB.m_max.y - g_AABB.m_min.y, g_AABB.m_max.z - g_AABB.m_min.z);
+
+	g_Rotation = rah::math::Identity4D();
+
+	g_Translation = rah::math::TranslationMatrix4x4(g_AABB.m_center.x, g_AABB.m_center.y, g_AABB.m_center.z);
+
+	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
+
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	rah::RenderManager::GetInstance().renderShape(g_AABB);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);

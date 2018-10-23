@@ -2,9 +2,17 @@
 
 #include "Mesh.h"
 #include <vector>
+#include "VertexBuffer.h"
 
 namespace rah
 {
+	struct Triangle
+	{
+		VertexData m_Vertex[3];
+
+		Triangle() {}
+	};
+
 	/**
 	* Container for a model object
 	*/
@@ -57,7 +65,12 @@ namespace rah
 		virtual RahResult Load();
 		virtual void Release();
 
+		void setBox();
+
 		std::vector <Mesh* > m_meshes;
 		Matrix4D m_transform;
+		AABB m_boundingBox;
+		std::vector <Triangle* > m_triangles;
+		bool m_renderDebug;
 	};
 }
