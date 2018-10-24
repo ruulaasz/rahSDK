@@ -290,6 +290,8 @@ void renderModels()
 
 	rah::RenderManager::GetInstance().renderShape(g_AABB);
 
+	g_camera.m_frustum.getBox();
+
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
 }
