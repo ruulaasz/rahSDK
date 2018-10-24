@@ -112,7 +112,7 @@ namespace rah
 		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
 		pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
@@ -237,7 +237,7 @@ namespace rah
 		UINT offset = 0;
 		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
+		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
 
@@ -312,7 +312,7 @@ namespace rah
 		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
 		//pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
+		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
 		//pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 		pDeviceContext->Draw(vertexBuffer.getVertexSize(),0);
 	}
@@ -331,58 +331,112 @@ namespace rah
 		VertexData myVertex;
 		Vector3D p;
 
-		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);//0
 		myVertex.pos = p;
 		myVertex.pos.w =1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);//1
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);//2
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);//3
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[BACK], p);
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[LEFT], _frustum.m_planes[BACK], p);//4
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[BACK], p);
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[BACK], p);//5
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[LEFT], _frustum.m_planes[BACK], p);
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[BACK], p);//6
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
-		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[BACK], p);
-		myVertex.pos = p;
-		myVertex.pos.w = 1.f;
-		vertexBuffer.addVertex(myVertex);
-
-		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[BACK], p);//7
 		myVertex.pos = p;
 		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
 		vertexBuffer.create();
 
+		IndexBuffer indexBuffer;
+
+		//front
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(1); 
+		indexBuffer.addIndex(3);
+
+		indexBuffer.addIndex(3);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(2);
+
+		//top
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(7);
+
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(6);
+
+		//back
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(4);
+
+		indexBuffer.addIndex(4);
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(5);
+
+		//right
+		indexBuffer.addIndex(6);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(5);
+
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(1);
+		indexBuffer.addIndex(2);
+
+		//left
+		indexBuffer.addIndex(0);
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(4);
+
+		indexBuffer.addIndex(4);
+		indexBuffer.addIndex(7);
+		indexBuffer.addIndex(3);
+
+		//bottom
+		indexBuffer.addIndex(2);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(4);
+
+		indexBuffer.addIndex(4);
+		indexBuffer.addIndex(5);
+		indexBuffer.addIndex(3);
+
+		indexBuffer.create();
+
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
 		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+		pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
+		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
+		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 }

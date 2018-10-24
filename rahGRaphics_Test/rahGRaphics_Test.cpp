@@ -184,6 +184,13 @@ void LoadGraphicResources()
 	g_pDeviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
 	
 	g_pDeviceContext->RSSetViewports(1, g_pViewport);
+
+	g_camera2.m_stopMoving = true;
+	g_camera2.Update();
+	g_View = rah::math::LookAtLH(g_camera2.m_vPosition, g_camera2.m_vView, g_camera2.m_vUpVector);
+	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, g_aspectRatio, 0.2f, 20.0f);
+	g_camera2.m_frustum.calculateFrustum(g_Projection, g_View);
+	g_Projection = rah::math::PerspectiveFovLH(rah::math::PI / 4, g_aspectRatio, 0.01f, 100.0f);
 }
 
 void renderModels()
@@ -198,9 +205,6 @@ void renderModels()
 	rah::GraphicManager::GetInstance().clearScreen(&rah::GraphicManager::GetInstance().m_renderTarget, g_backgroundColor);
 
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-	g_View = rah::math::LookAtLH(g_camera2.m_vPosition, g_camera2.m_vView, g_camera2.m_vUpVector);
-	g_camera2.m_frustum.calculateFrustum(g_Projection, g_View);
 
 	g_camera.Update();
 	g_View = rah::math::LookAtLH(g_camera.m_vPosition, g_camera.m_vView, g_camera.m_vUpVector);
@@ -299,7 +303,7 @@ void renderModels()
 	cbWorld.mWorld = g_World;
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 	rah::RenderManager::GetInstance().renderShape(g_camera2.m_frustum);
-
+	rah::RenderManager::GetInstance().renderShape(g_camera.m_frustum);
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
 }
