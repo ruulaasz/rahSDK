@@ -65,6 +65,7 @@ rah::VertexShader g_vertexShapeShader;
 rah::FragmentShader g_pixelShapeShader;
 
 rah::CameraDebug g_camera;
+rah::CameraDebug g_camera2;
 
 rah::Model* g_Model;
 rah::OBB g_OBB(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
@@ -164,6 +165,7 @@ void LoadGraphicResources()
 	rah::Vector3D At(0.0f, 1.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
 	g_camera.PositionCamera(Eye, At, Up);
+	g_camera2.PositionCamera(Eye, At, Up);
 
 	g_View = rah::math::LookAtLH(Eye, At, Up);
 
@@ -197,10 +199,13 @@ void renderModels()
 
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	g_View = rah::math::LookAtLH(g_camera2.m_vPosition, g_camera2.m_vView, g_camera2.m_vUpVector);
+	g_camera2.m_frustum.calculateFrustum(g_Projection, g_View);
+
 	g_camera.Update();
 	g_View = rah::math::LookAtLH(g_camera.m_vPosition, g_camera.m_vView, g_camera.m_vUpVector);
 	g_camera.m_frustum.calculateFrustum(g_Projection, g_View);
-
+	
 	// Update variables that change once per frame
 	CBView cbview;
 	cbview.mView = rah::math::Transpose(g_View);
@@ -290,7 +295,10 @@ void renderModels()
 
 	rah::RenderManager::GetInstance().renderShape(g_AABB);
 
-	g_camera.m_frustum.getBox();
+	g_World = rah::math::Identity4D();
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+	rah::RenderManager::GetInstance().renderShape(g_camera2.m_frustum);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);

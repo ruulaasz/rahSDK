@@ -111,14 +111,6 @@ namespace rah
 		normalizePlane(FRONT);
 	}
 
-	AABB Frustum::getBox()
-	{
-		Vector3D p;
-		Intersection::CheckIntersection(m_planes[TOP], m_planes[LEFT], m_planes[FRONT], p);
-		
-		return AABB();
-	}
-
 	void Frustum::render()
 	{
 

@@ -316,4 +316,73 @@ namespace rah
 		//pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 		pDeviceContext->Draw(vertexBuffer.getVertexSize(),0);
 	}
+
+	void RenderManager::renderShape(const Frustum & _frustum)
+	{
+		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+
+		if (!pDeviceContext)
+		{
+			throw "NullPointer pDeviceContext";
+		}
+
+		//vertex buffer
+		VertexBuffer vertexBuffer;
+		VertexData myVertex;
+		Vector3D p;
+
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);
+		myVertex.pos = p;
+		myVertex.pos.w =1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[BACK], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[BACK], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[LEFT], _frustum.m_planes[BACK], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[BACK], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		Intersection::CheckIntersection(_frustum.m_planes[BOTTOM], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);
+		myVertex.pos = p;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		vertexBuffer.create();
+
+		UINT stride = sizeof(VertexData);
+		UINT offset = 0;
+		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+	}
 }
