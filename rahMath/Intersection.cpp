@@ -237,6 +237,7 @@ namespace rah
 		float k1 = (p1.d*d22 - p2.d*d12) / denom;
 		float k2 = (p2.d*d11 - p1.d*d12) / denom;
 		p = p1n*k1 + p2n*k2;
+
 		return true;
 	}
 	bool Intersection::PlaneIntersection(Plane p1, Plane p2, Plane p3, Vector3D & p)
