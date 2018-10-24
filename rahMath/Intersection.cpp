@@ -241,9 +241,9 @@ namespace rah
 	}
 	bool Intersection::PlaneIntersection(Plane p1, Plane p2, Plane p3, Vector3D & p)
 	{
-		Vector3D m1 = Vector3D(p1.a, p2.b, p3.c);
-		Vector3D m2 = Vector3D(p1.a, p2.b, p3.c);
-		Vector3D m3 = Vector3D(p1.a, p2.b, p3.c);
+		Vector3D m1 = Vector3D(p1.a, p2.a, p3.a);
+		Vector3D m2 = Vector3D(p1.b, p2.b, p3.b);
+		Vector3D m3 = Vector3D(p1.c, p2.c, p3.c);
 
 		Vector3D u = math::CrossProduct(m2, m3);
 		float denom = math::Dot(m1, u);
