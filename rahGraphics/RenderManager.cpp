@@ -385,4 +385,65 @@ namespace rah
 
 		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
+
+	void RenderManager::renderGrid()
+	{
+		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+
+		if (!pDeviceContext)
+		{
+			throw "NullPointer pDeviceContext";
+		}
+
+		//vertex buffer
+		VertexBuffer vertexBuffer;
+		VertexData myVertex;
+
+		Vector3D xaxis(2.f, 0.f, 0.f);
+		Vector3D yaxis(0.f, 0.f, 2.f);
+		Vector3D origin;
+
+		size_t divisions = 80;
+
+		for (size_t i = 0; i <= divisions; ++i)
+		{
+			float fPercent = float(i) / float(divisions);
+			fPercent = (fPercent * 2.0f) - 1.0f;
+
+			Vector3D scale = xaxis * fPercent + origin;
+
+			myVertex.pos = scale - yaxis;
+			myVertex.pos.w = 1.f;
+			vertexBuffer.addVertex(myVertex);
+
+			myVertex.pos = scale + yaxis;
+			myVertex.pos.w = 1.f;
+			vertexBuffer.addVertex(myVertex);
+		}
+
+		for (size_t i = 0; i <= divisions; ++i)
+		{
+			float fPercent = float(i) / float(divisions);
+			fPercent = (fPercent * 2.0f) - 1.0f;
+
+			Vector3D scale = yaxis * fPercent + origin;
+
+			myVertex.pos = scale - xaxis;
+			myVertex.pos.w = 1.f;
+			vertexBuffer.addVertex(myVertex);
+
+			myVertex.pos = scale + xaxis;
+			myVertex.pos.w = 1.f;
+			vertexBuffer.addVertex(myVertex);
+		}
+
+		vertexBuffer.create();
+
+		UINT stride = sizeof(VertexData);
+		UINT offset = 0;
+		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+	}
 }

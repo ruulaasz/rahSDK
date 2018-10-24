@@ -55,7 +55,7 @@ rah::Matrix4D g_Scale;
 rah::Matrix4D g_Translation;
 rah::Matrix4D g_Rotation;
 
-rah::Color g_meshColor(0.2f, 0.0f, 0.0f, 1.f);
+rah::Color g_meshColor(1.0f, 0.0f, 0.0f, 1.f);
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 rah::VertexShader g_vertexModelShader;
@@ -237,7 +237,15 @@ void renderModels()
 	g_pDeviceContext->IASetInputLayout(g_vertexModelShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelModelShader.m_fragmentShader, NULL, 0);
 
+	cbColor.mColor = rah::Color(0.f, 0.f, 0.f);
+
+	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
+
 	g_Model->render();
+
+	cbColor.mColor = g_meshColor;
+
+	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
@@ -263,6 +271,18 @@ void renderModels()
 
 	rah::RenderManager::GetInstance().renderShape(g_OBB);
 
+	g_Scale = rah::math::ScalarMatrix4x4(g_AABB.m_max.x - g_AABB.m_min.x, g_AABB.m_max.y - g_AABB.m_min.y, g_AABB.m_max.z - g_AABB.m_min.z);
+
+	g_Rotation = rah::math::Identity4D();
+
+	g_Translation = rah::math::TranslationMatrix4x4(g_AABB.m_center.x, g_AABB.m_center.y, g_AABB.m_center.z);
+
+	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
+
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+
+	rah::RenderManager::GetInstance().renderShape(g_AABB);
+
 	//// Update variables that change once per frame
 	//g_Scale = rah::math::ScalarMatrix4x4(g_OBB1.m_dimentions.x, g_OBB1.m_dimentions.y, g_OBB1.m_dimentions.z);
 
@@ -283,17 +303,21 @@ void renderModels()
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 	rah::RenderManager::GetInstance().renderShape(g_Ray);
 
-	g_Scale = rah::math::ScalarMatrix4x4(g_AABB.m_max.x - g_AABB.m_min.x, g_AABB.m_max.y - g_AABB.m_min.y, g_AABB.m_max.z - g_AABB.m_min.z);
+	g_Scale = rah::math::ScalarMatrix4x4(100, 100, 100);
 
 	g_Rotation = rah::math::Identity4D();
 
-	g_Translation = rah::math::TranslationMatrix4x4(g_AABB.m_center.x, g_AABB.m_center.y, g_AABB.m_center.z);
+	g_Translation = rah::math::Identity4D();
 
 	cbWorld.mWorld = g_Scale * g_Rotation * g_Translation;
 
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	rah::RenderManager::GetInstance().renderShape(g_AABB);
+	cbColor.mColor = rah::Color(1.f, 1.f, 1.f);
+
+	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
+
+	rah::RenderManager::GetInstance().renderGrid();
 
 	g_World = rah::math::Identity4D();
 	cbWorld.mWorld = g_World;
