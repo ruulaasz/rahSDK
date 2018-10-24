@@ -2,6 +2,7 @@
 
 #include "Matrix4D.h"
 #include "Plane.h"
+#include "AABB.h"
 
 namespace rah
 {
@@ -31,6 +32,7 @@ namespace rah
 
 		void normalizePlane(FrustumSide _side);
 		void calculateFrustum(Matrix4D _proj, Matrix4D _view);
+		AABB getBox();
 
 		void render();
 	};
