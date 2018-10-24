@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "Plane.h"
 #include "AABB.h"
+#include "Frustum.h"
 namespace rah
 {
 	/*
@@ -24,6 +25,12 @@ namespace rah
 		static bool CheckIntersection(Sphere s, AABB a);
 		static bool CheckIntersection(Plane p1, Plane p2, Vector3D &p, Vector3D &d);
 		static bool CheckIntersection(Plane p1, Plane p2, Plane p3, Vector3D &p);
+		static bool CheckIntersection(Frustum f, Vector3D p);
+		static bool CheckIntersection(Vector3D p, Frustum f);
+		static bool CheckIntersection(Frustum f, Sphere s);
+		static bool CheckIntersection(Sphere s, Frustum f);
+		static bool CheckIntersection(Frustum f, AABB a);
+		static bool CheckIntersection(AABB a, Frustum f);
 		/*
 		* Sphere vs sphere
 		*
@@ -45,6 +52,9 @@ namespace rah
 		static bool AABBNSphereIntersection(AABB _a, Sphere _s);
 		static bool PlaneIntersection(Plane p1, Plane p2, Vector3D &p, Vector3D &d);
 		static bool PlaneIntersection(Plane p1, Plane p2, Plane p3, Vector3D &p);
+		static bool FrustrumNPointIntersection(Frustum f, Vector3D p);
+		static bool FrustrumNSphereIntersection(Frustum f, Sphere s);
+		static bool FrustumNAABBIntersection(Frustum f, AABB a);
 	public:
 		Intersection();
 		~Intersection();

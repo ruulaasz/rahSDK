@@ -70,8 +70,8 @@ rah::CameraDebug g_camera2;
 rah::Model* g_Model;
 rah::OBB g_OBB(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 rah::OBB g_OBB1(rah::Vector3D(2, 2, 8), rah::Vector3D(0.5, 0.4f, 0.5), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
-rah::AABB g_AABB(rah::Vector4D(1, 1, 4, 1.f), rah::Vector4D(-0.5f, -0.5f, -0.5f, 1.0f), rah::Vector4D(0.5f, 0.5f, 0.5f, 1.0f));
-rah::Sphere g_sphere(1, rah::Vector3D(1, 2, 8));
+rah::AABB g_AABB(rah::Vector4D(1, 2, 8, 1.f), rah::Vector4D(-0.f, -0.f, -0.f, 1.0f), rah::Vector4D(1.5f, 1.5f, 1.5f, 1.0f));
+rah::Sphere g_sphere(4, rah::Vector3D(1, 20, 8));
 
 rah::Ray g_Ray(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 2, 5));
 
@@ -221,15 +221,6 @@ void renderModels()
 
 	CBColor cbColor;
 
-	if (rah::Intersection::OBBIntersection(g_OBB, g_OBB1))
-	{
-		cbColor.mColor = rah::Color(0.f,1.f,0.f);
-	}
-	else
-	{
-		cbColor.mColor = g_meshColor;
-	}
-
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
 	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pCBWorld.m_buffer);
@@ -247,7 +238,14 @@ void renderModels()
 
 	g_Model->render();
 
-	cbColor.mColor = g_meshColor;
+	if (rah::Intersection::CheckIntersection(g_AABB, g_sphere))
+	{
+		cbColor.mColor = rah::Color(0.f, 1.f, 0.f);
+	}
+	else
+	{
+		cbColor.mColor = g_meshColor;
+	}
 
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
@@ -326,8 +324,8 @@ void renderModels()
 	g_World = rah::math::Identity4D();
 	cbWorld.mWorld = g_World;
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
-	rah::RenderManager::GetInstance().renderShape(g_camera2.m_frustum);
-	rah::RenderManager::GetInstance().renderShape(g_camera.m_frustum);
+	//rah::RenderManager::GetInstance().renderShape(g_camera2.m_frustum);
+	//rah::RenderManager::GetInstance().renderShape(g_camera.m_frustum);
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
 }

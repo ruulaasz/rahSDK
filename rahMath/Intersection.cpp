@@ -48,6 +48,30 @@ namespace rah
 	{
 		return PlaneIntersection(p1,p2,p3,p);
 	}
+	bool Intersection::CheckIntersection(Frustum f, Vector3D p)
+	{
+		return FrustrumNPointIntersection(f,p);
+	}
+	bool Intersection::CheckIntersection(Vector3D p, Frustum f)
+	{
+		return FrustrumNPointIntersection(f, p);
+	}
+	bool Intersection::CheckIntersection(Frustum f, Sphere s)
+	{
+		return FrustrumNSphereIntersection(f, s);
+	}
+	bool Intersection::CheckIntersection(Sphere s, Frustum f)
+	{
+		return FrustrumNSphereIntersection(f, s);
+	}
+	bool Intersection::CheckIntersection(Frustum f, AABB a)
+	{
+		return FrustumNAABBIntersection(f, a);
+	}
+	bool Intersection::CheckIntersection(AABB a, Frustum f)
+	{
+		return FrustumNAABBIntersection(f, a);
+	}
 	bool Intersection::SphereIntersection(Sphere a, Sphere b)
 	{
 		Vector3D distance = a.m_center - b.m_center;
@@ -196,27 +220,22 @@ namespace rah
 	}
 	bool Intersection::AABBNSphereIntersection(AABB _a, Sphere _s)
 	{
-		float fSquareDistance = 0.0f;
-
-		for (unsigned int i = 0; i < 3; i++)
+		float sqDist = 0.0f;
+		for (int i = 0; i < 3; i++)
 		{
-			float v = Vector3D(_s.m_center)[i];
+			
+			float v = _s.m_center[i];
 
-			if (v < _a.m_min[i])
-			{
-				fSquareDistance += math::Square(_a.m_min[i] - v);
-			}
+			if (v < (_a.m_min[i] + _a.m_center[i]))
+				sqDist += ((_a.m_min[i] + _a.m_center[i]) - v) * ((_a.m_min[i] + _a.m_center[i]) - v);
 
-			if (v > _a.m_max[i])
-			{
-				fSquareDistance += math::Square(v - _a.m_max[i]);
-			}
+			if (v > (_a.m_max[i] + _a.m_center[i]))
+				sqDist += (v - (_a.m_max[i] + _a.m_center[i])) * (v - (_a.m_max[i] + _a.m_center[i]));
 		}
 
-		if (fSquareDistance <= math::Square(_s.m_radius))
-		{
+		if(sqDist <= _s.m_radius * _s.m_radius)
 			return true;
-		}
+
 		return false;
 	}
 	bool Intersection::PlaneIntersection(Plane p1, Plane p2, Vector3D & p, Vector3D & d)
@@ -260,6 +279,53 @@ namespace rah
 		p.y = math::Dot(m3, v) * ood;
 		p.z = -math::Dot(m2, v) * ood;
 
+		return true;
+	}
+	bool Intersection::FrustrumNPointIntersection(Frustum f, Vector3D p)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (f.m_planes[i].a * p.x + f.m_planes[i].b * p.y + f.m_planes[i].c * p.z + f.m_planes[i].d <= 0)
+				return false;
+		}
+		return true;
+	}
+	bool Intersection::FrustrumNSphereIntersection(Frustum f, Sphere s)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (f.m_planes[i].a * s.m_center.x + f.m_planes[i].b * s.m_center.y + f.m_planes[i].c * s.m_center.z + f.m_planes[i].d <= -s.m_radius)
+				return false;
+		}
+		return true;
+	}
+	bool Intersection::FrustumNAABBIntersection(Frustum f, AABB a)
+	{
+		float sizeX = a.m_max.x - a.m_min.x;
+		float sizeY = a.m_max.y - a.m_min.y;
+		float sizeZ = a.m_max.z - a.m_min.z;
+
+		for (int i = 0; i < 6; i++)
+		{
+			if (f.m_planes[i].a * (a.m_center.x - sizeX) + f.m_planes[i].b * (a.m_center.y - sizeY) + f.m_planes[i].c * (a.m_center.z - sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x + sizeX) + f.m_planes[i].b * (a.m_center.y - sizeY) + f.m_planes[i].c * (a.m_center.z - sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x - sizeX) + f.m_planes[i].b * (a.m_center.y + sizeY) + f.m_planes[i].c * (a.m_center.z - sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x + sizeX) + f.m_planes[i].b * (a.m_center.y + sizeY) + f.m_planes[i].c * (a.m_center.z - sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x - sizeX) + f.m_planes[i].b * (a.m_center.y - sizeY) + f.m_planes[i].c * (a.m_center.z + sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x + sizeX) + f.m_planes[i].b * (a.m_center.y - sizeY) + f.m_planes[i].c * (a.m_center.z + sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x - sizeX) + f.m_planes[i].b * (a.m_center.y + sizeY) + f.m_planes[i].c * (a.m_center.z + sizeZ) + f.m_planes[i].d > 0)
+				continue;
+			if (f.m_planes[i].a * (a.m_center.x + sizeX) + f.m_planes[i].b * (a.m_center.y + sizeY) + f.m_planes[i].c * (a.m_center.z + sizeZ) + f.m_planes[i].d > 0)
+				continue;
+
+			return false;
+		}
 		return true;
 	}
 	Intersection::Intersection()
