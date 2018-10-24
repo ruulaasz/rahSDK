@@ -74,6 +74,8 @@ rah::Sphere g_sphere(1, rah::Vector3D(1, 2, 8));
 
 rah::Ray g_Ray(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 2, 5));
 
+rah::Plane g_Plane(rah::Vector3D(1, 1, 1), 1.0f);
+
 float g_deltaTime = 0.0f;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:

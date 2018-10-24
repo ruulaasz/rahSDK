@@ -12,6 +12,7 @@ namespace rah
 	public:
 		Plane();
 		Plane(Vector3D _A, Vector3D _B, Vector3D _C);
+		Plane(Vector3D _normal, float _origin);
 		Plane(const Plane& _plane);
 		~Plane();
 

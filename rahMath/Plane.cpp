@@ -13,6 +13,14 @@ namespace rah
 		initFromVectors(_A, _B, _C);
 	}
 
+	Plane::Plane(Vector3D _normal, float _origin)
+	{
+		a = _normal.x;
+		b = _normal.y;
+		c = _normal.z;
+		d = _origin;
+	}
+
 	Plane::Plane(const Plane & _plane)
 	{
 		a = _plane.a;
