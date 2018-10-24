@@ -4,6 +4,46 @@
 
 namespace rah
 {
+	bool Intersection::CheckIntersection(Sphere a, Sphere b)
+	{
+		return SphereIntersection(a,b);
+	}
+	bool Intersection::CheckIntersection(OBB a, OBB b)
+	{
+		return OBBIntersection(a,b);
+	}
+	bool Intersection::CheckIntersection(Sphere s, OBB b)
+	{
+		return SphereNOBBIntersection(s,b);
+	}
+	bool Intersection::CheckIntersection(OBB b, Sphere s)
+	{
+		return SphereNOBBIntersection(s, b);
+	}
+	bool Intersection::CheckIntersection(Ray r, Plane p)
+	{
+		return RayNPlaneIntersection(r, p);
+	}
+	bool Intersection::CheckIntersection(Plane p, Ray r)
+	{
+		return RayNPlaneIntersection(r, p);
+	}
+	bool Intersection::CheckIntersection(AABB a, AABB b)
+	{
+		return AABBIntersection(a,b);
+	}
+	bool Intersection::CheckIntersection(AABB a, Sphere s)
+	{
+		return AABBNSphereIntersection(a,s);
+	}
+	bool Intersection::CheckIntersection(Sphere s, AABB a)
+	{
+		return AABBNSphereIntersection(a, s);
+	}
+	bool Intersection::CheckIntersection(Plane p1, Plane p2, Vector3D & p, Vector3D & d)
+	{
+		return PlaneIntersection(p1,p2, p, d);
+	}
 	bool Intersection::SphereIntersection(Sphere a, Sphere b)
 	{
 		Vector3D distance = a.m_center - b.m_center;
@@ -174,6 +214,26 @@ namespace rah
 			return true;
 		}
 		return false;
+	}
+	bool Intersection::PlaneIntersection(Plane p1, Plane p2, Vector3D & p, Vector3D & d)
+	{
+		// Compute direction of intersection line
+		Vector3D p1n(p1.a, p1.b, p1.c);
+		Vector3D p2n(p2.a, p2.b, p2.c);
+		d = math::CrossProduct(p1n, p2n);
+		// If d is zero, the planes are parallel (and separated)
+		// or coincident, so they’re not considered intersecting
+		if (math::Dot(d, d) < math::fEpsilon) 
+			return false;
+
+		float d11 = math::Dot(p1n, p1n);
+		float d12 = math::Dot(p1n, p2n);
+		float d22 = math::Dot(p2n, p2n);
+		float denom = d11*d22 - d12*d12;
+		float k1 = (p1.d*d22 - p2.d*d12) / denom;
+		float k2 = (p2.d*d11 - p1.d*d12) / denom;
+		p = p1n*k1 + p2n*k2;
+		return true;
 	}
 	Intersection::Intersection()
 	{
