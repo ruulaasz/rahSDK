@@ -44,6 +44,10 @@ namespace rah
 	{
 		return PlaneIntersection(p1,p2, p, d);
 	}
+	bool Intersection::CheckIntersection(Plane p1, Plane p2, Plane p3, Vector3D & p)
+	{
+		return PlaneIntersection(p1,p2,p3,p);
+	}
 	bool Intersection::SphereIntersection(Sphere a, Sphere b)
 	{
 		Vector3D distance = a.m_center - b.m_center;
@@ -233,6 +237,28 @@ namespace rah
 		float k1 = (p1.d*d22 - p2.d*d12) / denom;
 		float k2 = (p2.d*d11 - p1.d*d12) / denom;
 		p = p1n*k1 + p2n*k2;
+		return true;
+	}
+	bool Intersection::PlaneIntersection(Plane p1, Plane p2, Plane p3, Vector3D & p)
+	{
+		Vector3D m1 = Vector3D(p1.a, p2.b, p3.c);
+		Vector3D m2 = Vector3D(p1.a, p2.b, p3.c);
+		Vector3D m3 = Vector3D(p1.a, p2.b, p3.c);
+
+		Vector3D u = math::CrossProduct(m2, m3);
+		float denom = math::Dot(m1, u);
+
+		if (math::Abs(denom) < math::fEpsilon) 
+			return false; // Planes do not intersect in a point
+
+		Vector3D d(p1.d, p2.d, p3.d);
+		Vector3D v = math::CrossProduct(m1, d);
+
+		float ood = 1.0f / denom;
+		p.x = math::Dot(d, u) * ood;
+		p.y = math::Dot(m3, v) * ood;
+		p.z = -math::Dot(m2, v) * ood;
+
 		return true;
 	}
 	Intersection::Intersection()

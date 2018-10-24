@@ -23,6 +23,7 @@ namespace rah
 		static bool CheckIntersection(AABB a, Sphere s);
 		static bool CheckIntersection(Sphere s, AABB a);
 		static bool CheckIntersection(Plane p1, Plane p2, Vector3D &p, Vector3D &d);
+		static bool CheckIntersection(Plane p1, Plane p2, Plane p3, Vector3D &p);
 		/*
 		* Sphere vs sphere
 		*
@@ -43,6 +44,7 @@ namespace rah
 		static bool AABBIntersection(AABB _a, AABB _b);
 		static bool AABBNSphereIntersection(AABB _a, Sphere _s);
 		static bool PlaneIntersection(Plane p1, Plane p2, Vector3D &p, Vector3D &d);
+		static bool PlaneIntersection(Plane p1, Plane p2, Plane p3, Vector3D &p);
 	public:
 		Intersection();
 		~Intersection();
