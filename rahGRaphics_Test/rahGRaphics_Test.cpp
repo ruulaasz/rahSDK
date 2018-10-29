@@ -55,7 +55,7 @@ rah::Matrix4D g_Scale;
 rah::Matrix4D g_Translation;
 rah::Matrix4D g_Rotation;
 
-rah::Color g_meshColor(1.0f, 0.0f, 0.0f, 1.f);
+rah::Color g_meshColor(0.5f, 0.0f, 0.0f, 1.f);
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 rah::VertexShader g_vertexModelShader;
@@ -287,6 +287,16 @@ void renderModels()
 
 	rah::RenderManager::GetInstance().renderShape(g_AABB);
 
+	g_World = rah::math::Identity4D();
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+	rah::RenderManager::GetInstance().renderShape(g_Ray);
+
+	g_World = rah::math::Identity4D();
+	cbWorld.mWorld = g_World;
+	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+	rah::RenderManager::GetInstance().renderShape(g_camera2.m_frustum);
+
 	//// Update variables that change once per frame
 	//g_Scale = rah::math::ScalarMatrix4x4(g_OBB1.m_dimentions.x, g_OBB1.m_dimentions.y, g_OBB1.m_dimentions.z);
 
@@ -302,11 +312,6 @@ void renderModels()
 
 	//rah::RenderManager::GetInstance().renderShape(g_OBB1);
 
-	g_World = rah::math::Identity4D();
-	cbWorld.mWorld = g_World;
-	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
-	rah::RenderManager::GetInstance().renderShape(g_Ray);
-
 	g_Scale = rah::math::ScalarMatrix4x4(100, 100, 100);
 
 	g_Rotation = rah::math::Identity4D();
@@ -317,17 +322,12 @@ void renderModels()
 
 	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
 
-	cbColor.mColor = rah::Color(1.f, 1.f, 1.f);
+	cbColor.mColor = rah::Color(0.5f, 0.5f, 0.5f);
 
 	g_pDeviceContext->UpdateSubresource(g_pCBColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 
 	rah::RenderManager::GetInstance().renderGrid();
 
-	g_World = rah::math::Identity4D();
-	cbWorld.mWorld = g_World;
-	g_pDeviceContext->UpdateSubresource(g_pCBWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
-	rah::RenderManager::GetInstance().renderShape(g_camera2.m_frustum);
-	rah::RenderManager::GetInstance().renderShape(g_camera.m_frustum);
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
 }
