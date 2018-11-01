@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Vector4D.h"
 namespace rah
 {
 	/**
@@ -17,6 +17,7 @@ namespace rah
 		*
 		*/
 		void operator= (const Color& _Color);
+		void operator= (const Vector4D& _vec);
 		Color operator+	(const Color& _Color);
 		Color operator-	(const Color& _Color);
 		void operator+= (const Color& _Color);
@@ -34,5 +35,11 @@ namespace rah
 		float g;
 		float b;
 		float alpha;
+
+		static Color black;
+		static Color white;
+		static Color red;
+		static Color green;
+		static Color blue;
 	};
 }

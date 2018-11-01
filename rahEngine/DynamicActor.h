@@ -16,6 +16,8 @@ namespace rah
 		Model* m_model;
 		AABB m_box;
 		Color m_color;
+	protected:
+		Transform m_LastTransform;
 	public:
 		virtual RahResult Initialize(void* _initData = NULL);
 		virtual void Update(float _deltaTime);

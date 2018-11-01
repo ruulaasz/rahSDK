@@ -171,9 +171,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::SimpleActorInit* params = new rah::SimpleActorInit();
 	params->_color = rah::Color();
 	params->_nameModel = "resources\\models\\Bassilisk\\Basillisk.dae";
-	params->_transform = rah::Transform(rah::Vector3D(10,5,3), rah::Vector3D(), rah::Vector3D(1, 1, 1));
+	params->_transform = rah::Transform(rah::Vector3D(10,5,3), rah::Vector3D(0, 0, 0), rah::Vector3D(.5, 1, 1));
 	g_Actor.Initialize((void*)params);
-
+	float time = 1;
 	while (TRUE)
 	{
 		// Check to see if any messages are waiting in the queue
@@ -191,7 +191,21 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
+			g_Actor.m_transform.m_position.x = rah::math::Sin(rah::Degrees(time).getRadians());
+			g_Actor.m_transform.m_position.y = rah::math::Cos(rah::Degrees(time).getRadians());
+
+			g_Actor.m_transform.m_scale.x = time/2000;
+			g_Actor.m_transform.m_scale.y = time/2000;
+
+			g_Actor.m_transform.m_rotation.x = 0.1 * time;
+
+			g_Actor.Update(0);
 			renderModels();
+		}
+		time++;
+		if (time > 20000)
+		{
+			time = 1;
 		}
 	}
 

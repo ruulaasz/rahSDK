@@ -2,6 +2,12 @@
 
 namespace rah
 {
+	Color rah::Color::black = Color();
+	Color rah::Color::white = Color(1.f, 1.f, 1.f);
+	Color rah::Color::red = Color(1.f);
+	Color rah::Color::green = Color(0.f, 1.f);
+	Color rah::Color::blue = Color(0.f, 0.f, 1.f);
+
 	rah::Color::Color(float _r, float _g, float _b, float _alpha)
 	{
 		r = _r;
@@ -21,6 +27,14 @@ namespace rah
 		g = _Color.g;
 		b = _Color.b;
 		alpha = _Color.alpha;
+	}
+
+	void Color::operator=(const Vector4D & _vec)
+	{
+		r = _vec.x;
+		g = _vec.y;
+		b = _vec.z;
+		alpha = _vec.w;
 	}
 
 	Color Color::operator+(const Color & _Color)
@@ -134,6 +148,6 @@ namespace rah
 		r = 0.f;
 		g = 0.f;
 		b = 0.f;
-		alpha = 1.f;
+		alpha = 0.f;
 	}
 }

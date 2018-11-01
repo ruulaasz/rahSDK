@@ -1,10 +1,11 @@
 #include "Matrix3D.h"
+#include "PlatformMath.h"
 
 namespace rah
 {
 	Matrix3D::Matrix3D()
 	{
-
+		math::Clear(*this);
 	}
 
 	Matrix3D::Matrix3D(const Matrix3D & _matrix)
@@ -57,7 +58,7 @@ namespace rah
 			{
 				for (int k = 0; k < 3; k++)
 				{
-					MultiplicationMatrix.Line[j][i] += (Line[k][i] * _Matrix3x3.Line[j][k]);
+					MultiplicationMatrix.Line[i][j] += (Line[i][k] * _Matrix3x3.Line[k][j]);
 				}
 			}
 		}

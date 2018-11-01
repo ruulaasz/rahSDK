@@ -17,6 +17,31 @@ namespace rah
 		m_max.w = 1.f;
 	}
 
+	void AABB::RotateAABB(Matrix3D _m)
+	{
+		AABB b;
+		for (int i = 0; i < 3; i++)
+		{
+			b.m_min[i] = b.m_max[i] = 0;
+
+			for (int j = 0; j < 3; j++)
+			{
+				float e = _m.Line[i][j] * m_min[j];
+				float f = _m.Line[i][j] * m_max[j];
+				if (e < f) {
+					b.m_min[i] += e;
+					b.m_max[i] += f;
+				}
+				else {
+					b.m_min[i] += f;
+					b.m_max[i] += e;
+				}
+			}
+		}
+		m_min = b.m_min;
+		m_max = b.m_max;
+	}
+
 	AABB::~AABB()
 	{
 
