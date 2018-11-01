@@ -551,6 +551,16 @@ namespace rah
 			return ScalarMatrix;
 		}
 
+		static inline  Matrix4D ScalarMatrix4x4(Vector3D _scalar)
+		{
+			Matrix4D ScalarMatrix = Identity4D();
+
+			ScalarMatrix.Line[0][0] = _scalar.x;
+			ScalarMatrix.Line[1][1] = _scalar.y;
+			ScalarMatrix.Line[2][2] = _scalar.z;
+
+			return ScalarMatrix;
+		}
 		/**
 		* Matrix Translation
 		*/
@@ -564,7 +574,16 @@ namespace rah
 
 			return TranslationMatrix;
 		}
+		static inline  Matrix4D TranslationMatrix4x4(Vector3D _trans)
+		{
+			Matrix4D TranslationMatrix = Identity4D();
 
+			TranslationMatrix.Line[0][3] = _trans.x;
+			TranslationMatrix.Line[1][3] = _trans.y;
+			TranslationMatrix.Line[2][3] = _trans.z;
+
+			return TranslationMatrix;
+		}
 		/**
 		* Matrix Rotation
 		*/
