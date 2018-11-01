@@ -44,6 +44,23 @@ namespace rah
 		float aspectRatio = float(GraphicManager::GetInstance().m_width) / float(GraphicManager::GetInstance().m_height);
 		m_projection = math::PerspectiveFovLH(math::PI / 4, aspectRatio, 0.01f, 100.0f);
 
+		// Create and set the sample state
+		D3D11_SAMPLER_DESC sampDesc;
+		ZeroMemory(&sampDesc, sizeof(sampDesc));
+		sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		sampDesc.MinLOD = 0;
+		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+		reinterpret_cast<ID3D11Device*>(GraphicManager::GetInstance().m_device.getPtr())->CreateSamplerState(&sampDesc, &m_samplerState);
+		m_deviceContext->PSSetSamplers(0, 1, &m_samplerState);
+
+		m_deviceContext->OMSetDepthStencilState(rah::GraphicManager::GetInstance().m_depthStencilState, 1);
+
+		m_deviceContext->RSSetViewports(1, reinterpret_cast<D3D11_VIEWPORT*>(rah::GraphicManager::GetInstance().m_viewport.getPtr()));
+
 		return RahResult();
 	}
 
@@ -282,8 +299,11 @@ namespace rah
 		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
-	void RenderManager::renderShape(const Ray & _ray)
+	void RenderManager::renderShape(const Ray & _ray, Color _color)
 	{
+		updateWorld(math::Identity4D());
+		updateColor(_color);
+
 		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
@@ -505,8 +525,22 @@ namespace rah
 		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
-	void RenderManager::renderGrid()
+	void RenderManager::renderGrid(int _size, int _divitions, Color _color)
 	{
+		Matrix4D g_Scale;
+		Matrix4D g_Translation;
+		Matrix4D g_Rotation;
+
+		g_Scale = math::ScalarMatrix4x4(_size, _size, _size);
+
+		g_Rotation = math::Identity4D();
+
+		g_Translation = math::Identity4D();
+
+		updateWorld(g_Scale * g_Rotation * g_Translation);
+
+		updateColor(_color);
+
 		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
@@ -520,7 +554,7 @@ namespace rah
 		Vector3D yaxis(0.f, 0.f, 2.f);
 		Vector3D origin;
 
-		size_t divisions = 80;
+		size_t divisions = _divitions;
 
 		for (size_t i = 0; i <= divisions; ++i)
 		{
