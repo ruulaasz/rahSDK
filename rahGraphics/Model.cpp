@@ -49,11 +49,6 @@ namespace rah
 		{
 			m_meshes.at(i)->render();
 		}
-
-		if (m_renderDebug)
-		{
-			RenderManager::GetInstance().renderShape(m_boundingBox);
-		}
 	}
 
 	RahResult Model::Load()
@@ -187,8 +182,6 @@ namespace rah
 			}
 		}
 
-		setBox();
-
 		return RahResult();
 	}
 
@@ -197,50 +190,52 @@ namespace rah
 
 	}
 
-	void Model::setBox()
+	AABB Model::getBox()
 	{
-		m_boundingBox.m_min = m_boundingBox.m_max = m_triangles.back()->m_Vertex->pos;
+		AABB returnAABB;
+		returnAABB.m_min = returnAABB.m_max = m_triangles.back()->m_Vertex->pos;
 
 		for (int i = 0; i < m_triangles.size(); i++)
 		{
 			//Min
-			if (m_triangles.at(i)->m_Vertex->pos.x < m_boundingBox.m_min.x)
+			if (m_triangles.at(i)->m_Vertex->pos.x < returnAABB.m_min.x)
 			{
-				m_boundingBox.m_min.x = m_triangles.at(i)->m_Vertex->pos.x;
+				returnAABB.m_min.x = m_triangles.at(i)->m_Vertex->pos.x;
 			}
 
-			if (m_triangles.at(i)->m_Vertex->pos.y < m_boundingBox.m_min.y)
+			if (m_triangles.at(i)->m_Vertex->pos.y < returnAABB.m_min.y)
 			{
-				m_boundingBox.m_min.y = m_triangles.at(i)->m_Vertex->pos.y;
+				returnAABB.m_min.y = m_triangles.at(i)->m_Vertex->pos.y;
 			}
 
-			if (m_triangles.at(i)->m_Vertex->pos.z < m_boundingBox.m_min.z)
+			if (m_triangles.at(i)->m_Vertex->pos.z < returnAABB.m_min.z)
 			{
-				m_boundingBox.m_min.z = m_triangles.at(i)->m_Vertex->pos.z;
+				returnAABB.m_min.z = m_triangles.at(i)->m_Vertex->pos.z;
 			}
 
 			//Max
-			if (m_triangles.at(i)->m_Vertex->pos.x > m_boundingBox.m_max.x)
+			if (m_triangles.at(i)->m_Vertex->pos.x > returnAABB.m_max.x)
 			{
-				m_boundingBox.m_max.x = m_triangles.at(i)->m_Vertex->pos.x;
+				returnAABB.m_max.x = m_triangles.at(i)->m_Vertex->pos.x;
 			}
 
-			if (m_triangles.at(i)->m_Vertex->pos.y > m_boundingBox.m_max.y)
+			if (m_triangles.at(i)->m_Vertex->pos.y > returnAABB.m_max.y)
 			{
-				m_boundingBox.m_max.y = m_triangles.at(i)->m_Vertex->pos.y;
+				returnAABB.m_max.y = m_triangles.at(i)->m_Vertex->pos.y;
 			}
 
-			if (m_triangles.at(i)->m_Vertex->pos.z > m_boundingBox.m_max.z)
+			if (m_triangles.at(i)->m_Vertex->pos.z > returnAABB.m_max.z)
 			{
-				m_boundingBox.m_max.z = m_triangles.at(i)->m_Vertex->pos.z;
+				returnAABB.m_max.z = m_triangles.at(i)->m_Vertex->pos.z;
 			}
 		}
 
 		Vector4D Temp;
 
-		Temp = m_boundingBox.m_max - m_boundingBox.m_min;
+		Temp = returnAABB.m_max - returnAABB.m_min;
 		Temp /= 2;
 
-		m_boundingBox.m_center = Temp + m_boundingBox.m_min;
+		returnAABB.m_center = Temp + returnAABB.m_min;
+		return returnAABB;
 	}
 }

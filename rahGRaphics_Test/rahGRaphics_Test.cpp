@@ -27,7 +27,7 @@ rah::VertexShader g_vertexShapeShader;
 rah::FragmentShader g_pixelShapeShader;
 
 rah::CameraDebug g_camera;
-rah::Model* g_Model;
+rah::DynamicActor g_Actor;
 
 rah::OBB g_OBB(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 rah::Sphere g_sphere(1, rah::Vector3D(0, 0, 0));
@@ -114,11 +114,15 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 	
-	g_Model->render();
+	//g_Model->render();
+	g_Actor.Render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
+
+	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
+	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 
 	rah::RenderManager::GetInstance().renderShape(g_sphere, 16, g_shapesColor);
 
@@ -163,9 +167,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	/************************************************************************/
 	/* Prueba de inicializacion de recursos                                 */
 	/************************************************************************/
-	rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
-	rParams->filePath = "resources\\models\\Bassilisk\\Basillisk.dae";
-	g_Model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
+
+	rah::SimpleActorInit* params = new rah::SimpleActorInit();
+	params->_color = rah::Color();
+	params->_nameModel = "resources\\models\\Bassilisk\\Basillisk.dae";
+	params->_transform = rah::Transform(rah::Vector3D(10,5,3), rah::Vector3D(), rah::Vector3D(1, 1, 1));
+	g_Actor.Initialize((void*)params);
 
 	while (TRUE)
 	{

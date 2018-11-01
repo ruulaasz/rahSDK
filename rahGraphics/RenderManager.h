@@ -42,10 +42,11 @@ namespace rah
 		void Release() {};
 
 		void renderShape(const OBB& _obb, Color _color = Color(1.f, 0.f, 0.f));
-		void renderShape(const AABB& _aabb);
+		void renderShape(const AABB& _aabb, Color _color = Color(1.f, 0.f, 0.f));
 		void renderShape(const Ray& _ray, Color _color = Color(1.f, 0.f, 0.f));
 		void renderShape(const Sphere& _sphere, unsigned int _faces = 16, Color _color = Color(1.f, 0.f, 0.f));
 		void renderShape(const Frustum& _frustum);
+		void renderShape(const Vector4D& _from, const Vector4D& _to, Color _color = Color(1.f, 0.f, 0.f));
 		void renderGrid(int size = 100, int divitions = 80, Color _color = Color(0.5f, 0.5f, 0.5f));
 
 		void updateProjection();

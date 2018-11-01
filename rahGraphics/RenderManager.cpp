@@ -3,6 +3,7 @@
 #include "GraphicManager.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include <rahMath.h>
 
 namespace rah
 {
@@ -206,97 +207,35 @@ namespace rah
 		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
-	void RenderManager::renderShape(const AABB & _aabb)
+	void RenderManager::renderShape(const AABB & _aabb, Color _color)
 	{
 		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
+		AABB aabb = _aabb;
+		aabb.m_max += aabb.m_center;
+		aabb.m_max.w = 1.f;
+		aabb.m_min += aabb.m_center;
+		aabb.m_min.w = 1.f;
 
-		//vertex buffer
-		VertexBuffer vertexBuffer;
-		VertexData myVertex;
+		renderShape(aabb.m_min, Vector4D(aabb.m_min.x, aabb.m_min.y, aabb.m_max.z), _color);
+		renderShape(Vector4D(aabb.m_min.x, aabb.m_min.y, aabb.m_max.z), Vector4D(aabb.m_max.x, aabb.m_min.y, aabb.m_max.z), _color);
+		renderShape(Vector4D(aabb.m_max.x, aabb.m_min.y, aabb.m_max.z), Vector4D(aabb.m_max.x, aabb.m_min.y, aabb.m_min.z), _color);
+		renderShape(Vector4D(aabb.m_max.x, aabb.m_min.y, aabb.m_min.z), aabb.m_min, _color);
 
-		myVertex.pos = Vector4D(-1.f, 1.f, -1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(1.f, 1.f, -1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(-1.f, -1.f, -1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(1.f, -1.f, -1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
+		renderShape(aabb.m_max, Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), _color);
+		renderShape(aabb.m_max, Vector4D(aabb.m_max.x, aabb.m_max.y, aabb.m_min.z), _color);
+		renderShape(Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), _color);
+		renderShape(Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), _color);
 
-		myVertex.pos = Vector4D(-1.f, 1.f, 1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(1.f, 1.f, 1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(-1.f, -1.f, 1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
-		myVertex.pos = Vector4D(1.f, -1.f, 1.f, 1.f);
-		vertexBuffer.addVertex(myVertex);
+		renderShape(Vector4D(aabb.m_max.x, aabb.m_max.y, aabb.m_min.z), Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_min.z), _color);
+		renderShape(aabb.m_max, Vector4D(aabb.m_max.x, aabb.m_min.y, aabb.m_max.z), _color);
+		renderShape(aabb.m_min, Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_min.z), _color);
+		renderShape(Vector4D(aabb.m_max.x, aabb.m_max.y, aabb.m_min.z), Vector4D(aabb.m_max.x, aabb.m_min.y, aabb.m_min.z), _color);
 
-		vertexBuffer.create();
-
-		//index buffer
-		IndexBuffer indexBuffer;
-
-		indexBuffer.addIndex(0);
-		indexBuffer.addIndex(1);
-		indexBuffer.addIndex(2);
-
-		indexBuffer.addIndex(2);
-		indexBuffer.addIndex(1);
-		indexBuffer.addIndex(3);
-
-		indexBuffer.addIndex(4);
-		indexBuffer.addIndex(0);
-		indexBuffer.addIndex(6);
-
-		indexBuffer.addIndex(6);
-		indexBuffer.addIndex(0);
-		indexBuffer.addIndex(2);
-
-		indexBuffer.addIndex(7);
-		indexBuffer.addIndex(5);
-		indexBuffer.addIndex(6);
-
-		indexBuffer.addIndex(6);
-		indexBuffer.addIndex(5);
-		indexBuffer.addIndex(4);
-
-		indexBuffer.addIndex(3);
-		indexBuffer.addIndex(1);
-		indexBuffer.addIndex(7);
-
-		indexBuffer.addIndex(7);
-		indexBuffer.addIndex(1);
-		indexBuffer.addIndex(5);
-
-		indexBuffer.addIndex(4);
-		indexBuffer.addIndex(5);
-		indexBuffer.addIndex(0);
-
-		indexBuffer.addIndex(0);
-		indexBuffer.addIndex(5);
-		indexBuffer.addIndex(1);
-
-		indexBuffer.addIndex(3);
-		indexBuffer.addIndex(7);
-		indexBuffer.addIndex(2);
-
-		indexBuffer.addIndex(2);
-		indexBuffer.addIndex(7);
-		indexBuffer.addIndex(6);
-
-		indexBuffer.create();
-
-		UINT stride = sizeof(VertexData);
-		UINT offset = 0;
-		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		m_deviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
-		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
-		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+		renderShape(Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), Vector4D(aabb.m_min.x, aabb.m_min.y, aabb.m_max.z), _color);
+		renderShape(Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_max.z), Vector4D(aabb.m_min.x, aabb.m_max.y, aabb.m_min.z), _color);
 	}
 
 	void RenderManager::renderShape(const Ray & _ray, Color _color)
@@ -523,6 +462,37 @@ namespace rah
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
 		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+	}
+
+	void RenderManager::renderShape(const Vector4D & _from, const Vector4D & _to, Color _color)
+	{
+		updateWorld(math::Identity4D());
+		updateColor(_color);
+
+		if (!m_deviceContext)
+		{
+			throw "NullPointer pDeviceContext";
+		}
+
+		//vertex buffer
+		VertexBuffer vertexBuffer;
+		VertexData myVertex;
+
+		myVertex.pos = _from;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+		myVertex.pos = _to;
+		myVertex.pos.w = 1.f;
+		vertexBuffer.addVertex(myVertex);
+
+		vertexBuffer.create();
+
+		UINT stride = sizeof(VertexData);
+		UINT offset = 0;
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
+		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
 
 	void RenderManager::renderGrid(int _size, int _divitions, Color _color)

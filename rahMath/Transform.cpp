@@ -30,6 +30,21 @@ namespace rah
 		m_scale = _scale;
 	}
 
+	Transform::Transform(Vector4D _pos, Vector4D _rot, Vector4D _scale)
+	{
+		m_position.x = _pos.x;
+		m_position.y = _pos.y;
+		m_position.z = _pos.z;
+
+		m_rotation.x = _rot.x;
+		m_rotation.y = _rot.y;
+		m_rotation.z = _rot.z;
+
+		m_scale.x = _scale.x;
+		m_scale.y = _scale.y;
+		m_scale.z = _scale.z;
+	}
+
 	Transform::Transform(float _all)
 	{
 		m_position = Vector3D(_all);

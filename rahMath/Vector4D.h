@@ -11,7 +11,7 @@ namespace rah
 	class Vector4D
 	{
 	public:
-		explicit Vector4D(float _x = 0.f, float _y = 0.f, float _z = 0.f, float _w = 0.f);
+		explicit Vector4D(float _x = 0.f, float _y = 0.f, float _z = 0.f, float _w = 1.f);
 		Vector4D(const Vector4D &_vector);
 		Vector4D(const Vector3D& _vector);
 		~Vector4D();

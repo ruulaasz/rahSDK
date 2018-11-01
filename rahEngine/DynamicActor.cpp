@@ -16,6 +16,8 @@ namespace rah
 		if (m_model == NULL)
 			return rah::ResourceManager::GetInstance().GetLastError();
 
+		m_box = m_model->getBox();
+		m_box.m_center = m_transform.m_position;
 		RAH_SAFE_DELETE(rParams);
 		return RAH_SUCCESS;
 	}
@@ -24,6 +26,10 @@ namespace rah
 	}
 	void DynamicActor::Render()
 	{
+		rah::RenderManager::GetInstance().updateWorld(m_transform.TransformToWorldMatrix());
+		rah::RenderManager::GetInstance().updateColor(m_color);
+		m_model->render();
+		RenderManager::GetInstance().renderShape(m_box, Color(0,0,1));
 	}
 	void DynamicActor::Destroy()
 	{

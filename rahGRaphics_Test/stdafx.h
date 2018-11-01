@@ -17,6 +17,5 @@
 #include <memory.h>
 #include <tchar.h>
 
-#include <rahGraphics.h>
 #include <rahEngine.h>
 // TODO: mencionar aquí los encabezados adicionales que el programa necesita

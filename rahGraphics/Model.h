@@ -65,11 +65,10 @@ namespace rah
 		virtual RahResult Load();
 		virtual void Release();
 
-		void setBox();
+		AABB getBox();
 
 		std::vector <Mesh* > m_meshes;
 		Matrix4D m_transform;
-		AABB m_boundingBox;
 		std::vector <Triangle* > m_triangles;
 		bool m_renderDebug;
 	};
