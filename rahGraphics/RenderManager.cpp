@@ -18,14 +18,72 @@ namespace rah
 
 	RahResult RenderManager::Initialize(GStruct ptr)
 	{
+		m_deviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(CBView);
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		m_cbView.create(&bd);
+		m_deviceContext->VSSetConstantBuffers(0, 1, &m_cbView.m_buffer);
+
+		bd.ByteWidth = sizeof(CBProj);
+		m_cbProj.create(&bd, nullptr);
+		m_deviceContext->VSSetConstantBuffers(1, 1, &m_cbProj.m_buffer);
+
+		bd.ByteWidth = sizeof(CBWorld);
+		m_cbWorld.create(&bd, nullptr);
+		m_deviceContext->VSSetConstantBuffers(2, 1, &m_cbWorld.m_buffer);
+
+		bd.ByteWidth = sizeof(CBColor);
+		m_cbColor.create(&bd, nullptr);
+		m_deviceContext->VSSetConstantBuffers(3, 1, &m_cbColor.m_buffer);
+
+		float aspectRatio = float(GraphicManager::GetInstance().m_width) / float(GraphicManager::GetInstance().m_height);
+		m_projection = math::PerspectiveFovLH(math::PI / 4, aspectRatio, 0.01f, 100.0f);
+
 		return RahResult();
 	}
 
-	void rah::RenderManager::renderShape(const OBB & _obb)
+	void RenderManager::updateProjection()
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
+		CBProj cbproj;
+		cbproj.projection = math::Transpose(m_projection);
+		m_deviceContext->UpdateSubresource(m_cbProj.m_buffer, 0, NULL, &cbproj, 0, 0);
+	}
 
-		if (!pDeviceContext)
+	void RenderManager::updateView(const Matrix4D & _matrix)
+	{
+		m_view = _matrix;
+
+		CBView cbview;
+		cbview.view = math::Transpose(m_view);
+		m_deviceContext->UpdateSubresource(m_cbView.m_buffer, 0, NULL, &cbview, 0, 0);
+	}
+
+	void RenderManager::updateWorld(const Matrix4D & _matrix)
+	{
+		m_world = _matrix;
+
+		CBWorld cbWorld;
+		cbWorld.mWorld = m_world;
+		m_deviceContext->UpdateSubresource(m_cbWorld.m_buffer, 0, NULL, &cbWorld, 0, 0);
+	}
+
+	void RenderManager::updateColor(const Color & _color)
+	{
+		m_color = _color;
+
+		CBColor cbColor;
+		cbColor.mColor = m_color;
+		m_deviceContext->UpdateSubresource(m_cbColor.m_buffer, 0, NULL, &cbColor, 0, 0);
+	}
+
+	void RenderManager::renderShape(const OBB & _obb)
+	{
+		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
@@ -109,18 +167,16 @@ namespace rah
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
-		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
-		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
+		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
 	void RenderManager::renderShape(const AABB & _aabb)
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
-
-		if (!pDeviceContext)
+		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
@@ -204,18 +260,16 @@ namespace rah
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
-		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
-		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
+		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
 	void RenderManager::renderShape(const Ray & _ray)
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
-
-		if (!pDeviceContext)
+		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
@@ -235,17 +289,15 @@ namespace rah
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
-		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
-		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
+		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
 
 	void RenderManager::renderShape(const Sphere & _sphere, unsigned int _faces)
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
-
-		if (!pDeviceContext)
+		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
@@ -262,7 +314,7 @@ namespace rah
 			VertexData v1, v2, v3;
 			v1.pos.y = (math::Sin(jumpAngle * i) * _sphere.m_radius) + _sphere.m_center.y;
 			v2.pos.y = v1.pos.y;
-			
+
 			if (i != _faces - 1)
 			{
 				v3.pos.y = (math::Sin(jumpAngle * (i + 1)) * _sphere.m_radius) + _sphere.m_center.y;
@@ -309,19 +361,15 @@ namespace rah
 		indexBuffer.create();
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
-		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		//pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
-		//pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
-		pDeviceContext->Draw(vertexBuffer.getVertexSize(),0);
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
+		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
 
 	void RenderManager::renderShape(const Frustum & _frustum)
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
-
-		if (!pDeviceContext)
+		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
@@ -333,7 +381,7 @@ namespace rah
 
 		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[LEFT], _frustum.m_planes[FRONT], p);//0
 		myVertex.pos = p;
-		myVertex.pos.w =1.f;
+		myVertex.pos.w = 1.f;
 		vertexBuffer.addVertex(myVertex);
 
 		Intersection::CheckIntersection(_frustum.m_planes[TOP], _frustum.m_planes[RIGHT], _frustum.m_planes[FRONT], p);//1
@@ -377,7 +425,7 @@ namespace rah
 
 		//front
 		indexBuffer.addIndex(0);
-		indexBuffer.addIndex(1); 
+		indexBuffer.addIndex(1);
 		indexBuffer.addIndex(3);
 
 		indexBuffer.addIndex(3);
@@ -433,18 +481,16 @@ namespace rah
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
-		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		pDeviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		pDeviceContext->RSSetState(rah::GraphicManager::GetInstance().m_rasterizerState[1]);
-		pDeviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetIndexBuffer(indexBuffer.m_buffer, DXGI_FORMAT_R32_UINT, 0);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
+		m_deviceContext->DrawIndexed(indexBuffer.getIndexSize(), 0, 0);
 	}
 
 	void RenderManager::renderGrid()
 	{
-		ID3D11DeviceContext* pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
-
-		if (!pDeviceContext)
+		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
 		}
@@ -495,9 +541,9 @@ namespace rah
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
-		pDeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		m_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer.m_buffer, &stride, &offset);
+		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-		pDeviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
 }
