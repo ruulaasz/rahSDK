@@ -81,8 +81,23 @@ namespace rah
 		m_deviceContext->UpdateSubresource(m_cbColor.m_buffer, 0, NULL, &cbColor, 0, 0);
 	}
 
-	void RenderManager::renderShape(const OBB & _obb)
+	void RenderManager::renderShape(const OBB & _obb, Color _color)
 	{
+		Matrix4D g_Scale;
+		Matrix4D g_Translation;
+		Matrix4D g_Rotation;
+
+		g_Scale = rah::math::ScalarMatrix4x4(_obb.m_dimentions.x, _obb.m_dimentions.y, _obb.m_dimentions.z);
+
+		g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(_obb.m_axis[0].x).getRadians(), rah::math::Axis_X);
+		g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(_obb.m_axis[1].y).getRadians(), rah::math::Axis_Y);
+		g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(_obb.m_axis[2].z).getRadians(), rah::math::Axis_Z);
+
+		g_Translation = rah::math::TranslationMatrix4x4(_obb.m_position.x, _obb.m_position.y, _obb.m_position.z);
+
+		rah::RenderManager::GetInstance().updateWorld(g_Scale * g_Rotation * g_Translation);
+		rah::RenderManager::GetInstance().updateColor(_color);
+
 		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";
@@ -295,8 +310,10 @@ namespace rah
 		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
 	}
 
-	void RenderManager::renderShape(const Sphere & _sphere, unsigned int _faces)
+	void RenderManager::renderShape(const Sphere & _sphere, unsigned int _faces, Color _color)
 	{
+		rah::RenderManager::GetInstance().updateColor(_color);
+
 		if (!m_deviceContext)
 		{
 			throw "NullPointer pDeviceContext";

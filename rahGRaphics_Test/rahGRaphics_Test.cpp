@@ -19,13 +19,9 @@ ID3D11SamplerState* g_pSamplerState;
 D3D11_VIEWPORT* g_pViewport;
 
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
-rah::Color g_shapesColor(0.8f, 0.0f, 0.0f, 1.0f);
+rah::Color g_shapesColor(0.0f, 0.8f, 0.0f, 1.0f);
 
 float g_deltaTime = 0.0f;
-
-rah::Matrix4D g_Scale;
-rah::Matrix4D g_Translation;
-rah::Matrix4D g_Rotation;
 
 rah::VertexShader g_vertexModelShader;
 rah::FragmentShader g_pixelModelShader;
@@ -40,11 +36,8 @@ rah::OBB g_OBB(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(
 rah::OBB g_OBB1(rah::Vector3D(2, 2, 8), rah::Vector3D(0.5, 0.4f, 0.5), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
 rah::AABB g_AABB(rah::Vector4D(1, 1, 4, 1.f), rah::Vector4D(-0.5f, -0.5f, -0.5f, 1.0f), rah::Vector4D(0.5f, 0.5f, 0.5f, 1.0f));
 rah::Sphere g_sphere(1, rah::Vector3D(0, 0, 0));
-
 rah::Ray g_Ray(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 2, 5));
-
 rah::Plane g_Plane(rah::Vector3D(1, 1, 1), 1.0f);
-
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -139,9 +132,6 @@ void renderModels()
 
 	g_camera.Update();
 
-	rah::RenderManager::GetInstance().updateView(rah::math::LookAtLH(g_camera.m_vPosition, g_camera.m_vView, g_camera.m_vUpVector));
-	g_camera.m_frustum.calculateFrustum(rah::RenderManager::GetInstance().m_projection, rah::RenderManager::GetInstance().m_view);
-
 	g_pDeviceContext->VSSetShader(g_vertexModelShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexModelShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelModelShader.m_fragmentShader, NULL, 0);
@@ -156,20 +146,7 @@ void renderModels()
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
 	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
 
-	rah::RenderManager::GetInstance().updateColor(g_shapesColor);
-
-	rah::RenderManager::GetInstance().renderShape(g_sphere, 16);
-
-	//// Update variables that change once per frame
-	g_Scale = rah::math::ScalarMatrix4x4(g_OBB.m_dimentions.x, g_OBB.m_dimentions.y, g_OBB.m_dimentions.z);
-
-	g_Rotation = rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[0].x).getRadians(), rah::math::Axis_X);
-	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[1].y).getRadians(), rah::math::Axis_Y);
-	g_Rotation = g_Rotation * rah::math::RotationMatrix4x4(rah::Degrees(g_OBB.m_axis[2].z).getRadians(), rah::math::Axis_Z);
-
-	g_Translation = rah::math::TranslationMatrix4x4(g_OBB.m_position.x, g_OBB.m_position.y, g_OBB.m_position.z);
-	
-	rah::RenderManager::GetInstance().updateWorld(g_Scale * g_Rotation * g_Translation);
+	rah::RenderManager::GetInstance().renderShape(g_sphere, 16, g_shapesColor);
 
 	rah::RenderManager::GetInstance().renderShape(g_OBB);
 

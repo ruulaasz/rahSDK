@@ -2,6 +2,8 @@
 #include <PlatformMath.h>
 #include "GraphicManager.h"
 #include <Windows.h>
+#include "RenderManager.h"
+
 namespace rah
 {
 	CameraDebug::CameraDebug()
@@ -177,5 +179,8 @@ namespace rah
 		// Move the camera's view by the mouse
 		if(!m_stopMoving)
 			SetViewByMouse();
+
+		RenderManager::GetInstance().updateView(math::LookAtLH(m_vPosition, m_vView, m_vUpVector));
+		m_frustum.calculateFrustum(RenderManager::GetInstance().m_projection, RenderManager::GetInstance().m_view);
 	}
 }
