@@ -23,6 +23,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DynamicActor.h" />
     <ClInclude Include="InputEvent.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="PlayerActor.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="rahAll.h" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DynamicActor.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="ResourceFabric.cpp" />
