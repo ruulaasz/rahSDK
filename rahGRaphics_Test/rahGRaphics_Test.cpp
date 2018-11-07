@@ -29,10 +29,6 @@ rah::FragmentShader g_pixelShapeShader;
 rah::CameraDebug g_camera;
 rah::DynamicActor g_Actor;
 
-rah::OBB g_OBB(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 0.4f, 1), rah::Vector3D(30, 0, 0), rah::Vector3D(0, 0, 0), rah::Vector3D(0, 0, 0));
-rah::Sphere g_sphere(1, rah::Vector3D(0, 0, 0));
-rah::Ray g_Ray(rah::Vector3D(1, 2, 2), rah::Vector3D(1, 2, 5));
-
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -79,8 +75,8 @@ void LoadGraphicResources()
 	g_pixelShapeShader.createFragmentShader(L"shapes.fx", "PS", "ps_5_0");
 
 	// Initialize the view matrix
-	rah::Vector3D Eye(0.0f, 1.0f, -6.0f);
-	rah::Vector3D At(0.0f, 1.0f, 0.0f);
+	rah::Vector3D Eye(0.0f, 18.f, -6.0f);
+	rah::Vector3D At(0.0f, 0.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
 	g_camera.PositionCamera(Eye, At, Up);
 
@@ -114,7 +110,6 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 	
-	//g_Model->render();
 	g_Actor.Render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
@@ -124,13 +119,7 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 
-	rah::RenderManager::GetInstance().renderShape(g_sphere, 16, g_shapesColor);
-
-	rah::RenderManager::GetInstance().renderShape(g_OBB);
-
-	rah::RenderManager::GetInstance().renderShape(g_Ray, g_shapesColor);
-
-	rah::RenderManager::GetInstance().renderGrid();
+	rah::RenderManager::GetInstance().renderGrid(120);
 
 	// switch the back buffer and the front buffer
 	g_pSwapChain->Present(0, 0);
@@ -171,7 +160,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::SimpleActorInit* params = new rah::SimpleActorInit();
 	params->_color = rah::Color();
 	params->_nameModel = "resources\\models\\Bassilisk\\Basillisk.dae";
-	params->_transform = rah::Transform(rah::Vector3D(10,5,3), rah::Vector3D(0, 0, 0), rah::Vector3D(.5, 1, 1));
+	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
 	g_Actor.Initialize((void*)params);
 	float time = 1;
 	while (TRUE)
@@ -191,13 +180,16 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			g_Actor.m_transform.m_position.x = rah::math::Sin(rah::Degrees(time).getRadians());
+			/*g_Actor.m_transform.m_position.x = rah::math::Sin(rah::Degrees(time).getRadians());
 			g_Actor.m_transform.m_position.y = rah::math::Cos(rah::Degrees(time).getRadians());
 
 			g_Actor.m_transform.m_scale.x = time/2000;
 			g_Actor.m_transform.m_scale.y = time/2000;
 
-			g_Actor.m_transform.m_rotation.x = 0.1 * time;
+			g_Actor.m_transform.m_rotation.x = 0.1 * time;*/
+
+			g_camera.m_vView = g_Actor.m_transform.m_position;
+
 
 			g_Actor.Update(0);
 			renderModels();
@@ -322,16 +314,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			PostQuitMessage(WM_QUIT);
 
 		if (wParam == 0x57)
-			g_camera.MoveCamera(0.5f);
-
+		{
+			//g_camera.MoveCamera(0.5f);
+			g_Actor.m_transform.m_position.z++;
+			g_camera.m_vPosition.z++;
+		}
+			
 		if (wParam == 0x53)
-			g_camera.MoveCamera(-0.5f);
-
+		{
+			//	g_camera.MoveCamera(-0.5f);
+			g_Actor.m_transform.m_position.z--;
+			g_camera.m_vPosition.z--;
+		}
+		
 		if (wParam == 0x41)
-			g_camera.StrafeCamera(0.5f);
+		{
+			//g_camera.StrafeCamera(0.5f);
+			g_Actor.m_transform.m_position.x--;
+			g_camera.m_vPosition.x--;
+		}
 
 		if (wParam == 0x44)
-			g_camera.StrafeCamera(-0.5f);
+		{
+			//g_camera.StrafeCamera(-0.5f);
+			g_Actor.m_transform.m_position.x++;
+			g_camera.m_vPosition.x++;
+		}
 
 		if (wParam == 0x5A)//Z
 			g_camera.m_stopMoving = !g_camera.m_stopMoving;

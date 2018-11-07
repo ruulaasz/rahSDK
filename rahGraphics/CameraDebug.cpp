@@ -8,7 +8,7 @@ namespace rah
 {
 	CameraDebug::CameraDebug()
 	{
-		m_stopMoving = false;
+		m_stopMoving = true;
 	}
 
 	CameraDebug::~CameraDebug()

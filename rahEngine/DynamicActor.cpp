@@ -43,7 +43,6 @@ namespace rah
 	}
 	void DynamicActor::Update(float _deltaTime)
 	{
-		
 		if (m_transform.m_position != m_LastTransform.m_position)
 		{
 			m_LastTransform.m_position = m_transform.m_position;
