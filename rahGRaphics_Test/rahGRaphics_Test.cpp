@@ -27,7 +27,8 @@ rah::VertexShader g_vertexShapeShader;
 rah::FragmentShader g_pixelShapeShader;
 
 rah::CameraDebug g_camera;
-rah::DynamicActor g_Actor;
+rah::PlayerActor*  g_Actor;
+rah::PlayerController g_controller;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -110,7 +111,7 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 	
-	g_Actor.Render();
+	g_Actor->Render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
@@ -160,7 +161,30 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	params->_color = rah::Color();
 	params->_nameModel = "resources\\models\\Bassilisk\\Basillisk.dae";
 	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
-	g_Actor.Initialize((void*)params);
+	g_Actor = new rah::PlayerActor();
+	g_Actor->Initialize((void*)params);
+
+	g_controller.AddPlayer(g_Actor);
+
+	rah::MoveCommand* moveComand = new rah::MoveCommand();
+	moveComand->axis = 2;
+	moveComand->value = 1;
+	g_controller.AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
+
+	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
+	moveComand1->axis = 2;
+	moveComand1->value = -1;
+	g_controller.AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
+
+	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
+	moveComand2->axis = 1;
+	moveComand2->value = -1;
+	g_controller.AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
+
+	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
+	moveComand3->axis = 1;
+	moveComand3->value = 1;
+	g_controller.AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
 
 	while (TRUE)
 	{
@@ -179,9 +203,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			g_camera.m_vView = g_Actor.m_transform.m_position;
+			g_camera.m_vView = g_Actor->m_transform.m_position;
 
-			g_Actor.Update(0);
+			g_Actor->Update(0);
 			renderModels();
 		}
 	}
@@ -257,6 +281,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	rah::InputEvent mainEvent;
+	mainEvent.key = wParam;
+	mainEvent.keyDown = message;
+	
     switch (message)
     {
     case WM_COMMAND:
@@ -295,34 +323,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 	case WM_KEYDOWN:
+		g_controller.CheckInput(&mainEvent);
 		if (wParam == VK_ESCAPE)
 			PostQuitMessage(WM_QUIT);
 
 		if (wParam == 0x57)
 		{
 			//g_camera.MoveCamera(0.5f);
-			g_Actor.m_transform.m_position.z++;
+			//g_Actor.m_transform.m_position.z++;
 			g_camera.m_vPosition.z++;
 		}
 			
 		if (wParam == 0x53)
 		{
 			//	g_camera.MoveCamera(-0.5f);
-			g_Actor.m_transform.m_position.z--;
+			//g_Actor.m_transform.m_position.z--;
 			g_camera.m_vPosition.z--;
 		}
 		
 		if (wParam == 0x41)
 		{
 			//g_camera.StrafeCamera(0.5f);
-			g_Actor.m_transform.m_position.x--;
+			//g_Actor.m_transform.m_position.x--;
 			g_camera.m_vPosition.x--;
 		}
 
 		if (wParam == 0x44)
 		{
 			//g_camera.StrafeCamera(-0.5f);
-			g_Actor.m_transform.m_position.x++;
+			//g_Actor.m_transform.m_position.x++;
 			g_camera.m_vPosition.x++;
 		}
 

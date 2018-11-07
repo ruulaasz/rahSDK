@@ -4,4 +4,6 @@
 #include "Actor.h"
 #include "DynamicActor.h"
 #include "PlayerActor.h"
+#include "InputEvent.h"
 #include "Controller.h"
+#include "PlayerController.h"

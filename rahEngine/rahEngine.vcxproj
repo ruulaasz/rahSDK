@@ -22,7 +22,9 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DynamicActor.h" />
+    <ClInclude Include="InputEvent.h" />
     <ClInclude Include="PlayerActor.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="rahAll.h" />
     <ClInclude Include="rahEngine.h" />
     <ClInclude Include="ResourceFabric.h" />
@@ -32,6 +34,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DynamicActor.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="ResourceFabric.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
