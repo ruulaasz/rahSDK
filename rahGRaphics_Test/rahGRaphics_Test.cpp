@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
-
+//#include <vld.h>
 #define MAX_LOADSTRING 100
 
 // Variables globales:
@@ -29,6 +29,7 @@ rah::FragmentShader g_pixelShapeShader;
 rah::CameraDebug g_camera;
 rah::PlayerActor*  g_Actor;
 rah::PlayerController* g_controller;
+rah::World g_world;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -111,7 +112,7 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 	
-	g_Actor->Render();
+	g_world.Render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
@@ -163,6 +164,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor = new rah::PlayerActor();
 	g_Actor->Initialize((void*)params);
 
+	RAH_SAFE_DELETE(params);
+	g_world.RegisterActor(g_Actor);
+
 	g_controller = new rah::PlayerController();
 	g_controller->AddPlayer(g_Actor);
 
@@ -207,13 +211,16 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		{
 			g_camera.m_vView = g_Actor->m_transform.m_position;
 
-			g_Actor->Update(0);
+			g_world.Update(0);
 			renderModels();
 		}
 	}
 
+	g_world.Destroy();
 	rah::GraphicManager::CloseModule();
 	rah::RenderManager::CloseModule();
+	rah::InputManager::CloseModule();
+	rah::ResourceManager::CloseModule();
     return (int) msg.wParam;
 }
 

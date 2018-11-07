@@ -493,6 +493,7 @@ namespace rah
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 		m_deviceContext->RSSetState(GraphicManager::GetInstance().m_rasterizerState[1]);
 		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+		vertexBuffer.m_buffer->Release();
 	}
 
 	void RenderManager::renderGrid(int _size, int _divitions, Color _color)
@@ -566,5 +567,6 @@ namespace rah
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 		m_deviceContext->Draw(vertexBuffer.getVertexSize(), 0);
+		vertexBuffer.m_buffer->Release();
 	}
 }

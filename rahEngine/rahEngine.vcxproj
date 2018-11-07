@@ -29,6 +29,7 @@
     <ClInclude Include="rahAll.h" />
     <ClInclude Include="rahEngine.h" />
     <ClInclude Include="ResourceFabric.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="ResourceFabric.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C201799F-CBC0-4764-BE27-9E859E36A5AF}</ProjectGuid>
