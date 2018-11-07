@@ -16,7 +16,7 @@ ID3D11DeviceContext* g_pDeviceContext;
 ID3D11DepthStencilView* g_pDepthStencilView;
 
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
-rah::Color g_shapesColor(0.0f, 0.8f, 0.0f, 1.0f);
+rah::Color g_shapesColor(rah::Color::green);
 
 float g_deltaTime = 0.0f;
 
@@ -75,7 +75,7 @@ void LoadGraphicResources()
 	g_pixelShapeShader.createFragmentShader(L"shapes.fx", "PS", "ps_5_0");
 
 	// Initialize the view matrix
-	rah::Vector3D Eye(0.0f, 18.f, -6.0f);
+	rah::Vector3D Eye(0.0f, 30.f, -8.0f);
 	rah::Vector3D At(0.0f, 0.0f, 0.0f);
 	rah::Vector3D Up(0.0f, 1.0f, 0.0f);
 	g_camera.PositionCamera(Eye, At, Up);
@@ -156,13 +156,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	/************************************************************************/
 	/* Prueba de inicializacion de recursos                                 */
 	/************************************************************************/
-
 	rah::SimpleActorInit* params = new rah::SimpleActorInit();
 	params->_color = rah::Color();
 	params->_nameModel = "resources\\models\\Bassilisk\\Basillisk.dae";
 	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
 	g_Actor.Initialize((void*)params);
-	float time = 1;
+
 	while (TRUE)
 	{
 		// Check to see if any messages are waiting in the queue
@@ -180,24 +179,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			/*g_Actor.m_transform.m_position.x = rah::math::Sin(rah::Degrees(time).getRadians());
-			g_Actor.m_transform.m_position.y = rah::math::Cos(rah::Degrees(time).getRadians());
-
-			g_Actor.m_transform.m_scale.x = time/2000;
-			g_Actor.m_transform.m_scale.y = time/2000;
-
-			g_Actor.m_transform.m_rotation.x = 0.1 * time;*/
-
 			g_camera.m_vView = g_Actor.m_transform.m_position;
-
 
 			g_Actor.Update(0);
 			renderModels();
-		}
-		time++;
-		if (time > 20000)
-		{
-			time = 1;
 		}
 	}
 
@@ -247,7 +232,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	g_hInst = hInstance; // Almacenar identificador de instancia en una variable global
 
    g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, SCREEN_WIDTH, SCREEN_HEIGHT, nullptr, nullptr, hInstance, nullptr);
+      0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, nullptr, nullptr, hInstance, nullptr);
 
    if (!g_hWnd)
    {
