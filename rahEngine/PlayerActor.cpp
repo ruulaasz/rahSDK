@@ -9,6 +9,12 @@ namespace rah
 
 	void PlayerActor::Update(float _deltaTime)
 	{
+		m_velocity = m_direction / _deltaTime;
+
+		m_transform.m_position += m_velocity;
+
+		m_direction /= _deltaTime;
+
 		__super::Update(_deltaTime);
 	}
 
@@ -28,7 +34,9 @@ namespace rah
 
 		if (value.axis == 1)
 		{
-			m_transform.m_position.x += value.value;
+			m_direction.x += value.value;
+
+			//m_transform.m_position.x += value.value;
 
 			if (value.value < 0)
 			{
@@ -41,7 +49,9 @@ namespace rah
 		}
 		else if (value.axis == 2)
 		{
-			m_transform.m_position.z += value.value;
+			m_direction.z += value.value;
+
+			//m_transform.m_position.z += value.value;
 
 			if (value.value < 0)
 			{
@@ -56,7 +66,7 @@ namespace rah
 
 	PlayerActor::PlayerActor()
 	{
-
+		m_movementSpeed = 0.2f;
 	}
 
 	PlayerActor::~PlayerActor()

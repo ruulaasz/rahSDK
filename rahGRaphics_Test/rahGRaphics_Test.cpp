@@ -31,7 +31,7 @@ rah::PlayerActor*  g_Actor;
 rah::PlayerController* g_controller;
 rah::World g_world;
 
-float g_playerSpeed = 0.4f;
+float g_playerSpeed = 1.f;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -213,7 +213,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		{
 			g_camera.m_vView = g_Actor->m_transform.m_position;
 
-			g_world.Update(0);
+			g_world.Update(g_deltaTime);
 			renderModels();
 		}
 	}
@@ -344,28 +344,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			//g_camera.MoveCamera(0.5f);
 			//g_Actor.m_transform.m_position.z++;
-			g_camera.m_vPosition.z += g_playerSpeed;
+			g_camera.m_vPosition.z += g_Actor->m_velocity.z;
 		}
 			
 		if (wParam == 0x53)
 		{
 			//	g_camera.MoveCamera(-0.5f);
 			//g_Actor.m_transform.m_position.z--;
-			g_camera.m_vPosition.z -= g_playerSpeed;
+			g_camera.m_vPosition.z -= g_Actor->m_velocity.z;
 		}
 		
 		if (wParam == 0x41)
 		{
 			//g_camera.StrafeCamera(0.5f);
 			//g_Actor.m_transform.m_position.x--;
-			g_camera.m_vPosition.x -= g_playerSpeed;
+			g_camera.m_vPosition.x -= g_Actor->m_velocity.x;
 		}
 
 		if (wParam == 0x44)
 		{
 			//g_camera.StrafeCamera(-0.5f);
 			//g_Actor.m_transform.m_position.x++;
-			g_camera.m_vPosition.x += g_playerSpeed;
+			g_camera.m_vPosition.x += g_Actor->m_velocity.x;
 		}
 
 		if (wParam == 0x5A)//Z
