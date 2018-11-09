@@ -5,7 +5,7 @@ namespace rah
 {
 	struct MoveCommand
 	{
-		int value;
+		float value;
 		// 1 == x, 2 == z
 		int axis;
 	};

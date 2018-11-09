@@ -31,7 +31,7 @@ rah::PlayerActor*  g_Actor;
 rah::PlayerController* g_controller;
 rah::World g_world;
 
-float g_playerSpeed = 1.f;
+float g_playerSpeed = 0.4f;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -174,45 +174,25 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	rah::MoveCommand* moveComand = new rah::MoveCommand();
 	moveComand->axis = 2;
-<<<<<<< HEAD
 	moveComand->value = g_playerSpeed;
-	g_controller.AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
-
-	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
-	moveComand1->axis = 2;
-	moveComand1->value = g_playerSpeed * -1;
-	g_controller.AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
-
-	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
-	moveComand2->axis = 1;
-	moveComand2->value = g_playerSpeed * -1;
-	g_controller.AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
-
-	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
-	moveComand3->axis = 1;
-	moveComand3->value = g_playerSpeed;
-	g_controller.AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
-=======
-	moveComand->value = 1;
 	g_controller->AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
 
 	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
 	moveComand1->axis = 2;
-	moveComand1->value = -1;
+	moveComand1->value = g_playerSpeed  * -1;
 	g_controller->AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
 
 	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
 	moveComand2->axis = 1;
-	moveComand2->value = -1;
+	moveComand2->value = g_playerSpeed * -1;
 	g_controller->AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
 
 	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
 	moveComand3->axis = 1;
-	moveComand3->value = 1;
+	moveComand3->value = g_playerSpeed;
 	g_controller->AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
 
 	rah::InputManager::GetInstance().RegisterController(g_controller);
->>>>>>> aaee16aa9bf1426bc6f1a09d3ec20a12af5c6fd9
 
 	while (TRUE)
 	{
