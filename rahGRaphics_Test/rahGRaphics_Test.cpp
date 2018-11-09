@@ -30,6 +30,8 @@ rah::CameraDebug g_camera;
 rah::PlayerActor*  g_Actor;
 rah::PlayerController g_controller;
 
+float g_playerSpeed = 1.f;
+
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -168,22 +170,22 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	rah::MoveCommand* moveComand = new rah::MoveCommand();
 	moveComand->axis = 2;
-	moveComand->value = 1;
+	moveComand->value = g_playerSpeed;
 	g_controller.AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
 
 	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
 	moveComand1->axis = 2;
-	moveComand1->value = -1;
+	moveComand1->value = g_playerSpeed * -1;
 	g_controller.AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
 
 	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
 	moveComand2->axis = 1;
-	moveComand2->value = -1;
+	moveComand2->value = g_playerSpeed * -1;
 	g_controller.AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
 
 	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
 	moveComand3->axis = 1;
-	moveComand3->value = 1;
+	moveComand3->value = g_playerSpeed;
 	g_controller.AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
 
 	while (TRUE)
@@ -331,28 +333,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			//g_camera.MoveCamera(0.5f);
 			//g_Actor.m_transform.m_position.z++;
-			g_camera.m_vPosition.z++;
+			g_camera.m_vPosition.z += g_playerSpeed;
 		}
 			
 		if (wParam == 0x53)
 		{
 			//	g_camera.MoveCamera(-0.5f);
 			//g_Actor.m_transform.m_position.z--;
-			g_camera.m_vPosition.z--;
+			g_camera.m_vPosition.z -= g_playerSpeed;
 		}
 		
 		if (wParam == 0x41)
 		{
 			//g_camera.StrafeCamera(0.5f);
 			//g_Actor.m_transform.m_position.x--;
-			g_camera.m_vPosition.x--;
+			g_camera.m_vPosition.x -= g_playerSpeed;
 		}
 
 		if (wParam == 0x44)
 		{
 			//g_camera.StrafeCamera(-0.5f);
 			//g_Actor.m_transform.m_position.x++;
-			g_camera.m_vPosition.x++;
+			g_camera.m_vPosition.x += g_playerSpeed;
 		}
 
 		if (wParam == 0x5A)//Z
