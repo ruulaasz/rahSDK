@@ -211,9 +211,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			g_camera.m_vView = g_Actor->m_transform.m_position;
-
 			g_world.Update(g_deltaTime);
+
+			g_camera.m_vView = g_Actor->m_transform.m_position;
+			g_camera.m_vPosition = g_Actor->m_transform.m_position;
+			g_camera.m_vPosition += rah::Vector3D(0.0f, 30.f, -8.0f);
+
 			renderModels();
 		}
 	}
@@ -344,28 +347,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			//g_camera.MoveCamera(0.5f);
 			//g_Actor.m_transform.m_position.z++;
-			g_camera.m_vPosition.z += g_Actor->m_velocity.z;
+			//g_camera.m_vPosition.z += g_Actor->m_transform.m_position.z;
 		}
 			
 		if (wParam == 0x53)
 		{
 			//	g_camera.MoveCamera(-0.5f);
 			//g_Actor.m_transform.m_position.z--;
-			g_camera.m_vPosition.z -= g_Actor->m_velocity.z;
+			//g_camera.m_vPosition.z -= g_Actor->m_transform.m_position.z;
 		}
 		
 		if (wParam == 0x41)
 		{
 			//g_camera.StrafeCamera(0.5f);
 			//g_Actor.m_transform.m_position.x--;
-			g_camera.m_vPosition.x -= g_Actor->m_velocity.x;
+			//g_camera.m_vPosition.x -= g_Actor->m_transform.m_position.x;
 		}
 
 		if (wParam == 0x44)
 		{
 			//g_camera.StrafeCamera(-0.5f);
 			//g_Actor.m_transform.m_position.x++;
-			g_camera.m_vPosition.x += g_Actor->m_velocity.x;
+			//g_camera.m_vPosition.x += g_Actor->m_transform.m_position.x;
 		}
 
 		if (wParam == 0x5A)//Z

@@ -4,16 +4,18 @@ namespace rah
 {
 	RahResult PlayerActor::Initialize(void * _initData)
 	{
+		m_velocity = Vector3D(0);
 		return __super::Initialize(_initData);
 	}
 
 	void PlayerActor::Update(float _deltaTime)
 	{
-		m_velocity = m_direction / _deltaTime;
+		if(m_direction != 0)
+			m_velocity = m_direction / _deltaTime;
 
 		m_transform.m_position += m_velocity;
 
-		m_direction /= _deltaTime;
+		m_direction -= m_velocity;
 
 		__super::Update(_deltaTime);
 	}

@@ -31,6 +31,7 @@ namespace rah
 		void operator/= (const float& _value);
 		bool operator== (const Vector3D& _vector);
 		bool operator!= (const Vector3D& _vector);
+		bool operator!=(const float _f);
 		Vector3D operator* (const float& _value);
 		void operator*= (const float& _value);
 		float& operator[](const int idx);

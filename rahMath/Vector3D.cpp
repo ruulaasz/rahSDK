@@ -111,6 +111,14 @@ namespace rah
 		return false;
 	}
 
+	bool Vector3D::operator!=(const float _f)
+	{
+		if (x != _f || y != _f || z != _f)
+			return true;
+
+		return false;
+	}
+
 	Vector3D Vector3D::operator*(const float & _value)
 	{
 		return Vector3D(x * _value, y * _value, z * _value);
