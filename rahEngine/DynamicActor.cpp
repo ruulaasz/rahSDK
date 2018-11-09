@@ -43,14 +43,11 @@ namespace rah
 	}
 	void DynamicActor::Update(float _deltaTime)
 	{
-		if (m_transform.m_position != m_LastTransform.m_position)
+		if (m_transform != m_LastTransform)
 		{
-			m_LastTransform.m_position = m_transform.m_position;
+			m_LastTransform = m_transform;
 			m_box.m_center = m_transform.m_position;
-		}
 
-		if (m_transform.m_scale != m_LastTransform.m_scale)
-		{
 			m_box = m_model->getBox();
 
 			m_box.m_center = m_transform.m_position;
@@ -65,10 +62,7 @@ namespace rah
 
 			m_box.m_min.z *= m_transform.m_scale.z;
 			m_box.m_max.z *= m_transform.m_scale.z;
-		}
 
-		if (m_transform.m_rotation != m_LastTransform.m_rotation)
-		{
 			m_LastTransform.m_rotation = m_transform.m_rotation;
 
 			Matrix3D rot;

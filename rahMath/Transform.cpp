@@ -23,6 +23,22 @@ namespace rah
 		return world;
 	}
 
+	bool Transform::operator==(Transform _other)
+	{
+		if (_other.m_position == m_position && _other.m_rotation == m_rotation && _other.m_scale == m_scale)
+			return true;
+
+		return false;
+	}
+
+	bool Transform::operator!=(Transform _other)
+	{
+		if (_other.m_position != m_position || _other.m_rotation != m_rotation || _other.m_scale != m_scale)\
+			return true;
+
+		return false;
+	}
+
 	Transform::Transform(Vector3D _pos, Vector3D _rot, Vector3D _scale)
 	{
 		m_position = _pos;
