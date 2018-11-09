@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
-
+//#include <vld.h>
 #define MAX_LOADSTRING 100
 
 // Variables globales:
@@ -28,7 +28,8 @@ rah::FragmentShader g_pixelShapeShader;
 
 rah::CameraDebug g_camera;
 rah::PlayerActor*  g_Actor;
-rah::PlayerController g_controller;
+rah::PlayerController* g_controller;
+rah::World g_world;
 
 float g_playerSpeed = 1.f;
 
@@ -113,7 +114,7 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 	
-	g_Actor->Render();
+	g_world.Render();
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
@@ -155,7 +156,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	InitD3D(g_hWnd);
 	LoadGraphicResources();
-
 	/************************************************************************/
 	/* Prueba de inicializacion de recursos                                 */
 	/************************************************************************/
@@ -166,10 +166,15 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor = new rah::PlayerActor();
 	g_Actor->Initialize((void*)params);
 
-	g_controller.AddPlayer(g_Actor);
+	RAH_SAFE_DELETE(params);
+	g_world.RegisterActor(g_Actor);
+
+	g_controller = new rah::PlayerController();
+	g_controller->AddPlayer(g_Actor);
 
 	rah::MoveCommand* moveComand = new rah::MoveCommand();
 	moveComand->axis = 2;
+<<<<<<< HEAD
 	moveComand->value = g_playerSpeed;
 	g_controller.AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
 
@@ -187,6 +192,27 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	moveComand3->axis = 1;
 	moveComand3->value = g_playerSpeed;
 	g_controller.AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
+=======
+	moveComand->value = 1;
+	g_controller->AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
+
+	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
+	moveComand1->axis = 2;
+	moveComand1->value = -1;
+	g_controller->AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
+
+	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
+	moveComand2->axis = 1;
+	moveComand2->value = -1;
+	g_controller->AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
+
+	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
+	moveComand3->axis = 1;
+	moveComand3->value = 1;
+	g_controller->AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
+
+	rah::InputManager::GetInstance().RegisterController(g_controller);
+>>>>>>> aaee16aa9bf1426bc6f1a09d3ec20a12af5c6fd9
 
 	while (TRUE)
 	{
@@ -207,13 +233,16 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		{
 			g_camera.m_vView = g_Actor->m_transform.m_position;
 
-			g_Actor->Update(0);
+			g_world.Update(0);
 			renderModels();
 		}
 	}
 
+	g_world.Destroy();
 	rah::GraphicManager::CloseModule();
 	rah::RenderManager::CloseModule();
+	rah::InputManager::CloseModule();
+	rah::ResourceManager::CloseModule();
     return (int) msg.wParam;
 }
 
@@ -255,6 +284,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
+	rah::InputManager::StartModule(NULL);
+
 	g_hInst = hInstance; // Almacenar identificador de instancia en una variable global
 
    g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
@@ -286,7 +317,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	rah::InputEvent mainEvent;
 	mainEvent.key = wParam;
 	mainEvent.keyDown = message;
-	
+	rah::InputManager::GetInstance().CheckInput(&mainEvent);
     switch (message)
     {
     case WM_COMMAND:
@@ -325,7 +356,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 	case WM_KEYDOWN:
-		g_controller.CheckInput(&mainEvent);
+		//g_controller.CheckInput(&mainEvent);
 		if (wParam == VK_ESCAPE)
 			PostQuitMessage(WM_QUIT);
 
