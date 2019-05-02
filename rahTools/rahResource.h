@@ -14,6 +14,7 @@ namespace rah
 		RAH_Material,
 		RAH_Mesh,
 		RAH_Model,
+		RAH_Audio,
 		RAH_TOTAL
 	};
 	/*

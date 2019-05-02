@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahMath", "rahMath\rahMath.vcxproj", "{107DC226-69AE-42EA-8019-53DCE19968EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{779B72E6-24EE-4831-AE6E-5BAB3120D8C9} = {779B72E6-24EE-4831-AE6E-5BAB3120D8C9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahMath_Test", "rahMath_Test\rahMath_Test.vcxproj", "{0D08CECA-1954-4E0A-99B1-082763274066}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -34,6 +37,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahEngine", "rahEngine\rahEngine.vcxproj", "{C201799F-CBC0-4764-BE27-9E859E36A5AF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A} = {B47F0F92-E31B-4D04-92E8-42EEA8C6228A}
 		{779B72E6-24EE-4831-AE6E-5BAB3120D8C9} = {779B72E6-24EE-4831-AE6E-5BAB3120D8C9}
 		{C060AAF4-5132-4923-B401-11B4BF36ABB3} = {C060AAF4-5132-4923-B401-11B4BF36ABB3}
 	EndProjectSection
@@ -41,6 +45,19 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahMathCollisions_Test", "rahMathCollisions_Test\rahMathCollisions_Test.vcxproj", "{0376BB6D-155F-40C1-829B-FEF303D9A262}"
 	ProjectSection(ProjectDependencies) = postProject
 		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahAudio", "rahAudio\rahAudio.vcxproj", "{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
+		{779B72E6-24EE-4831-AE6E-5BAB3120D8C9} = {779B72E6-24EE-4831-AE6E-5BAB3120D8C9}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rahAudio_Test", "rahAudio_Test\rahAudio_Test.vcxproj", "{713BAA6F-1A81-4678-85F9-1639B6C91C05}"
+	ProjectSection(ProjectDependencies) = postProject
+		{107DC226-69AE-42EA-8019-53DCE19968EA} = {107DC226-69AE-42EA-8019-53DCE19968EA}
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A} = {B47F0F92-E31B-4D04-92E8-42EEA8C6228A}
+		{C201799F-CBC0-4764-BE27-9E859E36A5AF} = {C201799F-CBC0-4764-BE27-9E859E36A5AF}
 	EndProjectSection
 EndProject
 Global
@@ -115,6 +132,22 @@ Global
 		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x64.Build.0 = Release|x64
 		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x86.ActiveCfg = Release|Win32
 		{0376BB6D-155F-40C1-829B-FEF303D9A262}.Release|x86.Build.0 = Release|Win32
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Debug|x64.ActiveCfg = Debug|x64
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Debug|x64.Build.0 = Debug|x64
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Debug|x86.ActiveCfg = Debug|Win32
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Debug|x86.Build.0 = Debug|Win32
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Release|x64.ActiveCfg = Release|x64
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Release|x64.Build.0 = Release|x64
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Release|x86.ActiveCfg = Release|Win32
+		{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}.Release|x86.Build.0 = Release|Win32
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Debug|x64.ActiveCfg = Debug|x64
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Debug|x64.Build.0 = Debug|x64
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Debug|x86.ActiveCfg = Debug|Win32
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Debug|x86.Build.0 = Debug|Win32
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Release|x64.ActiveCfg = Release|x64
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Release|x64.Build.0 = Release|x64
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Release|x86.ActiveCfg = Release|Win32
+		{713BAA6F-1A81-4678-85F9-1639B6C91C05}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

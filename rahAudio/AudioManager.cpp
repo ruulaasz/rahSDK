@@ -1,0 +1,73 @@
+#include "AudioManager.h"
+
+
+namespace rah
+{
+	RahResult AudioManager::Initialize(void * /*initValue*/)
+	{
+		FMOD_RESULT result;
+
+		result = FMOD::System_Create(&m_System);
+
+		result = m_System->init(MAX_CHANNELS, FMOD_INIT_NORMAL, NULL);
+
+		Set3DSettings(1.0f, 1.0f);
+
+		FMOD::ChannelGroup* master, *fx, *music, *default;
+
+		result = m_System->createChannelGroup("FX", &fx);
+		result = m_System->createChannelGroup("MUSIC", &music);
+		result = m_System->createChannelGroup("DEFAULT", &default);
+		result = m_System->getMasterChannelGroup(&master);
+
+		master->addGroup(fx);
+		master->addGroup(music);
+		master->addGroup(default);
+
+		m_ChannelGroups["MASTER"].m_ChannelGroup = master;
+		m_ChannelGroups["MASTER"].m_Name = "MASTER";
+
+		m_ChannelGroups["MUSIC"].m_ChannelGroup = music;
+		m_ChannelGroups["MUSIC"].m_Name = "MUSIC";
+
+		m_ChannelGroups["FX"].m_ChannelGroup = fx;
+		m_ChannelGroups["FX"].m_Name = "FX";
+
+		m_ChannelGroups["DEFAULT"].m_ChannelGroup = default;
+		m_ChannelGroups["DEFAULT"].m_Name = "DEFAULT";
+
+		return RAH_SUCCESS;
+	}
+	void AudioManager::Set3DSettings(float _DopplerScale, float _RollOffScale)
+	{
+		m_System->set3DSettings(_DopplerScale, DISTANCEFACTOR, _RollOffScale);
+	}
+	FMOD::System * AudioManager::getSystem()
+	{
+		return m_System;
+	}
+	bool AudioManager::findChannel(std::string _channelName)
+	{
+		if (m_ChannelGroups.find(_channelName) != m_ChannelGroups.end())
+		{
+			return true;
+		}
+		return false;
+	}
+	void AudioManager::PlayAudio(rahAudioFile * _Audio)
+	{
+		//if (!m_Listeners.empty())
+		//{
+			m_System->playSound(_Audio->m_sound, 0, true, &_Audio->m_channel->m_channel);
+			_Audio->m_channel->m_channel->setChannelGroup(m_ChannelGroups[_Audio->m_channelGroup].m_ChannelGroup);
+		//}
+	}
+	AudioManager::AudioManager()
+	{
+	}
+
+
+	AudioManager::~AudioManager()
+	{
+	}
+}

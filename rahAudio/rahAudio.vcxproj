@@ -19,32 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="Controller.h" />
-    <ClInclude Include="DynamicActor.h" />
-    <ClInclude Include="InputEvent.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="PlayerActor.h" />
-    <ClInclude Include="PlayerController.h" />
-    <ClInclude Include="rahAll.h" />
-    <ClInclude Include="rahEngine.h" />
-    <ClInclude Include="ResourceFabric.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="rahAudio.h" />
+    <ClInclude Include="rahAudioFile.h" />
+    <ClInclude Include="rahChannel.h" />
+    <ClInclude Include="rahChannelGroup.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="DynamicActor.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="PlayerActor.cpp" />
-    <ClCompile Include="PlayerController.cpp" />
-    <ClCompile Include="ResourceFabric.cpp" />
-    <ClCompile Include="World.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="rahAudioFile.cpp" />
+    <ClCompile Include="rahChannel.cpp" />
+    <ClCompile Include="rahChannelGroup.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C201799F-CBC0-4764-BE27-9E859E36A5AF}</ProjectGuid>
+    <ProjectGuid>{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>rahEngine</RootNamespace>
+    <RootNamespace>rahAudio</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -93,32 +83,32 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)Fmod\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)Fmod\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)Fmod\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)Fmod\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -128,14 +118,10 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEVLIBS)Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(DEVLIBS)Visual Leak Detector\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -145,18 +131,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEVLIBS)Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(DEVLIBS)Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -164,20 +146,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEVLIBS)Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(DEVLIBS)Visual Leak Detector\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -185,16 +163,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEVLIBS)Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(DEVLIBS)Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,6 @@
 #include "ResourceFabric.h"
 #include <rahGraphics.h>
+#include <rahAudio.h>
 
 namespace rah
 {
@@ -17,6 +18,8 @@ namespace rah
 			return new rah::Mesh;
 		case rah::RAH_Model:
 			return new rah::Model;
+		case rah::RAH_Audio:	
+			return new rah::rahAudioFile;
 		case rah::RAH_TOTAL:
 			return NULL;
 		default:
