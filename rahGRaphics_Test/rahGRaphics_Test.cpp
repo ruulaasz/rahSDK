@@ -1,5 +1,10 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
+
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 //#include <vld.h>
 #define MAX_LOADSTRING 100
 
@@ -14,6 +19,7 @@ bool g_initialized = false;
 IDXGISwapChain* g_pSwapChain;
 ID3D11DeviceContext* g_pDeviceContext;
 ID3D11DepthStencilView* g_pDepthStencilView;
+ID3D11Device* g_pDevice;
 
 rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
 rah::Color g_shapesColor(rah::Color::green);
@@ -31,7 +37,7 @@ rah::PlayerActor*  g_Actor;
 rah::PlayerController* g_controller;
 rah::World g_world;
 
-float g_playerSpeed = 1.f;
+float g_playerSpeed = 0.5f;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -60,6 +66,7 @@ RahResult InitD3D(HWND hWnd)
 
 	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
 	g_pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(rah::GraphicManager::GetInstance().m_deviceContext.getPtr());
+	g_pDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
 	g_pDepthStencilView = reinterpret_cast<ID3D11DepthStencilView*>(rah::GraphicManager::GetInstance().m_depthStencilView.getPtr());
 
 	return RAH_SUCCESS;
@@ -124,9 +131,6 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 
 	rah::RenderManager::GetInstance().renderGrid(120);
-
-	// switch the back buffer and the front buffer
-	g_pSwapChain->Present(0, 0);
 }
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance,
@@ -155,7 +159,43 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
 	InitD3D(g_hWnd);
+
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsClassic();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplWin32_Init(g_hWnd);
+	ImGui_ImplDX11_Init(g_pDevice, g_pDeviceContext);
+
+	// Load Fonts
+	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+	// - Read 'misc/fonts/README.txt' for more instructions and details.
+	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+	//io.Fonts->AddFontDefault();
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
+	//ImFont* font = io.Fonts->AddFontFromFileTTF("Cousine-Regular.ttf", 12.0f);
+
+	// Our state
+	bool show_demo_window = true;
+	bool show_another_window = false;
+	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+
 	LoadGraphicResources();
+
 	/************************************************************************/
 	/* Prueba de inicializacion de recursos                                 */
 	/************************************************************************/
@@ -217,15 +257,57 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 			g_camera.m_vPosition = g_Actor->m_transform.m_position;
 			g_camera.m_vPosition += rah::Vector3D(0.0f, 30.f, -8.0f);
 
+			// Start the Dear ImGui frame
+			ImGui_ImplDX11_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+			
+			{
+				static float f = 0.0f;
+				static int counter = 0;
+
+				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+				ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+				ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+				ImGui::Checkbox("Another Window", &show_another_window);
+
+				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+				g_backgroundColor = rah::Color(clear_color.x, clear_color.y, clear_color.z , 1.0f);
+
+				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+					counter++;
+
+				ImGui::SameLine();
+				ImGui::Text("counter = %d", counter);
+
+				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				ImGui::End();
+			}
+
 			renderModels();
+
+			ImGui::Render();
+			//g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
+			//g_pDeviceContext->ClearRenderTargetView(rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, (float*)&clear_color);
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+			g_pSwapChain->Present(0, 0);
 		}
 	}
+
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 
 	g_world.Destroy();
 	rah::GraphicManager::CloseModule();
 	rah::RenderManager::CloseModule();
 	rah::InputManager::CloseModule();
 	rah::ResourceManager::CloseModule();
+
     return (int) msg.wParam;
 }
 
@@ -265,6 +347,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        En esta función, se guarda el identificador de instancia en una variable común y
 //        se crea y muestra la ventana principal del programa.
 //
+
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	rah::InputManager::StartModule(NULL);
@@ -285,18 +368,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-//
-//  FUNCIÓN: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PROPÓSITO:  procesar mensajes de la ventana principal.
-//
-//  WM_COMMAND  - procesar el menú de aplicaciones
-//  WM_PAINT    - Pintar la ventana principal
-//  WM_DESTROY  - publicar un mensaje de salida y volver
-//
-//
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return true;
+
 	rah::InputEvent mainEvent;
 	mainEvent.key = wParam;
 	mainEvent.keyDown = message;
