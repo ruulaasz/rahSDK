@@ -5,9 +5,7 @@
 namespace rah
 {
 	class World
-	{
-	protected:
-		std::vector<Actor*> m_actors;
+	{	
 	public:
 		RahResult Initialize();
 		void Update(float _deltaTime = 0);
@@ -16,5 +14,7 @@ namespace rah
 		RahResult RegisterActor(Actor* _actor);
 		World();
 		~World();
+
+		std::vector<Actor*> m_actors;
 	};
 }

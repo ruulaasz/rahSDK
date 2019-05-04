@@ -6,6 +6,11 @@
 #include "imgui_impl_dx11.h"
 
 //#include <vld.h>
+
+#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #define MAX_LOADSTRING 100
 
 // Variables globales:
@@ -21,9 +26,6 @@ ID3D11DeviceContext* g_pDeviceContext;
 ID3D11DepthStencilView* g_pDepthStencilView;
 ID3D11Device* g_pDevice;
 
-rah::Color g_backgroundColor(0.0f, 0.0f, 0.0f, 1.0f);
-rah::Color g_shapesColor(rah::Color::green);
-
 float g_deltaTime = 0.0f;
 
 rah::VertexShader g_vertexModelShader;
@@ -32,12 +34,17 @@ rah::FragmentShader g_pixelModelShader;
 rah::VertexShader g_vertexShapeShader;
 rah::FragmentShader g_pixelShapeShader;
 
+rah::Color g_backgroundColor;
+rah::Color g_modelColor;
+
 rah::CameraDebug g_camera;
 rah::PlayerActor*  g_Actor;
 rah::PlayerController* g_controller;
+
 rah::World g_world;
 
 float g_playerSpeed = 0.5f;
+int g_gridDensity = 120;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -46,14 +53,14 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 // this function initializes and prepares Direct3D for use
-RahResult InitD3D(HWND hWnd)
+RahResult InitD3D()
 {
 	rah::InitStruct init;
 	init.w = SCREEN_WIDTH;
 	init.h = SCREEN_HEIGHT;
 	rah::GraphicManager::StartModule(init);
 
-	rah::GraphicManager::GetInstance().init(hWnd);
+	rah::GraphicManager::GetInstance().init(g_hWnd);
 
 	rah::ResourceManagerInit resourceInit;
 	resourceInit.Fabric = new rah::ResourceFabric();
@@ -70,6 +77,21 @@ RahResult InitD3D(HWND hWnd)
 	g_pDepthStencilView = reinterpret_cast<ID3D11DepthStencilView*>(rah::GraphicManager::GetInstance().m_depthStencilView.getPtr());
 
 	return RAH_SUCCESS;
+}
+
+void initGUI()
+{
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplWin32_Init(g_hWnd);
+	ImGui_ImplDX11_Init(g_pDevice, g_pDeviceContext);
 }
 
 void LoadGraphicResources()
@@ -100,13 +122,6 @@ void LoadGraphicResources()
 
 void renderModels()
 {
-	// Update our time
-	static DWORD dwTimeStart = 0;
-	DWORD dwTimeCur = GetTickCount();
-	if (dwTimeStart == 0)
-		dwTimeStart = dwTimeCur;
-	g_deltaTime = (dwTimeCur - dwTimeStart) / 1000.0f;
-
 	rah::GraphicManager::GetInstance().clearScreen(&rah::GraphicManager::GetInstance().m_renderTarget, g_backgroundColor);
 
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -119,7 +134,7 @@ void renderModels()
 
 	// Update variables that change once per frame
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
-	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
+	rah::RenderManager::GetInstance().updateColor(g_modelColor);
 	
 	g_world.Render();
 
@@ -128,9 +143,14 @@ void renderModels()
 	g_pDeviceContext->PSSetShader(g_pixelShapeShader.m_fragmentShader, NULL, 0);
 
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
-	rah::RenderManager::GetInstance().updateColor(rah::Color(0.0f, 0.f, 0.2f));
 
-	rah::RenderManager::GetInstance().renderGrid(120);
+	rah::RenderManager::GetInstance().renderGrid(g_gridDensity);
+}
+
+void renderGUI()
+{
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance,
@@ -158,41 +178,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	hAccelTable;
     MSG msg;
 
-	InitD3D(g_hWnd);
+	InitD3D();
 
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
-
-	// Setup Platform/Renderer bindings
-	ImGui_ImplWin32_Init(g_hWnd);
-	ImGui_ImplDX11_Init(g_pDevice, g_pDeviceContext);
-
-	// Load Fonts
-	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-	// - Read 'misc/fonts/README.txt' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-	//io.Fonts->AddFontDefault();
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-	//ImFont* font = io.Fonts->AddFontFromFileTTF("Cousine-Regular.ttf", 12.0f);
-
-	// Our state
-	bool show_demo_window = true;
-	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+	initGUI();
 
 	LoadGraphicResources();
 
@@ -206,8 +194,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor = new rah::PlayerActor();
 	g_Actor->Initialize((void*)params);
 
-	RAH_SAFE_DELETE(params);
 	g_world.RegisterActor(g_Actor);
+
+	rah::PlayerActor* SecondActor = new rah::PlayerActor();
+	SecondActor->Initialize((void*)params);
+
+	RAH_SAFE_DELETE(params);
+	g_world.RegisterActor(SecondActor);
 
 	g_controller = new rah::PlayerController();
 	g_controller->AddPlayer(g_Actor);
@@ -234,8 +227,18 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	rah::InputManager::GetInstance().RegisterController(g_controller);
 
+	// Our state
+	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+	static bool p_open = false;
 	while (TRUE)
 	{
+		// Update our time
+		static DWORD dwTimeStart = 0;
+		DWORD dwTimeCur = GetTickCount();
+		if (dwTimeStart == 0)
+			dwTimeStart = dwTimeCur;
+		g_deltaTime = (dwTimeCur - dwTimeStart) / 1000.0f;
+
 		// Check to see if any messages are waiting in the queue
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -266,34 +269,88 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 				static float f = 0.0f;
 				static int counter = 0;
 
-				ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+				ImGui::Begin("General");                          // Create a window called "Hello, world!" and append into it.
 
-				ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-				ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-				ImGui::Checkbox("Another Window", &show_another_window);
-
-				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
+				ImGui::Text("\nBackground Color");
+				ImGui::ColorEdit3("current color", (float*)&clear_color); // Edit 3 floats representing a color
 				g_backgroundColor = rah::Color(clear_color.x, clear_color.y, clear_color.z , 1.0f);
 
-				if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-					counter++;
-
-				ImGui::SameLine();
-				ImGui::Text("counter = %d", counter);
-
-				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 				ImGui::End();
+
+				if (ImGui::BeginMainMenuBar())
+				{
+					if (ImGui::BeginMenu("File"))
+					{
+						ImGui::EndMenu();
+					}
+					if (ImGui::BeginMenu("Edit"))
+					{
+						if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+						if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+						ImGui::Separator();
+						if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+						if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+						if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+						ImGui::EndMenu();
+					}
+
+					ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+					ImGui::EndMainMenuBar();
+
+					ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
+					if (ImGui::Begin("World Entities", false, ImGuiWindowFlags_MenuBar))
+					{
+						// left
+						static int selected = 0;
+						ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+						for (int i = 0; i < g_world.m_actors.size(); i++)
+						{
+							char label[128];
+							sprintf(label, "Actor %d", g_world.m_actors.at(i)->m_id);
+							if (ImGui::Selectable(label, selected == i))
+								selected = i;
+						}
+						ImGui::EndChild();
+						ImGui::SameLine();
+
+						// right
+						ImGui::BeginGroup();
+						ImGui::BeginChild("item view", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+						ImGui::Text("Actor: %d", selected);
+						ImGui::Separator();
+						if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+						{
+							for (int i = 0; i < g_world.m_actors.size(); i++)
+							{
+								
+							}
+
+							if (ImGui::BeginTabItem("Description"))
+							{
+								ImGui::TextWrapped("Defaul actor with: model, hitbox and movement WASD");
+								ImGui::EndTabItem();
+							}
+							if (ImGui::BeginTabItem("Details"))
+							{
+								ImGui::Text("ID: %d", g_world.m_actors.at(selected)->m_id);
+								ImGui::EndTabItem();
+							}
+
+							ImGui::EndTabBar();
+						}
+						ImGui::EndChild();
+						if (ImGui::Button("Revert")) {}
+						ImGui::SameLine();
+						if (ImGui::Button("Save")) {}
+						ImGui::EndGroup();
+					}
+					ImGui::End();
+				}
 			}
 
 			renderModels();
-
-			ImGui::Render();
-			//g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
-			//g_pDeviceContext->ClearRenderTargetView(rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, (float*)&clear_color);
-			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
+			renderGUI();
 			g_pSwapChain->Present(0, 0);
 		}
 	}
