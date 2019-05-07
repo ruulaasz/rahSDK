@@ -19,7 +19,7 @@ namespace rah
 		case rah::RAH_Model:
 			return new rah::Model;
 		case rah::RAH_Audio:	
-			//return new rah::rahAudioFile;
+			return new rah::rahAudioFile;
 		case rah::RAH_TOTAL:
 			return NULL;
 		default:
