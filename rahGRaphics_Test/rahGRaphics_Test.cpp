@@ -57,6 +57,8 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 // this function initializes and prepares Direct3D for use
 RahResult InitD3D()
 {
+	RAH_DEBUGER_MODULE_DECLARATION();
+
 	rah::InitStruct init;
 	init.w = SCREEN_WIDTH;
 	init.h = SCREEN_HEIGHT;
@@ -71,7 +73,7 @@ RahResult InitD3D()
 	rah::GStruct renderInit;
 	rah::RenderManager::StartModule(renderInit);
 
-	RAH_DEBUGER_MODULE_DECLARATION();
+	rah::AudioManager::StartModule(NULL);
 
 	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
 	g_pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(rah::GraphicManager::GetInstance().m_deviceContext.getPtr());
@@ -267,6 +269,15 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_controller->AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
 
 	rah::InputManager::GetInstance().RegisterController(g_controller);
+
+	rah::rahAudioFile* audio;
+	rah::AudioParams aprm;
+	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
+	aprm.filePath = "resources\\audio\\Cartoons - Witch Doctor (128  kbps).mp3";
+	aprm.IsStream = false;
+	aprm.Mode = rah::rahSoundMode::MODE_2D;
+	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
+	audio->Play();
 
 	// Our state
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
