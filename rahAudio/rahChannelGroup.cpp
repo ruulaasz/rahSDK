@@ -32,14 +32,9 @@ namespace rah
 		m_ChannelGroup->setPitch(_Pitch);
 	}
 
-	void rahChannelGroup::Mute()
+	void rahChannelGroup::Mute(bool _mute)
 	{
-		m_ChannelGroup->setMute(true);
-	}
-
-	void rahChannelGroup::UnMute()
-	{
-		m_ChannelGroup->setMute(false);
+		m_ChannelGroup->setMute(_mute);
 	}
 
 	void rahChannelGroup::AddGroup(rahChannelGroup * _Group)

@@ -17,8 +17,7 @@ namespace rah
 		void Stop();							
 		void SetVolume(float _Volume);			
 		void SetPitch(float _Pitch);			
-		void Mute();							
-		void UnMute();							
+		void Mute(bool _mute);													
 		void AddGroup(rahChannelGroup* _Group);	
 	};
 }

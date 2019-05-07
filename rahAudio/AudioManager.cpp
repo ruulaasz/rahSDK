@@ -62,6 +62,61 @@ namespace rah
 			_Audio->m_channel->m_channel->setChannelGroup(m_ChannelGroups[_Audio->m_channelGroup].m_ChannelGroup);
 		//}
 	}
+	std::string AudioManager::ChannelName(ChannelsTypesNames _name)
+	{
+		if (_name == ChannelsTypesNames::MASTER)
+			return "MASTER";
+		else if (_name == ChannelsTypesNames::MUSIC)
+			return "MUSIC";
+		else if (_name == ChannelsTypesNames::FX)
+			return "FX";
+		else
+			return "DEFAULT";
+	}
+	void AudioManager::SetVolumeToAllChannels(float _volume)
+	{
+		m_ChannelGroups["MASTER"].SetVolume(_volume);
+	}
+	void AudioManager::MuteAllChannels(bool _mute)
+	{
+		m_ChannelGroups["MASTER"].Mute(_mute);
+	}
+	void AudioManager::SetPausedToAllChannels(bool _paused)
+	{
+		m_ChannelGroups["MASTER"].SetPaused(_paused);
+	}
+	void AudioManager::StopAllChannels()
+	{
+		m_ChannelGroups["MASTER"].Stop();
+	}
+	void AudioManager::SetChannelGroupVolume(std::string _groupName, float _volume)
+	{
+		if (m_ChannelGroups.find(_groupName) != m_ChannelGroups.end())
+		{
+			m_ChannelGroups[_groupName].SetVolume(_volume);
+		}
+	}
+	void AudioManager::MuteChannelGroup(std::string _groupName, bool _mute)
+	{
+		if (m_ChannelGroups.find(_groupName) != m_ChannelGroups.end())
+		{
+			m_ChannelGroups[_groupName].Mute(_mute);
+		}
+	}
+	void AudioManager::SetChannelGroupPaused(std::string _groupName, bool _paused)
+	{
+		if (m_ChannelGroups.find(_groupName) != m_ChannelGroups.end())
+		{
+			m_ChannelGroups[_groupName].SetPaused(_paused);
+		}
+	}
+	void AudioManager::StopChannelGroup(std::string _groupName)
+	{
+		if (m_ChannelGroups.find(_groupName) != m_ChannelGroups.end())
+		{
+			m_ChannelGroups[_groupName].Stop();
+		}
+	}
 	AudioManager::AudioManager()
 	{
 	}

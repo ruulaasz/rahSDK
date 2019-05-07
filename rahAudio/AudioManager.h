@@ -9,6 +9,14 @@
 #define DISTANCEFACTOR 4.0f
 namespace rah 
 {
+	enum ChannelsTypesNames
+	{
+		MASTER,
+		MUSIC,
+		FX,
+		DEFAULT
+	};
+
 	class AudioManager : public rah::Module<AudioManager, void*>
 	{
 	private:
@@ -22,6 +30,17 @@ namespace rah
 		FMOD::System* getSystem();
 		bool findChannel(std::string _channelName);
 		void PlayAudio(rahAudioFile* _Audio);
+		std::string ChannelName(ChannelsTypesNames _name);
+
+		void SetVolumeToAllChannels(float _volume);						
+		void MuteAllChannels(bool _mute);
+		void SetPausedToAllChannels(bool _paused);
+		void StopAllChannels();
+
+		void SetChannelGroupVolume(std::string _groupName, float _volume);
+		void MuteChannelGroup(std::string _groupName, bool _mute);
+		void SetChannelGroupPaused(std::string _groupName, bool _paused);
+		void StopChannelGroup(std::string _groupName);
 		AudioManager();
 		~AudioManager();
 	};

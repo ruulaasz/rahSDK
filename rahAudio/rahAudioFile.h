@@ -39,5 +39,9 @@ namespace rah
 		void Release() {};
 		void Set3DMinMaxDistance(float min, float max);
 		void Play();
+		void SetPaused(bool _paused);							
+		void Stop();
+		void SetVolume(float _volume);
+		void Mute(bool _mute);											
 	};
 }
