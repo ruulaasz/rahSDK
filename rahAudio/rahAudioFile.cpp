@@ -32,7 +32,7 @@ namespace rah
 		m_isStream = tmp->IsStream;
 		m_mode = tmp->Mode;
 
-		return Load();
+		return RahResult::RAH_SUCCESS;
 	}
 	RahResult rahAudioFile::Load()
 	{
@@ -73,5 +73,22 @@ namespace rah
 	{
 		AudioManager::GetInstance().PlayAudio(this);
 		m_channel->m_channel->setPaused(false);
+	}
+	void rahAudioFile::SetPaused(bool _paused)
+	{
+		m_isPaused = _paused;
+		m_channel->m_channel->setPaused(m_isPaused);
+	}
+	void rahAudioFile::Stop()
+	{
+		m_channel->m_channel->stop();
+	}
+	void rahAudioFile::SetVolume(float _volume)
+	{
+		m_channel->m_channel->setVolume(_volume);
+	}
+	void rahAudioFile::Mute(bool _mute)
+	{
+		m_channel->m_channel->setMute(_mute);
 	}
 }
