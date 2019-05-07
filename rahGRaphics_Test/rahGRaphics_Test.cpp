@@ -273,12 +273,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::rahAudioFile* audio;
 	rah::AudioParams aprm;
 	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
-	aprm.filePath = "resources\\audio\\Cartoons - Witch Doctor (128  kbps).mp3";
+	aprm.filePath = "resources\\audio\\Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3";
 	aprm.IsStream = false;
 	aprm.Mode = rah::rahSoundMode::MODE_2D;
 	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
-	audio->Play();
 
+	int volume = 5;
+	bool mute = false;
 	// Our state
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 	static bool p_open = false;
@@ -419,6 +420,31 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 						ImGui::EndChild();
 						ImGui::EndGroup();
 					}
+					ImGui::End();
+
+					ImGui::Begin("Audio");                          // Create a window called "Hello, world!" and append into it.
+
+					if (ImGui::Button("Play"))
+					{
+						audio->Play();
+					}
+					if (ImGui::Button("Pause"))
+					{
+						audio->SetPaused(true);
+					}
+					if (ImGui::Button("Resume"))
+					{
+						audio->SetPaused(false);
+					}
+
+					if (ImGui::Checkbox("Mute", &mute))
+					{
+						audio->Mute(mute);
+					}
+
+					ImGui::SliderInt("Volume", &volume, 0, 10);
+					audio->SetVolume(volume);
+
 					ImGui::End();
 				}
 			}
