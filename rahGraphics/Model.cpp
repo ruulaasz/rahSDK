@@ -61,7 +61,7 @@ namespace rah
 
 		g_scene = g_importer.ReadFile(texturesPath, aiProcess_ConvertToLeftHanded);
 
-		if (!g_scene || !g_scene->HasMeshes())
+		if (g_scene == NULL || !g_scene->HasMeshes())
 		{
 			throw "NullPointer g_scene";
 		}

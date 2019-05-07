@@ -48,6 +48,13 @@ namespace rah
 		_params->id = m_automaticID;
 		m_automaticID++;
 		resultresourse = m_fabric->GetMemory(_resourceType);
+		if (resultresourse == NULL)
+		{
+			std::string logtxt;
+			logtxt = "Error in generate memory";
+			RAH_SAVELOG(logtxt);
+			return NULL;
+		}
 		RahResult resulttmp;
 		resulttmp = resultresourse->Initialize(_params);
 		if (resulttmp != RAH_SUCCESS)

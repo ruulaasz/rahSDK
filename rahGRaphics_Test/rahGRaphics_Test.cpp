@@ -46,6 +46,8 @@ rah::World g_world;
 float g_playerSpeed = 0.5f;
 int g_gridDensity = 120;
 
+rah::GraphicTexture* guiModelPrev = nullptr;
+
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -153,6 +155,50 @@ void renderGUI()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
+void changePreview()
+{
+	rah::BasicResourceParams p;
+	p.filePath = "resources\\models\\";
+	p.filePath += g_Actor->m_model->m_name.Get();
+
+	p.filePath.pop_back();
+	p.filePath.pop_back();
+	p.filePath.pop_back();
+	p.filePath.pop_back();
+
+	p.filePath += "\\";
+
+	p.filePath += g_Actor->m_model->m_name.Get();
+
+	p.filePath.pop_back();
+	p.filePath.pop_back();
+	p.filePath.pop_back();
+
+	p.filePath += "dds";
+
+	guiModelPrev = (rah::GraphicTexture*)rah::ResourceManager::GetInstance().LoadResource(&p, rah::ResourceTypes::RAH_GraphicTexture);
+}
+
+void changeModel(std::string _path)
+{
+	rah::Model* newModel = nullptr;
+
+	rah::BasicResourceParams params;
+	params.filePath = _path;
+
+	newModel = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(&params, rah::ResourceTypes::RAH_Model);
+
+	g_Actor->m_model = newModel;
+
+	changePreview();
+}
+
+#define MAXMODELS 4
+
+int current = 0;
+std::string smodels[MAXMODELS] = { "resources\\models\\ManEater\\ManEater.dae", "resources\\models\\Basillisk\\Basillisk.dae", "resources\\models\\ManEater\\ManEater.dae", "resources\\models\\Basillisk\\Basillisk.dae"};
+
+
 int WINAPI wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -189,18 +235,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	/************************************************************************/
 	rah::SimpleActorInit* params = new rah::SimpleActorInit();
 	params->_color = rah::Color();
-	params->_nameModel = "resources\\models\\Bassilisk\\Basillisk.dae";
+	params->_nameModel = "resources\\models\\ManEater\\ManEater.dae";
 	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
 	g_Actor = new rah::PlayerActor();
 	g_Actor->Initialize((void*)params);
 
 	g_world.RegisterActor(g_Actor);
-
-	rah::PlayerActor* SecondActor = new rah::PlayerActor();
-	SecondActor->Initialize((void*)params);
-
 	RAH_SAFE_DELETE(params);
-	g_world.RegisterActor(SecondActor);
 
 	g_controller = new rah::PlayerController();
 	g_controller->AddPlayer(g_Actor);
@@ -230,6 +271,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	// Our state
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 	static bool p_open = false;
+
+	changePreview();
+
+	float my_tex_w = 200;
+	float my_tex_h = 200;
+
 	while (TRUE)
 	{
 		// Update our time
@@ -326,9 +373,28 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 								
 							}
 
-							if (ImGui::BeginTabItem("Description"))
+							if (ImGui::BeginTabItem("Model"))
 							{
-								ImGui::TextWrapped("Defaul actor with: model, hitbox and movement WASD");
+								ImGui::Text("Current Model");
+								ImGui::Image(guiModelPrev->m_graphicTexture, ImVec2(my_tex_w, my_tex_h), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
+								if (ImGui::Button("Next"))
+								{
+									if (current < MAXMODELS - 1)
+										current++;
+									else
+										current = 0;
+
+									changeModel(smodels[current]);
+								}
+								if (ImGui::Button("Prev"))
+								{
+									if (current == 0)
+										current = MAXMODELS - 1;
+									else
+										current--;
+
+									changeModel(smodels[current]);
+								}
 								ImGui::EndTabItem();
 							}
 							if (ImGui::BeginTabItem("Details"))
@@ -340,9 +406,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 							ImGui::EndTabBar();
 						}
 						ImGui::EndChild();
-						if (ImGui::Button("Revert")) {}
-						ImGui::SameLine();
-						if (ImGui::Button("Save")) {}
 						ImGui::EndGroup();
 					}
 					ImGui::End();
@@ -477,8 +540,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (wParam == VK_ESCAPE)
 			PostQuitMessage(WM_QUIT);
 
-		if (wParam == 0x57)
+		if (wParam == 0x43)
 		{
+			changeModel("resources\\models\\Bassilisk\\Basillisk.dae");
 			//g_camera.MoveCamera(0.5f);
 			//g_Actor.m_transform.m_position.z++;
 			//g_camera.m_vPosition.z += g_Actor->m_transform.m_position.z;
