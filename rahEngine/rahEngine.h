@@ -9,3 +9,4 @@
 #include "PlayerController.h"
 #include "InputManager.h"
 #include "World.h"
+#include "ImgManager.h"

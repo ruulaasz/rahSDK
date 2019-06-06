@@ -22,6 +22,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DynamicActor.h" />
+    <ClInclude Include="ImgManager.h" />
     <ClInclude Include="InputEvent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="PlayerActor.h" />
@@ -35,6 +36,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DynamicActor.cpp" />
+    <ClCompile Include="ImgManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -93,29 +95,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(DEVLIBS)imgui\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName)\$(Configuration)\;$(DEVLIBS)imgui/lib/$(PlatformName)/$(Configuration)/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(DEVLIBS)imgui\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName)\$(Configuration)\;$(DEVLIBS)imgui/lib/$(PlatformName)/$(Configuration)/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(DEVLIBS)imgui\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName)\$(Configuration)\;$(DEVLIBS)imgui/lib/$(PlatformName)/$(Configuration)/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(DEVLIBS)imgui\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName)\$(Configuration)\;$(DEVLIBS)imgui/lib/$(PlatformName)/$(Configuration)/;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>

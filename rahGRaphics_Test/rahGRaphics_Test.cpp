@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-
 //#include <vld.h>
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -55,16 +51,23 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 // this function initializes and prepares Direct3D for use
-RahResult InitD3D()
+RahResult InitModules()
 {
 	RAH_DEBUGER_MODULE_DECLARATION();
 
 	rah::InitStruct init;
 	init.w = SCREEN_WIDTH;
 	init.h = SCREEN_HEIGHT;
-	rah::GraphicManager::StartModule(init);
 
+	rah::GraphicManager::StartModule(init);
 	rah::GraphicManager::GetInstance().init(g_hWnd);
+
+	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
+	g_pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(rah::GraphicManager::GetInstance().m_deviceContext.getPtr());
+	g_pDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
+	g_pDepthStencilView = reinterpret_cast<ID3D11DepthStencilView*>(rah::GraphicManager::GetInstance().m_depthStencilView.getPtr());
+
+	rah::ImgManager::StartModule(NULL);
 
 	rah::ResourceManagerInit resourceInit;
 	resourceInit.Fabric = new rah::ResourceFabric();
@@ -75,27 +78,7 @@ RahResult InitD3D()
 
 	rah::AudioManager::StartModule(NULL);
 
-	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
-	g_pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(rah::GraphicManager::GetInstance().m_deviceContext.getPtr());
-	g_pDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
-	g_pDepthStencilView = reinterpret_cast<ID3D11DepthStencilView*>(rah::GraphicManager::GetInstance().m_depthStencilView.getPtr());
-
 	return RAH_SUCCESS;
-}
-
-void initGUI()
-{
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-
-	// Setup Platform/Renderer bindings
-	ImGui_ImplWin32_Init(g_hWnd);
-	ImGui_ImplDX11_Init(g_pDevice, g_pDeviceContext);
 }
 
 void LoadGraphicResources()
@@ -149,12 +132,6 @@ void renderModels()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 
 	rah::RenderManager::GetInstance().renderGrid(g_gridDensity);
-}
-
-void renderGUI()
-{
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 void changePreview()
@@ -226,9 +203,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	hAccelTable;
     MSG msg;
 
-	InitD3D();
-
-	initGUI();
+	InitModules();
 
 	LoadGraphicResources();
 
@@ -319,10 +294,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 			g_camera.m_vPosition = g_Actor->m_transform.m_position;
 			g_camera.m_vPosition += rah::Vector3D(0.0f, 30.f, -8.0f);
 
-			// Start the Dear ImGui frame
-			ImGui_ImplDX11_NewFrame();
-			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
+			rah::ImgManager::GetInstance().update();
 			
 			{
 				static float f = 0.0f;
@@ -450,20 +422,18 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 			}
 
 			renderModels();
-			renderGUI();
+			rah::ImgManager::GetInstance().render();
+
 			g_pSwapChain->Present(0, 0);
 		}
 	}
-
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
 
 	g_world.Destroy();
 	rah::GraphicManager::CloseModule();
 	rah::RenderManager::CloseModule();
 	rah::InputManager::CloseModule();
 	rah::ResourceManager::CloseModule();
+	rah::ImgManager::CloseModule();
 
     return (int) msg.wParam;
 }

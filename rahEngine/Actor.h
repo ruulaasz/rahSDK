@@ -1,6 +1,5 @@
 #pragma once
 #include "rahAll.h"
-
 namespace rah
 {
 	class Actor
