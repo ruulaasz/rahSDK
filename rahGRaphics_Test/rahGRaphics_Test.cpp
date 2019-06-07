@@ -1,15 +1,11 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
 
-<<<<<<< HEAD
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include <vld.h>
-=======
 //#include <vld.h>
->>>>>>> 4b01339104dc0e0d45f4d002b839698cc0ad4632
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
@@ -72,9 +68,7 @@ RahResult InitModules()
 	rah::GraphicManager::StartModule(init);
 	rah::GraphicManager::GetInstance().init(g_hWnd);
 
-<<<<<<< HEAD
 	g_fabric = new rah::ResourceFabric();
-=======
 	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
 	g_pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(rah::GraphicManager::GetInstance().m_deviceContext.getPtr());
 	g_pDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
@@ -82,7 +76,6 @@ RahResult InitModules()
 
 	rah::ImgManager::StartModule(NULL);
 
->>>>>>> 4b01339104dc0e0d45f4d002b839698cc0ad4632
 	rah::ResourceManagerInit resourceInit;
 	resourceInit.Fabric = g_fabric;
 	rah::ResourceManager::StartModule(resourceInit);
@@ -447,14 +440,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::RenderManager::CloseModule();
 	rah::InputManager::CloseModule();
 	rah::ResourceManager::CloseModule();
-<<<<<<< HEAD
 	rah::AudioManager::CloseModule();
 	rah::debug::Debug::CloseModule();
 	RAH_SAFE_DELETE(g_fabric);
-=======
 	rah::ImgManager::CloseModule();
 
->>>>>>> 4b01339104dc0e0d45f4d002b839698cc0ad4632
     return (int) msg.wParam;
 }
 
