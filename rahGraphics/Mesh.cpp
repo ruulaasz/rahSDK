@@ -25,7 +25,10 @@ namespace rah
 			throw "NullPointer pDeviceContext";
 		}
 
-		pDeviceContext->PSSetShaderResources(0, 12, m_material->m_textures);
+		for (int i = 1; i < TextureType_MAXTEXTURES; i++)
+		{
+			pDeviceContext->PSSetShaderResources(i-1, 1, &m_material->m_graphicTextures[i]->m_graphicTexture);
+		}
 
 		UINT stride = sizeof(VertexData);
 		UINT offset = 0;
@@ -45,7 +48,7 @@ namespace rah
 			throw "NullPointer _texture";
 		}
 
-		m_material->m_textures[_textureType] = _texture->m_graphicTexture;
+		memcpy(m_material->m_graphicTextures[_textureType], _texture, sizeof(_texture));
 	}
 
 	void Mesh::assignNewMaterial(Material * _material)
@@ -159,7 +162,7 @@ namespace rah
 						newTexture->Initialize(rParams);
 						newTexture->Load();
 
-						pMaterial->m_textures[k] = newTexture->m_graphicTexture;
+						pMaterial->m_graphicTextures[k] = newTexture;
 					}
 				}
 			}
@@ -184,5 +187,7 @@ namespace rah
 	}
 	void Mesh::Release()
 	{
+		m_material->Release();
+		RAH_SAFE_DELETE(m_material);
 	}
 }

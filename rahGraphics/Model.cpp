@@ -152,9 +152,10 @@ namespace rah
 							rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
 							rParams->filePath = finalPath;
 							newTexture->Initialize(rParams);
+							RAH_SAFE_DELETE(rParams);
 							newTexture->Load();
 
-							pMaterial->m_textures[k] = newTexture->m_graphicTexture;
+							pMaterial->m_graphicTextures[k] = newTexture;
 						}
 					}
 				}
@@ -187,7 +188,13 @@ namespace rah
 
 	void Model::Release()
 	{
-
+		for (int i = m_meshes.size() - 1; i >= 0; i--)
+		{
+			m_meshes[i]->Release();
+			RAH_SAFE_DELETE(m_meshes[i]);
+			m_meshes.pop_back();
+		}
+		RAH_STDVECTOR_SAFE_DELETE(m_triangles);
 	}
 
 	AABB Model::getBox()

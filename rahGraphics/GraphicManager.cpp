@@ -333,5 +333,6 @@ namespace rah
 	}
 	void GraphicManager::Release()
 	{
+		cleanDevice();
 	}
 }

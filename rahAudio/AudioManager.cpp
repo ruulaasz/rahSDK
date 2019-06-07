@@ -117,6 +117,9 @@ namespace rah
 			m_ChannelGroups[_groupName].Stop();
 		}
 	}
+	void AudioManager::Release()
+	{
+	}
 	AudioManager::AudioManager()
 	{
 	}
