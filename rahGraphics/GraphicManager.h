@@ -159,6 +159,7 @@ namespace rah
 		GraphicViewport m_viewport;
 		ID3D11DepthStencilState* m_depthStencilState;
 		ID3D11RasterizerState* m_rasterizerState[3];
+		HWND m_hWnd;
 
 		UINT m_width;
 		UINT m_height;

@@ -324,6 +324,8 @@ namespace rah
 			throw "NullPointer _hwnd";
 		}
 
+		m_hWnd = _hwnd;
+
 		createDeviceAndSwapchain(_hwnd);
 		createBackBuffer();
 		createDepthStencilView();
