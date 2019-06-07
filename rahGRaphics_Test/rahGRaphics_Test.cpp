@@ -193,7 +193,7 @@ float my_tex_h = 200;
 
 void GUI()
 {
-	ImGui::Begin("General");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::Begin("General");                         
 
 	ImGui::Text("\nBackground Color");
 	ImGui::ColorEdit3("current color", (float*)&clear_color); // Edit 3 floats representing a color
