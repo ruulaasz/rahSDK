@@ -14,8 +14,6 @@ namespace rah
 	}
 	RahResult rahAudioFile::Initialize(BasicResourceParams * _params)
 	{
-		RahResult rtnValue;
-
 		if (__super::Initialize(_params) != RahResult::RAH_SUCCESS)
 			return RahResult::RAH_ERROR;
 

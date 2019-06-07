@@ -41,7 +41,7 @@ namespace rah
 		RAH_SAFE_DELETE(rParams);
 		return RAH_SUCCESS;
 	}
-	void DynamicActor::Update(float _deltaTime)
+	void DynamicActor::Update(float /*_deltaTime*/)
 	{
 		if (m_transform != m_LastTransform)
 		{

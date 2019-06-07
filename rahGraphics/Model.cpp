@@ -202,7 +202,7 @@ namespace rah
 		AABB returnAABB;
 		returnAABB.m_min = returnAABB.m_max = m_triangles.back()->m_Vertex->pos;
 
-		for (int i = 0; i < m_triangles.size(); i++)
+		for (size_t i = 0; i < m_triangles.size(); i++)
 		{
 			//Min
 			if (m_triangles.at(i)->m_Vertex->pos.x < returnAABB.m_min.x)

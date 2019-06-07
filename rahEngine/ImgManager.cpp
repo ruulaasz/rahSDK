@@ -2,7 +2,7 @@
 
 namespace rah
 {
-	RahResult ImgManager::Initialize(void * _init)
+	RahResult ImgManager::Initialize(void * /*_init*/)
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();

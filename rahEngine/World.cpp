@@ -9,21 +9,21 @@ namespace rah
 	}
 	void World::Update(float _deltaTime)
 	{
-		for (int i = 0; i < m_actors.size(); i++)
+		for (size_t i = 0; i < m_actors.size(); i++)
 		{
 			m_actors[i]->Update(_deltaTime);
 		}
 	}
 	void World::Render()
 	{
-		for (int i = 0; i < m_actors.size(); i++)
+		for (size_t i = 0; i < m_actors.size(); i++)
 		{
 			m_actors[i]->Render();
 		}
 	}
 	void World::Destroy()
 	{
-		for (int i = 0; i < m_actors.size(); i++)
+		for (size_t i = 0; i < m_actors.size(); i++)
 		{
 			m_actors[i]->Destroy();
 			RAH_SAFE_DELETE(m_actors[i]);

@@ -22,7 +22,7 @@ namespace rah
 	}
 	void InputManager::Release()
 	{
-		for (int i = 0; i < m_controllers.size(); i++)
+		for (size_t i = 0; i < m_controllers.size(); i++)
 		{
 			m_controllers[i]->Destroy();
 			RAH_SAFE_DELETE(m_controllers[i]);
@@ -31,7 +31,7 @@ namespace rah
 	}
 	RahResult InputManager::CheckInput(InputEvent * _event)
 	{
-		for (int i = 0; i < m_controllers.size(); i++)
+		for (size_t i = 0; i < m_controllers.size(); i++)
 		{
 			if (m_controllers[i]->CheckInput(_event) != RAH_DONT_FIND_KEY)
 				GetLastError() = RAH_SUCCESS;

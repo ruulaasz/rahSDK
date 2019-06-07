@@ -49,6 +49,7 @@
     <ClCompile Include="Matrix4D.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="PlatformMath.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Radians.cpp" />
     <ClCompile Include="Ray.cpp" />

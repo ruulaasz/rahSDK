@@ -40,7 +40,7 @@ namespace rah
 	}
 	RahResult PlayerController::CheckForExistingInput(unsigned int _key)
 	{
-		for (int i = 0; i < m_ActionInfo.size(); i++)
+		for (size_t i = 0; i < m_ActionInfo.size(); i++)
 		{
 			if (m_ActionInfo[i]->input.key == _key)
 				return RAH_KEY_ALREADY_ASSIGNED;
@@ -49,7 +49,7 @@ namespace rah
 	}
 	RahResult PlayerController::CheckInput(InputEvent * _event)
 	{
-		for (int i = 0; i < m_ActionInfo.size(); i++)
+		for (size_t i = 0; i < m_ActionInfo.size(); i++)
 		{
 			ActionInfo* info = m_ActionInfo[i];
 			if (info->input.key == _event->key && info->input.keyDown == _event->keyDown)
