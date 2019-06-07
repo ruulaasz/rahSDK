@@ -17,7 +17,7 @@ namespace rah
 
 	}
 
-	RahResult RenderManager::Initialize(GStruct ptr)
+	RahResult RenderManager::Initialize(GStruct /*ptr*/)
 	{
 		m_deviceContext = reinterpret_cast<ID3D11DeviceContext*>(GraphicManager::GetInstance().m_deviceContext.getPtr());
 
@@ -282,7 +282,7 @@ namespace rah
 		VertexBuffer vertexBuffer;
 		IndexBuffer indexBuffer;
 		int lastIndex = 0;
-		for (int i = 0; i < _faces; i++)
+		for (size_t i = 0; i < _faces; i++)
 		{
 			float CurrentRadio = math::Cos(jumpAngle * i) * _sphere.m_radius;
 			float NextRadio = math::Cos(jumpAngle * (i + 1)) * _sphere.m_radius;
@@ -300,7 +300,7 @@ namespace rah
 				v3.pos.y = (math::Sin(jumpAngle * 0) * _sphere.m_radius) + _sphere.m_center.y;
 			}
 
-			for (int j = 0; j < _faces; j++)
+			for (size_t j = 0; j < _faces; j++)
 			{
 				v1.pos.x = (math::Cos(jumpAngle * j) * CurrentRadio) + _sphere.m_center.x;
 				v1.pos.z = (math::Sin(jumpAngle * j) * CurrentRadio) + _sphere.m_center.z;
@@ -502,7 +502,7 @@ namespace rah
 		Matrix4D g_Translation;
 		Matrix4D g_Rotation;
 
-		g_Scale = math::ScalarMatrix4x4(_size, _size, _size);
+		g_Scale = math::ScalarMatrix4x4((float)_size, (float)_size, (float)_size);
 
 		g_Rotation = math::Identity4D();
 

@@ -213,17 +213,7 @@ namespace rah
 		* Returns the abs of the value
 		*
 		*/
-		template<>
-		float Abs(float _value)
-		{
-			return std::abs(_value);
-		}
-
-		static float AbsVec3D(Vector3D _vec)
-		{
-			return Sqrt(Square(_vec.x) + Square(_vec.y) + Square(_vec.z));
-		}
-
+		float AbsVec3D(Vector3D _vec);
 		/**
 		* Elevates a given value to a given power
 		*
