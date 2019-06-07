@@ -65,6 +65,12 @@ namespace rah
 
 		return RahResult::RAH_SUCCESS;
 	}
+	void rahAudioFile::Release()
+	{
+		m_sound->release();
+		m_channel->m_channel->stop();
+		RAH_SAFE_DELETE(m_channel);
+	}
 	void rahAudioFile::Set3DMinMaxDistance(float min, float max)
 	{
 		m_sound->set3DMinMaxDistance(min, max);

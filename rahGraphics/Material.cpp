@@ -6,7 +6,7 @@ namespace rah
 	{
 		for (int i = 0; i < TextureType_MAXTEXTURES; i++)
 		{
-			m_textures[i] = nullptr;
+			m_graphicTextures[i] = NULL;
 		}
 	}
 
@@ -21,5 +21,14 @@ namespace rah
 	}
 	void Material::Release()
 	{
+		for (int i = 0; i < TextureType_MAXTEXTURES; i++)
+		{
+			if (m_graphicTextures[i])
+			{
+				m_graphicTextures[i]->Release();
+				RAH_SAFE_DELETE(m_graphicTextures[i]);
+				m_graphicTextures[i] = NULL;
+			}
+		}
 	}
 }

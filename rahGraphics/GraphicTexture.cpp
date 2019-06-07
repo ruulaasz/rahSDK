@@ -79,5 +79,10 @@ namespace rah
 	}
 	void GraphicTexture::Release()
 	{
+		if (m_graphicTexture)
+		{
+			m_graphicTexture->Release();
+			m_graphicTexture = NULL;
+		}
 	}
 }

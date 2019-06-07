@@ -36,7 +36,7 @@ namespace rah
 
 		virtual RahResult Initialize(BasicResourceParams* _params);
 		RahResult Load();
-		void Release() {};
+		void Release();
 		void Set3DMinMaxDistance(float min, float max);
 		void Play();
 		void SetPaused(bool _paused);							

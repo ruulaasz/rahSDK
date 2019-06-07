@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "rahGRaphics_Test.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 //#include <vld.h>
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -39,6 +43,8 @@ rah::PlayerController* g_controller;
 
 rah::World g_world;
 
+rah::ResourceFabric* g_fabric;
+
 float g_playerSpeed = 0.5f;
 int g_gridDensity = 120;
 
@@ -62,6 +68,7 @@ RahResult InitModules()
 	rah::GraphicManager::StartModule(init);
 	rah::GraphicManager::GetInstance().init(g_hWnd);
 
+	g_fabric = new rah::ResourceFabric();
 	g_pSwapChain = reinterpret_cast<IDXGISwapChain*>(rah::GraphicManager::GetInstance().m_swapchain.getPtr());
 	g_pDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(rah::GraphicManager::GetInstance().m_deviceContext.getPtr());
 	g_pDevice = reinterpret_cast<ID3D11Device*>(rah::GraphicManager::GetInstance().m_device.getPtr());
@@ -70,7 +77,7 @@ RahResult InitModules()
 	rah::ImgManager::StartModule(NULL);
 
 	rah::ResourceManagerInit resourceInit;
-	resourceInit.Fabric = new rah::ResourceFabric();
+	resourceInit.Fabric = g_fabric;
 	rah::ResourceManager::StartModule(resourceInit);
 
 	rah::GStruct renderInit;
@@ -430,6 +437,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::RenderManager::CloseModule();
 	rah::InputManager::CloseModule();
 	rah::ResourceManager::CloseModule();
+	rah::AudioManager::CloseModule();
+	rah::debug::Debug::CloseModule();
+	RAH_SAFE_DELETE(g_fabric);
 	rah::ImgManager::CloseModule();
 
     return (int) msg.wParam;

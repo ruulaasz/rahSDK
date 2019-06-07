@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include <rahResource.h>
+#include "GraphicTexture.h"
 
 namespace rah
 {
@@ -36,6 +37,7 @@ namespace rah
 
 		virtual RahResult Load();
 		virtual void Release();
-		ID3D11ShaderResourceView* m_textures[TextureType_MAXTEXTURES];
+
+		GraphicTexture* m_graphicTextures[TextureType_MAXTEXTURES];
 	};
 }

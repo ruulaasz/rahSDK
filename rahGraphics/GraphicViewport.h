@@ -1,4 +1,5 @@
 #pragma once
+#include <rahTools.h>
 
 namespace rah
 {
@@ -41,10 +42,7 @@ namespace rah
 		*/
 		void Release()
 		{
-			if (m_viewport)
-			{
-				m_viewport = nullptr;
-			}
+			RAH_SAFE_DELETE(m_viewport);
 		}
 
 		/**
