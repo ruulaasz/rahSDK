@@ -177,6 +177,143 @@ void changeModel(std::string _path)
 int current = 0;
 std::string smodels[MAXMODELS] = { "resources\\models\\ManEater\\ManEater.dae", "resources\\models\\Basillisk\\Basillisk.dae", "resources\\models\\ManEater\\ManEater.dae", "resources\\models\\Basillisk\\Basillisk.dae"};
 
+int volume = 5;
+bool mute = false;
+// Our state
+ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+float my_tex_w = 200;
+float my_tex_h = 200;
+
+void GUI()
+{
+	ImGui::Begin("General");                          // Create a window called "Hello, world!" and append into it.
+
+	ImGui::Text("\nBackground Color");
+	ImGui::ColorEdit3("current color", (float*)&clear_color); // Edit 3 floats representing a color
+	g_backgroundColor = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
+
+	rah::rahAudioFile* audio;
+	rah::AudioParams aprm;
+	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
+	aprm.filePath = "resources\\audio\\Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3";
+	aprm.IsStream = false;
+	aprm.Mode = rah::rahSoundMode::MODE_2D;
+	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
+
+	ImGui::End();
+
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+			ImGui::Separator();
+			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			ImGui::EndMenu();
+		}
+
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImGui::EndMainMenuBar();
+
+		ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
+		if (ImGui::Begin("World Entities", false, ImGuiWindowFlags_MenuBar))
+		{
+			// left
+			static int selected = 0;
+			ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+			for (int i = 0; i < g_world.m_actors.size(); i++)
+			{
+				char label[128];
+				sprintf(label, "Actor %d", g_world.m_actors.at(i)->m_id);
+				if (ImGui::Selectable(label, selected == i))
+					selected = i;
+			}
+			ImGui::EndChild();
+			ImGui::SameLine();
+
+			// right
+			ImGui::BeginGroup();
+			ImGui::BeginChild("item view", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
+			ImGui::Text("Actor: %d", selected);
+			ImGui::Separator();
+			if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+			{
+				for (int i = 0; i < g_world.m_actors.size(); i++)
+				{
+
+				}
+
+				if (ImGui::BeginTabItem("Model"))
+				{
+					ImGui::Text("Current Model");
+					ImGui::Image(guiModelPrev->m_graphicTexture, ImVec2(my_tex_w, my_tex_h), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
+					if (ImGui::Button("Next"))
+					{
+						if (current < MAXMODELS - 1)
+							current++;
+						else
+							current = 0;
+
+						changeModel(smodels[current]);
+					}
+					if (ImGui::Button("Prev"))
+					{
+						if (current == 0)
+							current = MAXMODELS - 1;
+						else
+							current--;
+
+						changeModel(smodels[current]);
+					}
+					ImGui::EndTabItem();
+				}
+				if (ImGui::BeginTabItem("Details"))
+				{
+					ImGui::Text("ID: %d", g_world.m_actors.at(selected)->m_id);
+					ImGui::EndTabItem();
+				}
+
+				ImGui::EndTabBar();
+			}
+			ImGui::EndChild();
+			ImGui::EndGroup();
+		}
+		ImGui::End();
+
+		ImGui::Begin("Audio");                          // Create a window called "Hello, world!" and append into it.
+
+		if (ImGui::Button("Play"))
+		{
+			audio->Play();
+		}
+		if (ImGui::Button("Pause"))
+		{
+			audio->SetPaused(true);
+		}
+		if (ImGui::Button("Resume"))
+		{
+			audio->SetPaused(false);
+		}
+
+		if (ImGui::Checkbox("Mute", &mute))
+		{
+			audio->Mute(mute);
+		}
+
+		ImGui::SliderInt("Volume", &volume, 0, 10);
+		audio->SetVolume(volume);
+
+		ImGui::End();
+	}
+}
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -245,24 +382,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	rah::InputManager::GetInstance().RegisterController(g_controller);
 
-	rah::rahAudioFile* audio;
-	rah::AudioParams aprm;
-	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
-	aprm.filePath = "resources\\audio\\Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3";
-	aprm.IsStream = false;
-	aprm.Mode = rah::rahSoundMode::MODE_2D;
-	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
-
-	int volume = 5;
-	bool mute = false;
-	// Our state
-	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
-	static bool p_open = false;
-
 	changePreview();
-
-	float my_tex_w = 200;
-	float my_tex_h = 200;
 
 	while (TRUE)
 	{
@@ -296,130 +416,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 			rah::ImgManager::GetInstance().update();
 			
-			{
-				static float f = 0.0f;
-				static int counter = 0;
-
-				ImGui::Begin("General");                          // Create a window called "Hello, world!" and append into it.
-
-				ImGui::Text("\nBackground Color");
-				ImGui::ColorEdit3("current color", (float*)&clear_color); // Edit 3 floats representing a color
-				g_backgroundColor = rah::Color(clear_color.x, clear_color.y, clear_color.z , 1.0f);
-
-				ImGui::End();
-
-				if (ImGui::BeginMainMenuBar())
-				{
-					if (ImGui::BeginMenu("File"))
-					{
-						ImGui::EndMenu();
-					}
-					if (ImGui::BeginMenu("Edit"))
-					{
-						if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-						if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-						ImGui::Separator();
-						if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-						if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-						if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-						ImGui::EndMenu();
-					}
-
-					ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-					ImGui::EndMainMenuBar();
-
-					ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-					if (ImGui::Begin("World Entities", false, ImGuiWindowFlags_MenuBar))
-					{
-						// left
-						static int selected = 0;
-						ImGui::BeginChild("left pane", ImVec2(150, 0), true);
-						for (int i = 0; i < g_world.m_actors.size(); i++)
-						{
-							char label[128];
-							sprintf(label, "Actor %d", g_world.m_actors.at(i)->m_id);
-							if (ImGui::Selectable(label, selected == i))
-								selected = i;
-						}
-						ImGui::EndChild();
-						ImGui::SameLine();
-
-						// right
-						ImGui::BeginGroup();
-						ImGui::BeginChild("item view", ImVec2(0, -ImGui::GetFrameHeightWithSpacing())); // Leave room for 1 line below us
-						ImGui::Text("Actor: %d", selected);
-						ImGui::Separator();
-						if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
-						{
-							for (int i = 0; i < g_world.m_actors.size(); i++)
-							{
-								
-							}
-
-							if (ImGui::BeginTabItem("Model"))
-							{
-								ImGui::Text("Current Model");
-								ImGui::Image(guiModelPrev->m_graphicTexture, ImVec2(my_tex_w, my_tex_h), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
-								if (ImGui::Button("Next"))
-								{
-									if (current < MAXMODELS - 1)
-										current++;
-									else
-										current = 0;
-
-									changeModel(smodels[current]);
-								}
-								if (ImGui::Button("Prev"))
-								{
-									if (current == 0)
-										current = MAXMODELS - 1;
-									else
-										current--;
-
-									changeModel(smodels[current]);
-								}
-								ImGui::EndTabItem();
-							}
-							if (ImGui::BeginTabItem("Details"))
-							{
-								ImGui::Text("ID: %d", g_world.m_actors.at(selected)->m_id);
-								ImGui::EndTabItem();
-							}
-
-							ImGui::EndTabBar();
-						}
-						ImGui::EndChild();
-						ImGui::EndGroup();
-					}
-					ImGui::End();
-
-					ImGui::Begin("Audio");                          // Create a window called "Hello, world!" and append into it.
-
-					if (ImGui::Button("Play"))
-					{
-						audio->Play();
-					}
-					if (ImGui::Button("Pause"))
-					{
-						audio->SetPaused(true);
-					}
-					if (ImGui::Button("Resume"))
-					{
-						audio->SetPaused(false);
-					}
-
-					if (ImGui::Checkbox("Mute", &mute))
-					{
-						audio->Mute(mute);
-					}
-
-					ImGui::SliderInt("Volume", &volume, 0, 10);
-					audio->SetVolume(volume);
-
-					ImGui::End();
-				}
-			}
+			GUI();
 
 			renderModels();
 			rah::ImgManager::GetInstance().render();
