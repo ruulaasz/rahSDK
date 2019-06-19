@@ -41,6 +41,9 @@ namespace rah
 		void MuteChannelGroup(std::string _groupName, bool _mute);
 		void SetChannelGroupPaused(std::string _groupName, bool _paused);
 		void StopChannelGroup(std::string _groupName);
+
+		void Update(float _deltatime = 0.0f);
+
 		AudioManager();
 		~AudioManager();
 	};

@@ -26,8 +26,15 @@ int main()
 	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
 	aprm.filePath = "Audio\\Cartoons - Witch Doctor (128  kbps).mp3";
 	aprm.IsStream = false;
-	aprm.Mode = rah::rahSoundMode::MODE_2D;
+	aprm.Mode = rah::rahSoundMode::MODE_3D;
 	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
+	audio->UpdatePositionVelocity(rah::Vector3D(10.0f, 10.0f), rah::Vector3D(10.0f));
+	audio->m_channel->m_channel->set3DLevel(0.2);
+	//audio->Set3DMinMaxDistance(0.0f, 10.0f);
+	rah::rahListener listener;
+
+	listener.m_up = rah::Vector3D(0.0f, 1.0f);
+	listener.m_forward = rah::Vector3D(0.0f, 0.0f, 1.0f);
 
 	rah::rahAudioFile* audio2;
 	rah::AudioParams aprm2;
@@ -41,7 +48,7 @@ int main()
 		RAH_LOG("fail thiz shit");
 
 	audio->Play();
-	audio2->Play();
+	//audio2->Play();
 	bool mute = true;
 	int voulmen = 5;
 	audio->SetVolume(voulmen);
@@ -56,7 +63,7 @@ int main()
 	{
 		char x = 0;
 		std::cin >> x;
-		if (x == 'm')
+		/*if (x == 'm')
 		{
 			mute = !mute;
 			audio->Mute(mute);
@@ -90,9 +97,29 @@ int main()
 				voulmen = 0;
 			}
 			audio->SetVolume(voulmen);
+		}*/
+		if (x == 'a')
+		{
+			listener.m_position.x -= DISTANCEFACTOR;
+			listener.UpdateListener(listener.m_position, listener.m_velocity, listener.m_forward, listener.m_up);
+		}
+		else if (x == 'w')
+		{
+			listener.m_position.y += DISTANCEFACTOR;
+			listener.UpdateListener(listener.m_position, listener.m_velocity, listener.m_forward, listener.m_up);
+		}
+		else if (x == 's')
+		{
+			listener.m_position.y -= DISTANCEFACTOR;
+			listener.UpdateListener(listener.m_position, listener.m_velocity, listener.m_forward, listener.m_up);
+		}
+		else if (x == 'd')
+		{
+			listener.m_position.x += DISTANCEFACTOR;
+			listener.UpdateListener(listener.m_position, listener.m_velocity, listener.m_forward, listener.m_up);
 		}
 		std::cin.clear();
-
+		rah::AudioManager::GetInstance().Update();
 	}
 
     return 0;

@@ -117,6 +117,10 @@ namespace rah
 			m_ChannelGroups[_groupName].Stop();
 		}
 	}
+	void AudioManager::Update(float /*_deltatime*/)
+	{
+		m_System->update();
+	}
 	void AudioManager::Release()
 	{
 	}

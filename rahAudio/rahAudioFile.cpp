@@ -95,4 +95,19 @@ namespace rah
 	{
 		m_channel->m_channel->setMute(_mute);
 	}
+	void rahAudioFile::UpdatePositionVelocity(Vector3D _position, Vector3D _velocity)
+	{
+		m_position = _position;
+		m_velocity = _velocity;
+
+		FMOD_VECTOR pos, vel;
+		pos.x = m_position.x;
+		pos.y = m_position.y;
+		pos.z = m_position.z;
+
+		vel.x = m_velocity.x;
+		vel.y = m_velocity.y;
+		vel.z = m_velocity.z;
+		m_channel->m_channel->set3DAttributes(&pos, &vel);
+	}
 }

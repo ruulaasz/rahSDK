@@ -74,8 +74,8 @@
     <OutDir>$(SolutionDir)bin\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(SolutionDir)rahEngine;$(DEVLIBS)assimp/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/$(Configuration)\;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName);$(SolutionDir)lib\rahEngine\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(Configuration)/$(PlatformTarget)/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(SolutionDir)rahGraphics;$(DEVLIBS)DirectXTex/include/;$(SolutionDir)rahAudio;$(DEVLIBS)Fmod\include;$(SolutionDir)rahEngine;$(DEVLIBS)assimp/include/;$(DEVLIBS)imgui/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahGraphics\$(PlatformName)\$(Configuration)\;$(DEVLIBS)DirectXTex/lib/$(PlatformTarget)/$(Configuration)\;$(SolutionDir)lib\rahAudio\$(PlatformName)\$(Configuration)\;$(DEVLIBS)Fmod\lib\$(PlatformName);$(SolutionDir)lib\rahEngine\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(Configuration)/$(PlatformTarget)/;$(DEVLIBS)imgui/lib/$(PlatformTarget)/$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>rahMath_$(Configuration).lib;rahTools_$(Configuration).lib;rahAudio_$(Configuration).lib;rahGraphics_$(Configuration).lib;rahEngine_$(Configuration).lib;fmod_vc.lib;d3d11.lib;DirectXTexd.lib;assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>rahMath_$(Configuration).lib;rahTools_$(Configuration).lib;rahAudio_$(Configuration).lib;rahGraphics_$(Configuration).lib;rahEngine_$(Configuration).lib;fmod_vc.lib;d3d11.lib;DirectXTexd.lib;assimpd.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

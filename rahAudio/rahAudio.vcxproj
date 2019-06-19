@@ -24,12 +24,14 @@
     <ClInclude Include="rahAudioFile.h" />
     <ClInclude Include="rahChannel.h" />
     <ClInclude Include="rahChannelGroup.h" />
+    <ClInclude Include="rahListener.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="rahAudioFile.cpp" />
     <ClCompile Include="rahChannel.cpp" />
     <ClCompile Include="rahChannelGroup.cpp" />
+    <ClCompile Include="rahListener.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B47F0F92-E31B-4D04-92E8-42EEA8C6228A}</ProjectGuid>

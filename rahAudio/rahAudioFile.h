@@ -42,6 +42,8 @@ namespace rah
 		void SetPaused(bool _paused);							
 		void Stop();
 		void SetVolume(float _volume);
-		void Mute(bool _mute);											
+		void Mute(bool _mute);
+
+		void UpdatePositionVelocity(Vector3D _position, Vector3D _velocity);
 	};
 }
