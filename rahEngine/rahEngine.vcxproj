@@ -20,11 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentManager.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DynamicActor.h" />
     <ClInclude Include="ImgManager.h" />
     <ClInclude Include="InputEvent.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="PlayerActor.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="rahAll.h" />
@@ -34,10 +37,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DynamicActor.cpp" />
     <ClCompile Include="ImgManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="ResourceFabric.cpp" />

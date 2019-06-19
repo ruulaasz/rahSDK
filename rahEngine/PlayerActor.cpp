@@ -1,10 +1,16 @@
 #include "PlayerActor.h"
+#include "ModelComponent.h"
 
 namespace rah
 {
 	RahResult PlayerActor::Initialize(void * _initData)
 	{
 		m_velocity = Vector3D(0);
+
+		rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
+		rParams->filePath = "resources\\models\\ManEater\\ManEater.dae";
+		reinterpret_cast<ModelComponent*>(m_Components["model"])->m_model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
+
 		return __super::Initialize(_initData);
 	}
 

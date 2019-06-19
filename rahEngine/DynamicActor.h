@@ -1,4 +1,5 @@
 #pragma once
+
 #include "rahAll.h"
 #include "Actor.h"
 
@@ -13,7 +14,7 @@ namespace rah
 	class DynamicActor : public Actor
 	{
 	public:
-		Model* m_model;
+		//Model* m_model;
 		AABB m_box;
 		Color m_color;
 	protected:

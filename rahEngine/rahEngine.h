@@ -1,6 +1,7 @@
 #pragma once
 #include "rahAll.h"
 #include "ResourceFabric.h"
+#include "Component.h"
 #include "Actor.h"
 #include "DynamicActor.h"
 #include "PlayerActor.h"
@@ -10,3 +11,5 @@
 #include "InputManager.h"
 #include "World.h"
 #include "ImgManager.h"
+#include "ComponentManager.h"
+#include "ModelComponent.h"

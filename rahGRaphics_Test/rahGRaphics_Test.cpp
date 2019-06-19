@@ -38,7 +38,10 @@ rah::Color g_backgroundColor;
 rah::Color g_modelColor;
 
 rah::CameraDebug g_camera;
+
 rah::PlayerActor*  g_Actor;
+rah::ModelComponent* g_ModelComponent;
+
 rah::PlayerController* g_controller;
 
 rah::World g_world;
@@ -143,7 +146,7 @@ void renderModels()
 
 void changePreview()
 {
-	rah::BasicResourceParams p;
+	/*rah::BasicResourceParams p;
 	p.filePath = "resources\\models\\";
 	p.filePath += g_Actor->m_model->m_name.Get();
 
@@ -162,12 +165,12 @@ void changePreview()
 
 	p.filePath += "dds";
 
-	guiModelPrev = (rah::GraphicTexture*)rah::ResourceManager::GetInstance().LoadResource(&p, rah::ResourceTypes::RAH_GraphicTexture);
+	guiModelPrev = (rah::GraphicTexture*)rah::ResourceManager::GetInstance().LoadResource(&p, rah::ResourceTypes::RAH_GraphicTexture);*/
 }
 
 void changeModel(std::string _path)
 {
-	rah::Model* newModel = nullptr;
+	/*rah::Model* newModel = nullptr;
 
 	rah::BasicResourceParams params;
 	params.filePath = _path;
@@ -176,7 +179,7 @@ void changeModel(std::string _path)
 
 	g_Actor->m_model = newModel;
 
-	changePreview();
+	changePreview();*/
 }
 
 #define MAXMODELS 4
@@ -359,6 +362,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	params->_nameModel = "resources\\models\\ManEater\\ManEater.dae";
 	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
 	g_Actor = new rah::PlayerActor();
+
+	g_ModelComponent = new rah::ModelComponent();
+	g_ModelComponent->m_owner = g_Actor;
+	g_ModelComponent->m_id = "model";
+	g_Actor->addComponent(g_ModelComponent);
+
 	g_Actor->Initialize((void*)params);
 
 	g_world.RegisterActor(g_Actor);
@@ -423,7 +432,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 			rah::ImgManager::GetInstance().update();
 			
-			GUI();
+			//GUI();
 
 			renderModels();
 			rah::ImgManager::GetInstance().render();

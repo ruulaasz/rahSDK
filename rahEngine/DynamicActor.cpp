@@ -1,5 +1,5 @@
 #include "DynamicActor.h"
-
+#include "Component.h"
 
 namespace rah
 {
@@ -12,12 +12,12 @@ namespace rah
 
 		rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
 		rParams->filePath = actorData->_nameModel;
-		m_model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
+		//m_model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
 
-		if (m_model == NULL)
-			return rah::ResourceManager::GetInstance().GetLastError();
+		//if (m_model == NULL)
+			//return rah::ResourceManager::GetInstance().GetLastError();
 
-		m_box = m_model->getBox();
+		//m_box = m_model->getBox();
 
 		m_box.m_center = m_transform.m_position;
 
@@ -41,14 +41,17 @@ namespace rah
 		RAH_SAFE_DELETE(rParams);
 		return RAH_SUCCESS;
 	}
-	void DynamicActor::Update(float /*_deltaTime*/)
+
+	void DynamicActor::Update(float _deltaTime)
 	{
+		__super::Update(_deltaTime);
+
 		if (m_transform != m_LastTransform)
 		{
 			m_LastTransform = m_transform;
 			m_box.m_center = m_transform.m_position;
 
-			m_box = m_model->getBox();
+			//m_box = m_model->getBox();
 
 			m_box.m_center = m_transform.m_position;
 
@@ -75,25 +78,31 @@ namespace rah
 		}
 		
 	}
+
 	void DynamicActor::Render()
 	{
+		__super::Render();
+
 		rah::RenderManager::GetInstance().updateWorld(m_transform.TransformToWorldMatrix());
 		rah::RenderManager::GetInstance().updateColor(m_color);
-		m_model->render();
+		//m_model->render();
 		RenderManager::GetInstance().renderShape(m_box, Color::blue);
 	}
+
 	void DynamicActor::Destroy()
 	{
 		m_color.clear();
 		m_transform = Transform(0);
-		m_model->Destroy();
-	}
-	DynamicActor::DynamicActor()
-	{
+		//m_model->Destroy();
 	}
 
+	DynamicActor::DynamicActor()
+	{
+
+	}
 
 	DynamicActor::~DynamicActor()
 	{
+
 	}
 }
