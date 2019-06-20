@@ -22,7 +22,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="BoxComponent.h" />
     <ClInclude Include="Component.h" />
-    <ClInclude Include="ComponentManager.h" />
+    <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DynamicActor.h" />
     <ClInclude Include="ImgManager.h" />
@@ -40,7 +40,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="BoxComponent.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="ComponentManager.cpp" />
+    <ClCompile Include="ComponentFactory.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DynamicActor.cpp" />
     <ClCompile Include="ImgManager.cpp" />

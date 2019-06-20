@@ -11,10 +11,13 @@ namespace rah
 		BoxComponent();
 		~BoxComponent();
 
-		AABB m_box;
-
 		virtual void init();
 		virtual void render();
 		virtual void update(float _deltaTime);
+		void adjustBox();
+
+		AABB m_box;
+		bool m_rendereable;
+		Color m_color;
 	};
 }

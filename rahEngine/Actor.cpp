@@ -3,14 +3,19 @@
 
 namespace rah
 {
-	size_t rah::Actor::m_autoID = 1;
+	size_t Actor::m_autoID = 1;
 
 	void Actor::Update(float _deltaTime)
 	{
 		for (auto& it : m_Components)
 		{
 			if (it.second != NULL)
-				it.second->update(_deltaTime);
+			{
+				if (it.second->m_enabled)
+				{
+					it.second->update(_deltaTime);
+				}
+			}
 		}
 	}
 
@@ -18,8 +23,13 @@ namespace rah
 	{
 		for (auto& it : m_Components)
 		{
-			if(it.second != NULL)
-				it.second->render();
+			if (it.second != NULL)
+			{
+				if (it.second->m_enabled)
+				{
+					it.second->render();
+				}
+			}
 		}
 	}
 
@@ -60,6 +70,23 @@ namespace rah
 				++it;
 			}
 		}
+	}
+
+	Component * Actor::getComponent(std::string _id)
+	{
+		for (auto it = m_Components.begin(); it != m_Components.end(); )
+		{
+			if (it->first == _id)
+			{
+				return it->second;
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		return NULL;
 	}
 
 	Actor::Actor()

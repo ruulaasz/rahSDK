@@ -5,7 +5,8 @@ namespace rah
 {
 	BoxComponent::BoxComponent()
 	{
-
+		m_rendereable = true;
+		m_color = Color::blue;
 	}
 
 	BoxComponent::~BoxComponent()
@@ -15,17 +16,7 @@ namespace rah
 
 	void BoxComponent::init()
 	{
-		auto model = m_owner->m_Components.find("model");
-
-		if (model != m_owner->m_Components.end())
-		{
-			ModelComponent* modelComp = (ModelComponent*)model->second;
-			m_box = modelComp->m_model->getBox();
-		}
-		else
-		{
-			m_box = AABB(m_owner->m_transform.m_position, Vector4D(-2, -2, -2, 1), Vector4D(2, 2, 2, 1));
-		}
+		adjustBox();
 
 		Transform t = m_owner->m_transform;
 
@@ -49,7 +40,10 @@ namespace rah
 
 	void BoxComponent::render()
 	{
-		RenderManager::GetInstance().renderShape(m_box, Color::blue);
+		if (m_rendereable)
+		{
+			RenderManager::GetInstance().renderShape(m_box, m_color);
+		}
 	}
 
 	void BoxComponent::update(float _deltaTime)
@@ -59,15 +53,6 @@ namespace rah
 		Transform t = m_owner->m_transform;
 
 		m_box.m_center = t.m_position;
-
-		auto model = m_owner->m_Components.find("model");
-
-		if (model != m_owner->m_Components.end())
-		{
-			ModelComponent* modelComp = (ModelComponent*)model->second;
-			m_box = modelComp->m_model->getBox();
-		}
-
 		m_box.m_center = t.m_position;
 
 		m_box.m_min.x *= t.m_scale.x;
@@ -86,5 +71,20 @@ namespace rah
 		rot = rot * rah::math::RotationMatrix3x3(rah::Degrees(t.m_rotation.z).getRadians(), rah::math::Axis_Z);
 
 		m_box.RotateAABB(rot);
+	}
+
+	void BoxComponent::adjustBox()
+	{
+		auto model = m_owner->m_Components.find("model");
+
+		if (model != m_owner->m_Components.end())
+		{
+			ModelComponent* modelComp = (ModelComponent*)model->second;
+			m_box = modelComp->m_model->getBox();
+		}
+		else
+		{
+			m_box = AABB(m_owner->m_transform.m_position, Vector4D(-2, -2, -2, 1), Vector4D(2, 2, 2, 1));
+		}
 	}
 }

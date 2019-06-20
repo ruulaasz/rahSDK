@@ -35,7 +35,6 @@ rah::VertexShader g_vertexShapeShader;
 rah::FragmentShader g_pixelShapeShader;
 
 rah::Color g_backgroundColor;
-rah::Color g_modelColor;
 
 rah::CameraDebug g_camera;
 
@@ -89,6 +88,8 @@ RahResult InitModules()
 
 	rah::AudioManager::StartModule(NULL);
 
+	rah::ComponentFactory::StartModule(NULL);
+
 	return RAH_SUCCESS;
 }
 
@@ -118,7 +119,7 @@ void LoadGraphicResources()
 	g_initialized = true;
 }
 
-void renderModels()
+void renderWorld()
 {
 	rah::GraphicManager::GetInstance().clearScreen(&rah::GraphicManager::GetInstance().m_renderTarget, g_backgroundColor);
 
@@ -132,7 +133,6 @@ void renderModels()
 
 	// Update variables that change once per frame
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
-	rah::RenderManager::GetInstance().updateColor(g_modelColor);
 	
 	g_world.Render();
 
@@ -147,9 +147,11 @@ void renderModels()
 
 void changePreview()
 {
-	/*rah::BasicResourceParams p;
+	rah::ModelComponent* m = reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"));
+
+	rah::BasicResourceParams p;
 	p.filePath = "resources\\models\\";
-	p.filePath += g_Actor->m_model->m_name.Get();
+	p.filePath += m->m_model->m_name.Get();
 
 	p.filePath.pop_back();
 	p.filePath.pop_back();
@@ -158,7 +160,7 @@ void changePreview()
 
 	p.filePath += "\\";
 
-	p.filePath += g_Actor->m_model->m_name.Get();
+	p.filePath += m->m_model->m_name.Get();
 
 	p.filePath.pop_back();
 	p.filePath.pop_back();
@@ -166,21 +168,22 @@ void changePreview()
 
 	p.filePath += "dds";
 
-	guiModelPrev = (rah::GraphicTexture*)rah::ResourceManager::GetInstance().LoadResource(&p, rah::ResourceTypes::RAH_GraphicTexture);*/
+	guiModelPrev = (rah::GraphicTexture*)rah::ResourceManager::GetInstance().LoadResource(&p, rah::ResourceTypes::RAH_GraphicTexture);
 }
 
 void changeModel(std::string _path)
 {
-	/*rah::Model* newModel = nullptr;
+	rah::ModelComponent* m = reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"));
+	rah::Model* newModel = nullptr;
 
 	rah::BasicResourceParams params;
 	params.filePath = _path;
 
 	newModel = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(&params, rah::ResourceTypes::RAH_Model);
 
-	g_Actor->m_model = newModel;
+	m->m_model = newModel;
 
-	changePreview();*/
+	changePreview();
 }
 
 #define MAXMODELS 4
@@ -326,6 +329,34 @@ void GUI()
 	}
 }
 
+void inputs()
+{
+	g_controller = new rah::PlayerController();
+	g_controller->AddPlayer(g_Actor);
+
+	rah::MoveCommand* moveComand = new rah::MoveCommand();
+	moveComand->axis = 2;
+	moveComand->value = g_playerSpeed;
+	g_controller->AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
+
+	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
+	moveComand1->axis = 2;
+	moveComand1->value = g_playerSpeed  * -1;
+	g_controller->AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
+
+	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
+	moveComand2->axis = 1;
+	moveComand2->value = g_playerSpeed * -1;
+	g_controller->AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
+
+	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
+	moveComand3->axis = 1;
+	moveComand3->value = g_playerSpeed;
+	g_controller->AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
+
+	rah::InputManager::GetInstance().RegisterController(g_controller);
+}
+
 int WINAPI wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -362,46 +393,15 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
 	g_Actor = new rah::PlayerActor();
 
-	g_ModelComponent = new rah::ModelComponent();
-	g_ModelComponent->m_owner = g_Actor;
-	g_ModelComponent->m_id = "model";
-	
-	g_BoxComponent = new rah::BoxComponent();
-	g_BoxComponent->m_owner = g_Actor;
-	g_BoxComponent->m_id = "box";
-
 	g_Actor->Initialize((void*)params);
 
-	g_Actor->addComponent(g_BoxComponent);
-	g_Actor->addComponent(g_ModelComponent);
+	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_MODEL, "model"));
+	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_BOX, "box"));
 
 	g_world.RegisterActor(g_Actor);
 	RAH_SAFE_DELETE(params);
 
-	g_controller = new rah::PlayerController();
-	g_controller->AddPlayer(g_Actor);
-
-	rah::MoveCommand* moveComand = new rah::MoveCommand();
-	moveComand->axis = 2;
-	moveComand->value = g_playerSpeed;
-	g_controller->AddAction(0x57, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand);
-
-	rah::MoveCommand* moveComand1 = new rah::MoveCommand();
-	moveComand1->axis = 2;
-	moveComand1->value = g_playerSpeed  * -1;
-	g_controller->AddAction(0x53, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand1);
-
-	rah::MoveCommand* moveComand2 = new rah::MoveCommand();
-	moveComand2->axis = 1;
-	moveComand2->value = g_playerSpeed * -1;
-	g_controller->AddAction(0x41, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand2);
-
-	rah::MoveCommand* moveComand3 = new rah::MoveCommand();
-	moveComand3->axis = 1;
-	moveComand3->value = g_playerSpeed;
-	g_controller->AddAction(0x44, WM_KEYDOWN, &rah::PlayerActor::Move, (void*)moveComand3);
-
-	rah::InputManager::GetInstance().RegisterController(g_controller);
+	inputs();
 
 	changePreview();
 
@@ -437,9 +437,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 			rah::ImgManager::GetInstance().update();
 			
-			//GUI();
+			GUI();
 
-			renderModels();
+			renderWorld();
 			rah::ImgManager::GetInstance().render();
 
 			g_pSwapChain->Present(0, 0);
@@ -455,6 +455,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::debug::Debug::CloseModule();
 	RAH_SAFE_DELETE(g_fabric);
 	rah::ImgManager::CloseModule();
+	rah::ComponentFactory::CloseModule();
 
     return (int) msg.wParam;
 }
@@ -570,7 +571,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		if (wParam == 0x43)
 		{
-			changeModel("resources\\models\\Bassilisk\\Basillisk.dae");
 			//g_camera.MoveCamera(0.5f);
 			//g_Actor.m_transform.m_position.z++;
 			//g_camera.m_vPosition.z += g_Actor->m_transform.m_position.z;

@@ -5,7 +5,7 @@ namespace rah
 {
 	Component::Component()
 	{
-		
+		m_enabled = true;
 	}
 
 	Component::~Component()

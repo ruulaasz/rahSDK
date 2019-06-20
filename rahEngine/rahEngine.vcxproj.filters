@@ -54,13 +54,13 @@
     <ClInclude Include="Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ModelComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BoxComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,13 +95,13 @@
     <ClCompile Include="Component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ModelComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoxComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

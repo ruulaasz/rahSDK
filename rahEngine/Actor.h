@@ -10,6 +10,7 @@ namespace rah
 	{
 	public:
 		static size_t m_autoID;
+
 		size_t m_id;
 		Transform m_transform;
 		std::unordered_map<std::string, Component*> m_Components;
@@ -22,6 +23,7 @@ namespace rah
 
 		RahResult addComponent(Component* _component);
 		void removeComponent(std::string _id);
+		Component* getComponent(std::string _id);
 
 		Actor();
 		virtual ~Actor();
