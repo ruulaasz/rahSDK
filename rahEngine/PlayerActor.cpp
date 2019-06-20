@@ -7,10 +7,6 @@ namespace rah
 	{
 		m_velocity = Vector3D(0);
 
-		rah::BasicResourceParams* rParams = new rah::BasicResourceParams();
-		rParams->filePath = "resources\\models\\ManEater\\ManEater.dae";
-		reinterpret_cast<ModelComponent*>(m_Components["model"])->m_model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(rParams, rah::ResourceTypes::RAH_Model);
-
 		return __super::Initialize(_initData);
 	}
 
@@ -44,8 +40,6 @@ namespace rah
 		{
 			m_direction.x += value.value;
 
-			//m_transform.m_position.x += value.value;
-
 			if (value.value < 0)
 			{
 				m_transform.m_rotation.y = 90;
@@ -58,8 +52,6 @@ namespace rah
 		else if (value.axis == 2)
 		{
 			m_direction.z += value.value;
-
-			//m_transform.m_position.z += value.value;
 
 			if (value.value < 0)
 			{

@@ -1,19 +1,17 @@
 #pragma once
 
 #include "Component.h"
-
 #include "rahAll.h"
 
 namespace rah
 {
-	class ModelComponent : public Component
+	class BoxComponent : public Component
 	{
 	public:
-		ModelComponent();
-		~ModelComponent();
+		BoxComponent();
+		~BoxComponent();
 
-		Model* m_model;
-		Color m_color;
+		AABB m_box;
 
 		virtual void init();
 		virtual void render();

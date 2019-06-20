@@ -13,3 +13,4 @@
 #include "ImgManager.h"
 #include "ComponentManager.h"
 #include "ModelComponent.h"
+#include "BoxComponent.h"

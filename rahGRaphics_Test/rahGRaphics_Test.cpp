@@ -41,6 +41,7 @@ rah::CameraDebug g_camera;
 
 rah::PlayerActor*  g_Actor;
 rah::ModelComponent* g_ModelComponent;
+rah::BoxComponent* g_BoxComponent;
 
 rah::PlayerController* g_controller;
 
@@ -358,17 +359,21 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	/* Prueba de inicializacion de recursos                                 */
 	/************************************************************************/
 	rah::SimpleActorInit* params = new rah::SimpleActorInit();
-	params->_color = rah::Color();
-	params->_nameModel = "resources\\models\\ManEater\\ManEater.dae";
 	params->_transform = rah::Transform(rah::Vector3D(0,0,0), rah::Vector3D(0, 0, 0), rah::Vector3D(1, 1, 1));
 	g_Actor = new rah::PlayerActor();
 
 	g_ModelComponent = new rah::ModelComponent();
 	g_ModelComponent->m_owner = g_Actor;
 	g_ModelComponent->m_id = "model";
-	g_Actor->addComponent(g_ModelComponent);
+	
+	g_BoxComponent = new rah::BoxComponent();
+	g_BoxComponent->m_owner = g_Actor;
+	g_BoxComponent->m_id = "box";
 
 	g_Actor->Initialize((void*)params);
+
+	g_Actor->addComponent(g_BoxComponent);
+	g_Actor->addComponent(g_ModelComponent);
 
 	g_world.RegisterActor(g_Actor);
 	RAH_SAFE_DELETE(params);
