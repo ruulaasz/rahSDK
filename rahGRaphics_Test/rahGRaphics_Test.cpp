@@ -292,6 +292,19 @@ void GUI()
 				if (ImGui::BeginTabItem("Details"))
 				{
 					ImGui::Text("ID: %d", g_world.m_actors.at(selected)->m_id);
+					ImGui::Text("actor transform x: %f", g_Actor->m_transform.m_position.x);
+					ImGui::Text("actor transform y: %f", g_Actor->m_transform.m_position.y);
+					ImGui::Text("actor transform z: %f", g_Actor->m_transform.m_position.z);
+
+					ImGui::Text("box transform x: %f", reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->m_box.m_center.x);
+					ImGui::Text("box transform y: %f", reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->m_box.m_center.y);
+					ImGui::Text("box transform z: %f", reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->m_box.m_center.z);
+
+					ImGui::InputFloat4("input float4", reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"))->m_model->m_transform.Line[0]);
+					ImGui::InputFloat4("input float4", reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"))->m_model->m_transform.Line[1]);
+					ImGui::InputFloat4("input float4", reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"))->m_model->m_transform.Line[2]);
+					ImGui::InputFloat4("input float4", reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"))->m_model->m_transform.Line[3]);
+
 					ImGui::EndTabItem();
 				}
 

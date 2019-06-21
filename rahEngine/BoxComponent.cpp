@@ -44,12 +44,14 @@ namespace rah
 		{
 			RenderManager::GetInstance().renderShape(m_box, m_color);
 		}
+
+
 	}
 
-	void BoxComponent::update(float _deltaTime)
+	void BoxComponent::update(float /*_deltaTime*/)
 	{
-		_deltaTime;
-
+		adjustBox();
+		
 		Transform t = m_owner->m_transform;
 
 		m_box.m_center = t.m_position;
@@ -73,14 +75,16 @@ namespace rah
 		m_box.RotateAABB(rot);
 	}
 
+	void BoxComponent::addModel(Model * _model)
+	{
+		m_model = _model;
+	}
+
 	void BoxComponent::adjustBox()
 	{
-		auto model = m_owner->m_Components.find("model");
-
-		if (model != m_owner->m_Components.end())
+		if (m_model != NULL)
 		{
-			ModelComponent* modelComp = (ModelComponent*)model->second;
-			m_box = modelComp->m_model->getBox();
+			m_box = m_model->getBox();
 		}
 		else
 		{

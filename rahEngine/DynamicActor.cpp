@@ -24,9 +24,9 @@ namespace rah
 
 	void DynamicActor::Render()
 	{
-		__super::Render();
-
 		rah::RenderManager::GetInstance().updateWorld(m_transform.TransformToWorldMatrix());
+
+		__super::Render();
 	}
 
 	void DynamicActor::Destroy()
