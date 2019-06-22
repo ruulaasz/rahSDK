@@ -8,7 +8,7 @@ namespace rah
 		math::Clear(*this);
 	}
 
-	rah::Matrix4D::Matrix4D(const Matrix4D & _matrix)
+	Matrix4D::Matrix4D(const Matrix4D & _matrix)
 	{
 		*this = _matrix;
 	}
@@ -18,7 +18,7 @@ namespace rah
 
 	}
 
-	Matrix4D rah::Matrix4D::operator+(const Matrix4D & _Matrix4x4)
+	Matrix4D Matrix4D::operator+(const Matrix4D & _Matrix4x4)
 	{
 		Matrix4D AditionMatrix = _Matrix4x4;
 
@@ -33,7 +33,7 @@ namespace rah
 		return AditionMatrix;
 	}
 
-	Matrix4D rah::Matrix4D::operator-(const Matrix4D & _Matrix4x4)
+	Matrix4D Matrix4D::operator-(const Matrix4D & _Matrix4x4)
 	{
 		Matrix4D AditionMatrix = _Matrix4x4;
 
@@ -48,7 +48,7 @@ namespace rah
 		return AditionMatrix;
 	}
 
-	Matrix4D rah::Matrix4D::operator*(const Matrix4D & _Matrix4x4)
+	Matrix4D Matrix4D::operator*(const Matrix4D & _Matrix4x4)
 	{
 		Matrix4D MultiplicationMatrix;
 
@@ -84,7 +84,7 @@ namespace rah
 		*this = MultiplicationMatrix;
 	}
 
-	Matrix4D rah::Matrix4D::operator*(float _Value)
+	Matrix4D Matrix4D::operator*(float _Value)
 	{
 		Matrix4D MultiplicationMatrix;
 
@@ -99,7 +99,7 @@ namespace rah
 		return MultiplicationMatrix;
 	}
 
-	void rah::Matrix4D::operator+=(const Matrix4D & _Matrix4x4)
+	void Matrix4D::operator+=(const Matrix4D & _Matrix4x4)
 	{
 		for (int i = 0; i < 4; i++)
 		{
@@ -110,7 +110,7 @@ namespace rah
 		}
 	}
 
-	void rah::Matrix4D::operator-=(const Matrix4D & _Matrix4x4)
+	void Matrix4D::operator-=(const Matrix4D & _Matrix4x4)
 	{
 		for (int i = 0; i < 4; i++)
 		{
@@ -119,5 +119,21 @@ namespace rah
 				Line[j][i] -= (_Matrix4x4.Line[j][i]);
 			}
 		}
+	}
+
+	bool Matrix4D::operator!=(const Matrix4D & _Matrix4x4)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (Line[j][i] != (_Matrix4x4.Line[j][i]))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

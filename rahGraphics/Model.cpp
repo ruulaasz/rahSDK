@@ -9,7 +9,7 @@ namespace rah
 {
 	Model::Model()
 	{
-		m_renderDebug = true;
+		
 	}
 
 	Model::~Model()
@@ -183,6 +183,8 @@ namespace rah
 			}
 		}
 
+		m_transform = math::ScalarMatrix4x4(Vector3D(1, 1, 1));
+		m_box = getBox();
 		return RahResult();
 	}
 
@@ -199,50 +201,54 @@ namespace rah
 
 	AABB Model::getBox()
 	{
-		AABB returnAABB;
-		returnAABB.m_min = returnAABB.m_max = m_triangles.back()->m_Vertex->pos;
-
-		for (size_t i = 0; i < m_triangles.size(); i++)
+		if (m_lastTransform != m_transform)
 		{
-			//Min
-			if (m_triangles.at(i)->m_Vertex->pos.x < returnAABB.m_min.x)
+			AABB returnAABB;
+			returnAABB.m_min = returnAABB.m_max = m_triangles.back()->m_Vertex->pos;
+
+			for (size_t i = 0; i < m_triangles.size(); i++)
 			{
-				returnAABB.m_min.x = m_triangles.at(i)->m_Vertex->pos.x;
+				//Min
+				if (m_triangles.at(i)->m_Vertex->pos.x < returnAABB.m_min.x)
+				{
+					returnAABB.m_min.x = m_triangles.at(i)->m_Vertex->pos.x;
+				}
+
+				if (m_triangles.at(i)->m_Vertex->pos.y < returnAABB.m_min.y)
+				{
+					returnAABB.m_min.y = m_triangles.at(i)->m_Vertex->pos.y;
+				}
+
+				if (m_triangles.at(i)->m_Vertex->pos.z < returnAABB.m_min.z)
+				{
+					returnAABB.m_min.z = m_triangles.at(i)->m_Vertex->pos.z;
+				}
+
+				//Max
+				if (m_triangles.at(i)->m_Vertex->pos.x > returnAABB.m_max.x)
+				{
+					returnAABB.m_max.x = m_triangles.at(i)->m_Vertex->pos.x;
+				}
+
+				if (m_triangles.at(i)->m_Vertex->pos.y > returnAABB.m_max.y)
+				{
+					returnAABB.m_max.y = m_triangles.at(i)->m_Vertex->pos.y;
+				}
+
+				if (m_triangles.at(i)->m_Vertex->pos.z > returnAABB.m_max.z)
+				{
+					returnAABB.m_max.z = m_triangles.at(i)->m_Vertex->pos.z;
+				}
 			}
 
-			if (m_triangles.at(i)->m_Vertex->pos.y < returnAABB.m_min.y)
-			{
-				returnAABB.m_min.y = m_triangles.at(i)->m_Vertex->pos.y;
-			}
+			m_lastTransform = m_transform;
 
-			if (m_triangles.at(i)->m_Vertex->pos.z < returnAABB.m_min.z)
-			{
-				returnAABB.m_min.z = m_triangles.at(i)->m_Vertex->pos.z;
-			}
-
-			//Max
-			if (m_triangles.at(i)->m_Vertex->pos.x > returnAABB.m_max.x)
-			{
-				returnAABB.m_max.x = m_triangles.at(i)->m_Vertex->pos.x;
-			}
-
-			if (m_triangles.at(i)->m_Vertex->pos.y > returnAABB.m_max.y)
-			{
-				returnAABB.m_max.y = m_triangles.at(i)->m_Vertex->pos.y;
-			}
-
-			if (m_triangles.at(i)->m_Vertex->pos.z > returnAABB.m_max.z)
-			{
-				returnAABB.m_max.z = m_triangles.at(i)->m_Vertex->pos.z;
-			}
+			m_box = returnAABB;
+			return returnAABB;
 		}
-
-		Vector4D Temp;
-
-		Temp = returnAABB.m_max - returnAABB.m_min;
-		Temp /= 2;
-
-		returnAABB.m_center = Temp + returnAABB.m_min;
-		return returnAABB;
+		else
+		{
+			return m_box;
+		}
 	}
 }

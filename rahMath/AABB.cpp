@@ -4,7 +4,9 @@ namespace rah
 {
 	AABB::AABB()
 	{
-
+		m_center = Vector4D();
+		m_min = Vector4D(-1.f, -1.f, -1.f, 1.f);
+		m_max = Vector4D(1.f, 1.f, 1.f, 1.f);
 	}
 
 	AABB::AABB(Vector4D _center, Vector4D _min, Vector4D _max)

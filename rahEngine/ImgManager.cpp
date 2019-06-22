@@ -1,4 +1,5 @@
 #include "ImgManager.h"
+#include "rahEngine.h"
 
 namespace rah
 {
@@ -48,5 +49,41 @@ namespace rah
 	ImgManager::~ImgManager()
 	{
 
+	}
+
+	void ImgManager::boxComponentGUI(Component* _component)
+	{
+		BoxComponent* box = reinterpret_cast<BoxComponent*>(_component);
+		ImVec4 clear_color = ImVec4(box->m_color.r, box->m_color.g, box->m_color.b, 1.00f);
+
+		ImGui::Begin("AABB Component");                     
+
+		ImGui::Checkbox("Render", &box->m_rendereable);
+		bool adjust = box->m_adjustToModel;
+		ImGui::Checkbox("Adjust to Model", &box->m_adjustToModel);
+		if (adjust != box->m_adjustToModel)
+		{
+			box->adjustBoxtoModel();
+		}
+		
+		ImGui::Text("\nBox Color");
+		ImGui::ColorEdit3("current color", (float*)&clear_color);
+		box->m_color = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
+
+		ImGui::Text("\nBox Transform");
+		float c[3] = { box->m_offsetTransform.m_position.x , box->m_offsetTransform.m_position.y, box->m_offsetTransform.m_position.z };
+		ImGui::InputFloat3("Offset Center", c);
+		box->m_offsetTransform.m_position.x = c[0];
+		box->m_offsetTransform.m_position.y = c[1];
+		box->m_offsetTransform.m_position.z = c[2];
+
+		ImGui::Text("\n");
+		float s[3] = { box->m_offsetTransform.m_scale.x , box->m_offsetTransform.m_scale.y, box->m_offsetTransform.m_scale.z };
+		ImGui::InputFloat3("Offset Scale", s);
+		box->m_offsetTransform.m_scale.x = s[0];
+		box->m_offsetTransform.m_scale.y = s[1];
+		box->m_offsetTransform.m_scale.z = s[2];
+
+		ImGui::End();
 	}
 }

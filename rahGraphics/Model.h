@@ -68,8 +68,12 @@ namespace rah
 		AABB getBox();
 
 		std::vector <Mesh* > m_meshes;
-		Matrix4D m_transform;
 		std::vector <Triangle* > m_triangles;
-		bool m_renderDebug;
+
+		Matrix4D m_transform;
+		Matrix4D m_lastTransform;
+
+	protected:
+		AABB m_box;
 	};
 }

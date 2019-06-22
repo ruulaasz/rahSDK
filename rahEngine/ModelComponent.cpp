@@ -1,6 +1,7 @@
 #include "ModelComponent.h"
 #include "rahAll.h"
 #include "Actor.h"
+
 namespace rah
 {
 	ModelComponent::ModelComponent()
@@ -32,11 +33,6 @@ namespace rah
 
 	void ModelComponent::update(float /*_deltaTime*/)
 	{
-		/*Matrix4D rot, scalar, pos;
-		scalar = math::ScalarMatrix4x4(m_owner->m_transform.m_scale);
-		pos = math::TranslationMatrix4x4(m_owner->m_transform.m_position);*/
-
-		//m_model->m_transform = m_owner->m_transform.TransformToWorldMatrix();
-		
+		m_model->m_transform = m_owner->m_transform.TransformToWorldMatrix();
 	}
 }

@@ -14,12 +14,19 @@ namespace rah
 		virtual void init();
 		virtual void render();
 		virtual void update(float _deltaTime);
-		virtual void addModel(Model* _model);
-		void adjustBox();
+		void adjustBoxtoModel();
+		void assignModel(Model* _model);
 
 		AABB m_box;
-		bool m_rendereable;
 		Color m_color;
+		bool m_rendereable;
+		bool m_adjustToModel;
+
+		Transform m_offsetTransform;
 		Model *m_model;
+	protected:
+		Transform m_lastTransform;
+
+
 	};
 }

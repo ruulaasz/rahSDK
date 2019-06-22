@@ -33,6 +33,7 @@ namespace rah
 		Matrix4D operator*	(float _Value);
 		void operator+=		(const Matrix4D& _Matrix4x4);
 		void operator-=		(const Matrix4D& _Matrix4x4);
+		bool operator!= (const Matrix4D& _Matrix4x4);
 	};
 }
 #pragma warning(default : 4201)

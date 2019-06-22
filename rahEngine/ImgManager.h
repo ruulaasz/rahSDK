@@ -8,6 +8,8 @@
 
 namespace rah
 {
+	class Component;
+
 	class ImgManager : public Module<ImgManager, void*>
 	{
 	public:
@@ -19,5 +21,7 @@ namespace rah
 
 		ImgManager();
 		~ImgManager();
+
+		void boxComponentGUI(Component* _component);
 	};
 }

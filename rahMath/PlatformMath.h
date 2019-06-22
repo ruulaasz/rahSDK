@@ -8,6 +8,7 @@
 #include "Vector4D.h"
 #include "Matrix3D.h"
 #include "Matrix4D.h"
+#include "AABB.h"
 
 namespace rah
 {
@@ -451,6 +452,11 @@ namespace rah
 		static inline  void Clear(Matrix4D& _Matrix)
 		{
 			memset(&_Matrix, 0, sizeof(Matrix4D));
+		}
+
+		static inline  void Clear(AABB& _aabb)
+		{
+			memset(&_aabb, 0, sizeof(AABB));
 		}
 
 		/**
