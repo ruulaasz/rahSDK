@@ -15,7 +15,7 @@ namespace rah
 		Model* m_model;
 		Color m_color;
 
-		virtual void init();
+		virtual void init(Actor* _owner, void* _data = NULL);
 		virtual void render();
 		virtual void update(float _deltaTime);
 	};

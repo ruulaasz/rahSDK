@@ -14,8 +14,9 @@ namespace rah
 
 	}
 
-	void ModelComponent::init()
+	void ModelComponent::init(Actor* _owner, void* _data)
 	{
+		m_owner = _owner;
 		m_color = Color(0.f, 0.f, 0.f, 1.f);
 
 		rah::BasicResourceParams* rParams = new rah::BasicResourceParams();

@@ -11,7 +11,7 @@ namespace rah
 		BoxComponent();
 		~BoxComponent();
 
-		virtual void init();
+		virtual void init(Actor* _owner, void* _data = NULL);
 		virtual void render();
 		virtual void update(float _deltaTime);
 		void adjustBoxtoModel();
@@ -19,7 +19,7 @@ namespace rah
 
 		AABB m_box;
 		Color m_color;
-		bool m_rendereable;
+		//bool m_rendereable;
 		bool m_adjustToModel;
 
 		Transform m_offsetTransform;

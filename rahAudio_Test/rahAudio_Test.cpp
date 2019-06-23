@@ -28,9 +28,9 @@ int main()
 	aprm.IsStream = false;
 	aprm.Mode = rah::rahSoundMode::MODE_3D;
 	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
-	audio->UpdatePositionVelocity(rah::Vector3D(10.0f, 10.0f), rah::Vector3D(10.0f));
+	//audio->UpdatePositionVelocity(rah::Vector3D(100.0f, 100.0f), rah::Vector3D(0.0f));
 	audio->m_channel->m_channel->set3DLevel(0.2);
-	//audio->Set3DMinMaxDistance(0.0f, 10.0f);
+	audio->Set3DMinMaxDistance(0.0f, 10.0f);
 	rah::rahListener listener;
 
 	listener.m_up = rah::Vector3D(0.0f, 1.0f);
@@ -61,6 +61,7 @@ int main()
 
 	while (true)
 	{
+		audio->UpdatePositionVelocity(rah::Vector3D(10.0f, 10.0f), rah::Vector3D(0.0f));
 		char x = 0;
 		std::cin >> x;
 		/*if (x == 'm')

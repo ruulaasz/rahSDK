@@ -24,6 +24,8 @@ namespace rah
 		PlayerActor();
 		virtual ~PlayerActor();
 		float m_movementSpeed;
+		float m_timeAction;
+		float m_currentActionTime;
 		Vector3D m_velocity;
 		Vector3D m_direction;
 	};

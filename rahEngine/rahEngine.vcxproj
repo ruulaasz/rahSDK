@@ -28,6 +28,7 @@
     <ClInclude Include="ImgManager.h" />
     <ClInclude Include="InputEvent.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="ListenerComponent.h" />
     <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="PlayerActor.h" />
     <ClInclude Include="PlayerController.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="DynamicActor.cpp" />
     <ClCompile Include="ImgManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="ListenerComponent.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="PlayerController.cpp" />

@@ -15,9 +15,9 @@ namespace rah
 
 	}
 
-	void BoxComponent::init()
+	void BoxComponent::init(Actor* _owner, void* _data)
 	{
-
+		m_owner = _owner;
 	}
 
 	void BoxComponent::render()

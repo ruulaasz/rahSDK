@@ -26,11 +26,8 @@ namespace rah
 
 	}
 
-	Component * ComponentFactory::createEmptyComponent(Actor * _owner, ComponentTypes _ct, std::string _id)
+	Component * ComponentFactory::createEmptyComponent(Actor * _owner, ComponentTypes _ct, std::string _id, void* _data)
 	{
-		ModelComponent* mc = NULL;
-		BoxComponent* bc = NULL;
-
 		if (_owner != NULL)
 		{
 			switch (_ct)
@@ -39,23 +36,34 @@ namespace rah
 				break;
 
 			case rah::CT_MODEL:
-				mc = new ModelComponent();
+			{
+				ModelComponent* mc = new ModelComponent();
 
-				mc->m_owner = _owner;
-				mc->init();
+				//mc->m_owner = _owner;
+				mc->init(_owner, _data);
 
 				setID(mc, "model", _id);
 				return mc;
-
+			}
 			case rah::CT_BOX:
-				bc = new BoxComponent();
+			{
+				BoxComponent* bc = new BoxComponent();
 
-				bc->m_owner = _owner;
-				bc->init();
+				//bc->m_owner = _owner;
+				bc->init(_owner, _data);
 
 				setID(bc, "box", _id);
 				return bc;
+			}
+			case rah::CT_LISTENER:
+			{
+				ListenerComponent* lc = new ListenerComponent();
 
+				lc->init(_owner);
+				setID(lc, "listener", _id);
+
+				return lc;
+			}
 			case rah::CT_TOTAL:
 				break;
 
@@ -65,7 +73,9 @@ namespace rah
 		}
 		else
 		{
-			printf("owner invalid");
+			RAH_LOG("owner invalid");
+			GetLastError() = RahResult::RAH_ERROR;
+			//printf("owner invalid");
 			return NULL;
 		}
 

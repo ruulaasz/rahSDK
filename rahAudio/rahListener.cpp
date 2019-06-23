@@ -9,6 +9,8 @@ namespace rah
 	{
 		m_id = m_autoID;
 		m_autoID++;
+		m_forward = Vector3D(0.f,0.f,1.f);
+		m_up = Vector3D(0.f, 1.f);
 	}
 	rahListener::~rahListener()
 	{

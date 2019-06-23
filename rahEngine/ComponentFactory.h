@@ -9,6 +9,7 @@ namespace rah
 		CT_NONE = 0,
 		CT_MODEL,
 		CT_BOX,
+		CT_LISTENER,
 		CT_TOTAL
 	};
 
@@ -26,7 +27,7 @@ namespace rah
 		RahResult Initialize(void* _init);
 		void Release();
 
-		Component* createEmptyComponent(Actor* _owner, ComponentTypes _ct, std::string _id);
+		Component* createEmptyComponent(Actor* _owner, ComponentTypes _ct, std::string _id, void* _data = NULL);
 		void setID(Component* _component, std::string _ct, std::string _id);
 	};
 }

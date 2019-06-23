@@ -45,7 +45,7 @@ namespace rah
 			}
 			else
 			{
-				_component->init();
+				//_component->init();
 				m_Components[_component->m_id] = _component;
 				m_componentNumber++;
 				return RAH_SUCCESS;

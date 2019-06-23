@@ -5,6 +5,8 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+#include <chrono>
+
 //#include <vld.h>
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -26,7 +28,7 @@ ID3D11DeviceContext* g_pDeviceContext;
 ID3D11DepthStencilView* g_pDepthStencilView;
 ID3D11Device* g_pDevice;
 
-float g_deltaTime = 0.0f;
+float g_deltaTime = 0.1f;
 
 rah::VertexShader g_vertexModelShader;
 rah::FragmentShader g_pixelModelShader;
@@ -48,10 +50,15 @@ rah::World g_world;
 
 rah::ResourceFabric* g_fabric;
 
+rah::rahAudioFile* audio;
+
 float g_playerSpeed = 0.5f;
 int g_gridDensity = 120;
 
 rah::GraphicTexture* guiModelPrev = nullptr;
+
+std::chrono::time_point<std::chrono::system_clock> g_FinalTime;
+std::chrono::time_point<std::chrono::system_clock> g_SartTime;
 
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -206,13 +213,7 @@ void GUI()
 	ImGui::ColorEdit3("current color", (float*)&clear_color); // Edit 3 floats representing a color
 	g_backgroundColor = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
 
-	rah::rahAudioFile* audio;
-	rah::AudioParams aprm;
-	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
-	aprm.filePath = "resources\\audio\\Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3";
-	aprm.IsStream = false;
-	aprm.Mode = rah::rahSoundMode::MODE_2D;
-	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
+	
 
 	ImGui::End();
 
@@ -409,6 +410,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_MODEL, "model"));
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_BOX, "box"));
+	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_LISTENER, "listener"));
 
 	reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->assignModel(reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"))->m_model);
 
@@ -419,14 +421,22 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	changePreview();
 
+	rah::AudioParams aprm;
+	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
+	aprm.filePath = "resources\\audio\\Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3";
+	aprm.IsStream = false;
+	aprm.Mode = rah::rahSoundMode::MODE_3D;
+	audio = (rah::rahAudioFile*)rah::ResourceManager::GetInstance().LoadResource(&aprm, rah::ResourceTypes::RAH_Audio);
+	audio->UpdatePositionVelocity(rah::Vector3D(0.0f, 0.0f), rah::Vector3D(0.0f));
+	audio->m_channel->m_channel->set3DLevel(0.2);
+	//audio->Set3DMinMaxDistance(0.0f, 10.0f);
+
 	while (TRUE)
 	{
 		// Update our time
-		static DWORD dwTimeStart = 0;
-		DWORD dwTimeCur = GetTickCount();
-		if (dwTimeStart == 0)
-			dwTimeStart = dwTimeCur;
-		g_deltaTime = (dwTimeCur - dwTimeStart) / 1000.0f;
+		//g_SartTime = ImGui::GetIO().DeltaTime;
+		
+		//g_deltaTime = (FinalTime - SartTime) / 1000.0f;
 
 		// Check to see if any messages are waiting in the queue
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -451,6 +461,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 			rah::ImgManager::GetInstance().update();
 			
+			rah::AudioManager::GetInstance().Update();
+
 			GUI();
 
 			renderWorld();
@@ -458,6 +470,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 			g_pSwapChain->Present(0, 0);
 		}
+		//g_FinalTime = std::chrono::system_clock::now();
+		//g_deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(g_FinalTime - g_SartTime).count() / 1000.0f;
+		g_deltaTime = ImGui::GetIO().DeltaTime;
 	}
 
 	g_world.Destroy();
