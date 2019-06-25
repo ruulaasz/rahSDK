@@ -23,5 +23,8 @@ namespace rah
 		~ImgManager();
 
 		void boxComponentGUI(Component* _component);
+		void modelComponentGUI(Component* _component);
+
+		void holdArrows(const char* _text, float& _f, char _id, float _steps = 1.f);
 	};
 }

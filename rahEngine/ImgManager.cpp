@@ -59,31 +59,80 @@ namespace rah
 		ImGui::Begin("AABB Component");                     
 
 		ImGui::Checkbox("Render", &box->m_rendereable);
+		ImGui::Spacing();
+
+		ImGui::Text("Box Color");
+		ImGui::ColorEdit3("current color", (float*)&clear_color);
+		box->m_color = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
+		ImGui::Separator();
+		ImGui::Spacing();
+
 		bool adjust = box->m_adjustToModel;
 		ImGui::Checkbox("Adjust to Model", &box->m_adjustToModel);
 		if (adjust != box->m_adjustToModel)
 		{
 			box->adjustBoxtoModel();
 		}
-		
-		ImGui::Text("\nBox Color");
-		ImGui::ColorEdit3("current color", (float*)&clear_color);
-		box->m_color = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
+		ImGui::Spacing();
 
-		ImGui::Text("\nBox Transform");
-		float c[3] = { box->m_offsetTransform.m_position.x , box->m_offsetTransform.m_position.y, box->m_offsetTransform.m_position.z };
-		ImGui::InputFloat3("Offset Center", c);
-		box->m_offsetTransform.m_position.x = c[0];
-		box->m_offsetTransform.m_position.y = c[1];
-		box->m_offsetTransform.m_position.z = c[2];
+		if (ImGui::CollapsingHeader("Box Transform"))
+		{
+			holdArrows("Offset Center X", box->m_offsetTransform.m_position.x, '0', 0.5f);
+			holdArrows("Offset Center Y", box->m_offsetTransform.m_position.y, '1', 0.5f);
+			holdArrows("Offset Center Z", box->m_offsetTransform.m_position.z, '2', 0.5f);
 
-		ImGui::Text("\n");
-		float s[3] = { box->m_offsetTransform.m_scale.x , box->m_offsetTransform.m_scale.y, box->m_offsetTransform.m_scale.z };
-		ImGui::InputFloat3("Offset Scale", s);
-		box->m_offsetTransform.m_scale.x = s[0];
-		box->m_offsetTransform.m_scale.y = s[1];
-		box->m_offsetTransform.m_scale.z = s[2];
+			float c[3] = { box->m_offsetTransform.m_position.x , box->m_offsetTransform.m_position.y, box->m_offsetTransform.m_position.z };
+			ImGui::InputFloat3("Offset Center", c);
+			box->m_offsetTransform.m_position.x = c[0];
+			box->m_offsetTransform.m_position.y = c[1];
+			box->m_offsetTransform.m_position.z = c[2];
+			ImGui::Spacing();
+
+			holdArrows("Offset Scale X", box->m_offsetTransform.m_scale.x, '3', 0.5f);
+			holdArrows("Offset Scale Y", box->m_offsetTransform.m_scale.y, '4', 0.5f);
+			holdArrows("Offset Scale Z", box->m_offsetTransform.m_scale.z, '5', 0.5f);
+
+			float s[3] = { box->m_offsetTransform.m_scale.x , box->m_offsetTransform.m_scale.y, box->m_offsetTransform.m_scale.z };
+			ImGui::InputFloat3("Offset Scale", s);
+			box->m_offsetTransform.m_scale.x = s[0];
+			box->m_offsetTransform.m_scale.y = s[1];
+			box->m_offsetTransform.m_scale.z = s[2];
+		}
+		ImGui::Spacing();
 
 		ImGui::End();
+	}
+
+	void ImgManager::modelComponentGUI(Component * _component)
+	{
+
+	}
+
+	void ImgManager::holdArrows(const char* _text, float& _f, char _id, float _steps)
+	{
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text(_text);
+		ImGui::SameLine();
+
+		float spacing = ImGui::GetStyle().ItemInnerSpacing.x;
+		ImGui::PushButtonRepeat(true);
+		std::string name = std::string("L");
+		name.push_back(_id);
+		const char* name2 = name.c_str();
+		if (ImGui::ArrowButton(name.c_str(), ImGuiDir_Left))
+		{ 
+			_f -= _steps;
+		}
+
+		ImGui::SameLine(0.0f, spacing);
+		name = std::string("R");
+		name.push_back(_id);
+		name2 = name.c_str();
+		if (ImGui::ArrowButton(name.c_str(), ImGuiDir_Right))
+		{ 
+			_f += _steps;
+		}
+
+		ImGui::PopButtonRepeat();
 	}
 }
