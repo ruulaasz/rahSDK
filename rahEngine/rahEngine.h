@@ -14,4 +14,5 @@
 #include "ModelComponent.h"
 #include "BoxComponent.h"
 #include "ListenerComponent.h"
+#include "AudioComponent.h"
 #include "ComponentFactory.h"

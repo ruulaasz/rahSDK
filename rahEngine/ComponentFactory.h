@@ -10,6 +10,7 @@ namespace rah
 		CT_MODEL,
 		CT_BOX,
 		CT_LISTENER,
+		CT_AUDIO,
 		CT_TOTAL
 	};
 

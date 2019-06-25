@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="AudioComponent.h" />
     <ClInclude Include="BoxComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
@@ -39,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="AudioComponent.cpp" />
     <ClCompile Include="BoxComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentFactory.cpp" />

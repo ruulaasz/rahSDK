@@ -411,6 +411,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_MODEL, "model"));
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_BOX, "box"));
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_LISTENER, "listener"));
+	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_AUDIO, "audio"));
+	rah::AudioComponent* acCheck = (rah::AudioComponent*)g_Actor->getComponent("audio");
+	acCheck->SetVolume(0.1);
+	acCheck->Play();
 
 	reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->assignModel(reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model")));
 

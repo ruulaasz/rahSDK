@@ -62,6 +62,15 @@ namespace rah
 
 				return lc;
 			}
+			case rah::CT_AUDIO:
+			{
+				AudioComponent* ac = new AudioComponent();
+
+				ac->init(_owner, _data);
+				setID(ac, "audio", _id);
+
+				return ac;
+			}
 			case rah::CT_TOTAL:
 				break;
 
