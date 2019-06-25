@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{5ff1aa58-1703-4999-8779-56aeaf225cac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Channel">
+      <UniqueIdentifier>{f526667f-2f38-4cd6-abe3-601562d5ed8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{d2c15f6f-e8c5-44c1-a147-b88f4becf44c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Listener">
+      <UniqueIdentifier>{6792fbef-3790-46ea-b7a1-509579054c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{aaa6e1fa-582a-474f-98be-67ad8e30e8bf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rahAudioFile.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="rahChannel.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="rahChannelGroup.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="rahAudio.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="rahListener.h">
+      <Filter>Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="rahAudioFile.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="rahChannel.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="rahChannelGroup.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="rahListener.cpp">
+      <Filter>Listener</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

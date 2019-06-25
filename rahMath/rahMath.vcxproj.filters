@@ -1,132 +1,138 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de recursos">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Vector">
+      <UniqueIdentifier>{d91191d6-7e59-46d1-b780-a4c10a2c8208}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Matrix">
+      <UniqueIdentifier>{bc3af0c8-9aad-4ddc-af43-eecaf4fb8fdc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{997e2624-226c-445f-9689-3f7beffd856a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{6f599c5a-dc62-46fd-9dde-b85295614a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Angles">
+      <UniqueIdentifier>{b70fec9a-131e-40ad-8e47-ff4c1cc9d301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{b44adf7c-ab83-49dc-ba42-9acc9241e3d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Vector2D.h">
+      <Filter>Vector</Filter>
+    </ClInclude>
     <ClInclude Include="Vector3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rahMath.h">
-      <Filter>Header Files</Filter>
+      <Filter>Vector</Filter>
     </ClInclude>
     <ClInclude Include="Vector4D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Radians.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Degrees.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OBB.h">
-      <Filter>Header Files</Filter>
+      <Filter>Vector</Filter>
     </ClInclude>
     <ClInclude Include="Matrix3D.h">
-      <Filter>Header Files</Filter>
+      <Filter>Matrix</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Quaternion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Frustum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Intersection.h">
-      <Filter>Header Files</Filter>
+      <Filter>Matrix</Filter>
     </ClInclude>
     <ClInclude Include="AABB.h">
-      <Filter>Header Files</Filter>
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="OBB.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformMath.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Intersection.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Degrees.h">
+      <Filter>Angles</Filter>
+    </ClInclude>
+    <ClInclude Include="Radians.h">
+      <Filter>Angles</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="rahMath.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Vector3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Vector4D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Radians.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Degrees.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OBB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Vector</Filter>
     </ClCompile>
     <ClCompile Include="Vector2D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Vector</Filter>
     </ClCompile>
-    <ClCompile Include="Quaternion.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Vector3D.cpp">
+      <Filter>Vector</Filter>
     </ClCompile>
-    <ClCompile Include="Frustum.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Matrix3D.cpp">
+      <Filter>Matrix</Filter>
     </ClCompile>
-    <ClCompile Include="Intersection.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Matrix4D.cpp">
+      <Filter>Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="OBB.cpp">
+      <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="AABB.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Matrix</Filter>
     </ClCompile>
     <ClCompile Include="PlatformMath.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersection.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Degrees.cpp">
+      <Filter>Angles</Filter>
+    </ClCompile>
+    <ClCompile Include="Radians.cpp">
+      <Filter>Angles</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
