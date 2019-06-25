@@ -1,6 +1,6 @@
 #include "ModelComponent.h"
 #include "rahAll.h"
-#include "Actor.h"
+#include "rahEngine.h"
 
 namespace rah
 {
@@ -27,13 +27,23 @@ namespace rah
 
 	void ModelComponent::render()
 	{
-		rah::RenderManager::GetInstance().updateWorld(m_owner->m_transform.TransformToWorldMatrix());
-		RenderManager::GetInstance().updateColor(m_color);
-		m_model->render();
+		ImgManager::GetInstance().modelComponentGUI(this);
+
+		if (m_rendereable)
+		{
+			rah::RenderManager::GetInstance().updateWorld(m_owner->m_transform.TransformToWorldMatrix());
+			RenderManager::GetInstance().updateColor(m_color);
+			m_model->render();
+		}
 	}
 
 	void ModelComponent::update(float /*_deltaTime*/)
 	{
 		m_model->m_transform = m_owner->m_transform.TransformToWorldMatrix();
+	}
+
+	void ModelComponent::changeModel(Model * _model)
+	{
+		
 	}
 }

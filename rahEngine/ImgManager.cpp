@@ -56,7 +56,7 @@ namespace rah
 		BoxComponent* box = reinterpret_cast<BoxComponent*>(_component);
 		ImVec4 clear_color = ImVec4(box->m_color.r, box->m_color.g, box->m_color.b, 1.00f);
 
-		ImGui::Begin("AABB Component");                     
+		ImGui::Begin("AABB");                     
 
 		ImGui::Checkbox("Render", &box->m_rendereable);
 		ImGui::Spacing();
@@ -64,6 +64,7 @@ namespace rah
 		ImGui::Text("Box Color");
 		ImGui::ColorEdit3("current color", (float*)&clear_color);
 		box->m_color = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
+		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
 
@@ -105,7 +106,45 @@ namespace rah
 
 	void ImgManager::modelComponentGUI(Component * _component)
 	{
+		ModelComponent* model = reinterpret_cast<ModelComponent*>(_component);
+		ImVec4 clear_color = ImVec4(model->m_color.r, model->m_color.g, model->m_color.b, 1.00f);
 
+		ImGui::Begin("Model");
+
+		ImGui::Checkbox("Render", &model->m_rendereable);
+		ImGui::Spacing();
+
+		ImGui::Text("Model Color");
+		ImGui::ColorEdit3("current color", (float*)&clear_color);
+		model->m_color = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		
+		if (ImGui::Button("change model"))
+		{
+			char filename[MAX_PATH];
+
+			OPENFILENAME ofn;
+			ZeroMemory(&filename, sizeof(filename));
+			ZeroMemory(&ofn, sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
+			ofn.lpstrFilter = "Text Files\0*.txt\0Any File\0*.*\0";
+			ofn.lpstrFile = filename;
+			ofn.nMaxFile = MAX_PATH;
+			ofn.lpstrTitle = "Select a File, yo!";
+			ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+
+			if (GetOpenFileNameA(&ofn))
+			{
+				filename;
+				printf("c");
+
+			}
+		}
+
+		ImGui::End();
 	}
 
 	void ImgManager::holdArrows(const char* _text, float& _f, char _id, float _steps)
@@ -116,9 +155,10 @@ namespace rah
 
 		float spacing = ImGui::GetStyle().ItemInnerSpacing.x;
 		ImGui::PushButtonRepeat(true);
+
 		std::string name = std::string("L");
 		name.push_back(_id);
-		const char* name2 = name.c_str();
+
 		if (ImGui::ArrowButton(name.c_str(), ImGuiDir_Left))
 		{ 
 			_f -= _steps;
@@ -127,7 +167,7 @@ namespace rah
 		ImGui::SameLine(0.0f, spacing);
 		name = std::string("R");
 		name.push_back(_id);
-		name2 = name.c_str();
+	
 		if (ImGui::ArrowButton(name.c_str(), ImGuiDir_Right))
 		{ 
 			_f += _steps;

@@ -18,5 +18,7 @@ namespace rah
 		virtual void init(Actor* _owner, void* _data = NULL);
 		virtual void render();
 		virtual void update(float _deltaTime);
+
+		void changeModel(Model* _model);
 	};
 }
