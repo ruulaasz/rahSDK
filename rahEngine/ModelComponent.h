@@ -19,6 +19,6 @@ namespace rah
 		virtual void render();
 		virtual void update(float _deltaTime);
 
-		void changeModel(Model* _model);
+		void changeModel(std::string _path);
 	};
 }

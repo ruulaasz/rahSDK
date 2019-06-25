@@ -39,7 +39,6 @@ namespace rah
 			{
 				ModelComponent* mc = new ModelComponent();
 
-				//mc->m_owner = _owner;
 				mc->init(_owner, _data);
 
 				setID(mc, "model", _id);
@@ -49,7 +48,6 @@ namespace rah
 			{
 				BoxComponent* bc = new BoxComponent();
 
-				//bc->m_owner = _owner;
 				bc->init(_owner, _data);
 
 				setID(bc, "box", _id);
@@ -75,7 +73,6 @@ namespace rah
 		{
 			RAH_LOG("owner invalid");
 			GetLastError() = RahResult::RAH_ERROR;
-			//printf("owner invalid");
 			return NULL;
 		}
 

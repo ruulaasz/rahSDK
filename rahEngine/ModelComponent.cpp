@@ -42,8 +42,11 @@ namespace rah
 		m_model->m_transform = m_owner->m_transform.TransformToWorldMatrix();
 	}
 
-	void ModelComponent::changeModel(Model * _model)
+	void ModelComponent::changeModel(std::string _path)
 	{
-		
+		rah::BasicResourceParams params;
+		params.filePath = _path;
+
+		m_model = (rah::Model*)rah::ResourceManager::GetInstance().LoadResource(&params, rah::ResourceTypes::RAH_Model);
 	}
 }

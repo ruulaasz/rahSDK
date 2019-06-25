@@ -1,5 +1,6 @@
 #include "BoxComponent.h"
 #include "rahEngine.h"
+#include "ModelComponent.h"
 
 namespace rah
 {
@@ -34,10 +35,8 @@ namespace rah
 	{
 		if (m_adjustToModel)
 		{
-			if (m_owner->m_transform != m_lastTransform)
-			{
-				adjustBoxtoModel();
-			}
+			
+			adjustBoxtoModel();
 		}
 		else
 		{
@@ -71,7 +70,7 @@ namespace rah
 
 		if (m_model != NULL)
 		{
-			m_box = m_model->getBox();
+			m_box = m_model->m_model->getBox();
 
 			m_box.m_center = m_owner->m_transform.m_position;
 
@@ -94,7 +93,7 @@ namespace rah
 		}
 	}
 
-	void BoxComponent::assignModel(Model * _model)
+	void BoxComponent::assignModel(ModelComponent * _model)
 	{
 		m_model = _model;
 

@@ -412,7 +412,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_BOX, "box"));
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_LISTENER, "listener"));
 
-	reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->assignModel(reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model"))->m_model);
+	reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->assignModel(reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model")));
 
 	g_world.RegisterActor(g_Actor);
 	RAH_SAFE_DELETE(params);
