@@ -65,3 +65,5 @@ rahAudio_Test/Audio/Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3
 rahAudio_Test/Log/May  6 2019.txt
 rahAudio_Test/Log/Jun 18 2019.txt
 rahAudio_Test/Log/Jun 23 2019.txt
+lib/rahAudio/x64/Debug/rahAudio_Debug.lib
+lib/rahAudio/Win32/Release/rahAudio_Release.lib
