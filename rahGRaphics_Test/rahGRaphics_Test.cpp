@@ -5,8 +5,6 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include <chrono>
-
 //#include <vld.h>
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -57,9 +55,6 @@ int g_gridDensity = 120;
 
 rah::GraphicTexture* guiModelPrev = nullptr;
 
-std::chrono::time_point<std::chrono::system_clock> g_FinalTime;
-std::chrono::time_point<std::chrono::system_clock> g_SartTime;
-
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -97,6 +92,8 @@ RahResult InitModules()
 
 	rah::ComponentFactory::StartModule(NULL);
 
+	rah::DeferredManager::StartModule(NULL);
+
 	return RAH_SUCCESS;
 }
 
@@ -121,7 +118,8 @@ void LoadGraphicResources()
 
 	rah::RenderManager::GetInstance().updateProjection();
 
-	g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
+	rah::DeferredManager::GetInstance().setRenderTargets();
+	//g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
 
 	g_initialized = true;
 }
@@ -269,7 +267,26 @@ void GUI()
 				if (ImGui::BeginTabItem("Model"))
 				{
 					ImGui::Text("Current Model");
-					ImGui::Image(guiModelPrev->m_graphicTexture, ImVec2(my_tex_w, my_tex_h), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
+					if (rah::DeferredManager::GetInstance().pRenderTargets[0])
+					{
+						//ID3D11Device::CreateShaderResourceView()
+						ID3D11ShaderResourceView * test;
+						HRESULT error = g_pDevice->CreateShaderResourceView(rah::DeferredManager::GetInstance().m_renderTexture[1].m_texture, NULL, &test);
+						if(error == S_OK);
+						{
+							DirectX::ScratchImage image;
+							HRESULT hr = CaptureTexture(g_pDevice, g_pDeviceContext, rah::DeferredManager::GetInstance().m_renderTexture[1].m_texture, image);
+							if (SUCCEEDED(hr))
+							{
+								/*hr = SaveToDDSFile(image.GetImages(),
+									image.GetImageCount(), image.GetMetadata(),
+									DirectX::DDS_FLAGS_NONE, L"caca.dds");*/
+							}
+							//DirectX::CreateShaderResourceView(g_pDevice, );
+							ImGui::Image(test, ImVec2(my_tex_w, my_tex_h), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
+						}
+					}
+
 					if (ImGui::Button("Next"))
 					{
 						if (current < MAXMODELS - 1)
@@ -414,7 +431,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_AUDIO, "audio"));
 	rah::AudioComponent* acCheck = (rah::AudioComponent*)g_Actor->getComponent("audio");
 	acCheck->SetVolume(0.1);
-	acCheck->Play();
+	//acCheck->Play();
 
 	reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->assignModel(reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model")));
 
@@ -474,8 +491,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 			g_pSwapChain->Present(0, 0);
 		}
-		//g_FinalTime = std::chrono::system_clock::now();
-		//g_deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(g_FinalTime - g_SartTime).count() / 1000.0f;
+
 		g_deltaTime = ImGui::GetIO().DeltaTime;
 	}
 
@@ -489,6 +505,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	RAH_SAFE_DELETE(g_fabric);
 	rah::ImgManager::CloseModule();
 	rah::ComponentFactory::CloseModule();
+	rah::DeferredManager::CloseModule();
 
     return (int) msg.wParam;
 }

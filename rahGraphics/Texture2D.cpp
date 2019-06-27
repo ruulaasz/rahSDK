@@ -34,7 +34,7 @@ namespace rah
 		desc.MiscFlags = 0;
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.Format = /*DXGI_FORMAT_R8G8B8A8_UNORM*/ DXGI_FORMAT_R16G16B16A16_FLOAT;
 
 		pDevice->CreateTexture2D(&desc, nullptr, &m_texture);
 		if (!m_texture)

@@ -99,6 +99,7 @@
     <ClInclude Include="RenderTarget.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="DeferredManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VertexBuffer.cpp">
@@ -176,5 +177,6 @@
     <ClCompile Include="RenderTarget.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="DeferredManager.cpp" />
   </ItemGroup>
 </Project>

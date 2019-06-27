@@ -9,3 +9,4 @@
 #include "Camera.h"
 #include "CameraDebug.h"
 #include "RenderManager.h"
+#include "DeferredManager.h"

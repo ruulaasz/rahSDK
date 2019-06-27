@@ -4,7 +4,7 @@ namespace rah
 {
 	RenderTarget::RenderTarget()
 	{
-		m_renderTarget = nullptr;
+		m_renderTarget = NULL;
 	}
 
 	RenderTarget::~RenderTarget()

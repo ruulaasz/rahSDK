@@ -28,7 +28,7 @@ namespace rah
 			throw "CreationFailed m_shaderBlob";
 		}
 
-		pDevice->CreatePixelShader(m_shaderBlob->GetBufferPointer(), m_shaderBlob->GetBufferSize(), nullptr, &m_fragmentShader);
+		pDevice->CreatePixelShader(m_shaderBlob->GetBufferPointer(), m_shaderBlob->GetBufferSize(), NULL, &m_fragmentShader);
 		if (!m_fragmentShader)
 		{
 			m_shaderBlob->Release();
