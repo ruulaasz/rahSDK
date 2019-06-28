@@ -119,7 +119,6 @@ void LoadGraphicResources()
 	rah::RenderManager::GetInstance().updateProjection();
 
 	rah::DeferredManager::GetInstance().setRenderTargets();
-	//g_pDeviceContext->OMSetRenderTargets(1, &rah::GraphicManager::GetInstance().m_renderTarget.m_renderTarget, g_pDepthStencilView);
 
 	g_initialized = true;
 }
@@ -196,8 +195,6 @@ void changeModel(std::string _path)
 int current = 0;
 std::string smodels[MAXMODELS] = { "resources\\models\\ManEater\\ManEater.dae", "resources\\models\\Basillisk\\Basillisk.dae", "resources\\models\\ManEater\\ManEater.dae", "resources\\models\\Basillisk\\Basillisk.dae"};
 
-int volume = 5;
-bool mute = false;
 // Our state
 ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 float my_tex_w = 200;
@@ -210,8 +207,6 @@ void GUI()
 	ImGui::Text("\nBackground Color");
 	ImGui::ColorEdit3("current color", (float*)&clear_color); // Edit 3 floats representing a color
 	g_backgroundColor = rah::Color(clear_color.x, clear_color.y, clear_color.z, 1.0f);
-
-	
 
 	ImGui::End();
 
@@ -272,7 +267,8 @@ void GUI()
 						//ID3D11Device::CreateShaderResourceView()
 						ID3D11ShaderResourceView * test;
 						HRESULT error = g_pDevice->CreateShaderResourceView(rah::DeferredManager::GetInstance().m_renderTexture[1].m_texture, NULL, &test);
-						if(error == S_OK);
+
+						if(error == S_OK)
 						{
 							DirectX::ScratchImage image;
 							HRESULT hr = CaptureTexture(g_pDevice, g_pDeviceContext, rah::DeferredManager::GetInstance().m_renderTexture[1].m_texture, image);
@@ -330,31 +326,6 @@ void GUI()
 			ImGui::EndChild();
 			ImGui::EndGroup();
 		}
-		ImGui::End();
-
-		ImGui::Begin("Audio");                          // Create a window called "Hello, world!" and append into it.
-
-		if (ImGui::Button("Play"))
-		{
-			audio->Play();
-		}
-		if (ImGui::Button("Pause"))
-		{
-			audio->SetPaused(true);
-		}
-		if (ImGui::Button("Resume"))
-		{
-			audio->SetPaused(false);
-		}
-
-		if (ImGui::Checkbox("Mute", &mute))
-		{
-			audio->Mute(mute);
-		}
-
-		ImGui::SliderInt("Volume", &volume, 0, 10);
-		audio->SetVolume(volume);
-
 		ImGui::End();
 	}
 }
@@ -429,9 +400,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_BOX, "box"));
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_LISTENER, "listener"));
 	g_Actor->addComponent(rah::ComponentFactory::GetInstance().createEmptyComponent(g_Actor, rah::CT_AUDIO, "audio"));
-	rah::AudioComponent* acCheck = (rah::AudioComponent*)g_Actor->getComponent("audio");
-	acCheck->SetVolume(0.1);
-	//acCheck->Play();
 
 	reinterpret_cast<rah::BoxComponent*>(g_Actor->getComponent("box"))->assignModel(reinterpret_cast<rah::ModelComponent*>(g_Actor->getComponent("model")));
 

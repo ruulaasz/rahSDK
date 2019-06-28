@@ -62,5 +62,8 @@
     <FxCompile Include="shapes.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="SSAO.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

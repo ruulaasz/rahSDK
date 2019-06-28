@@ -20,7 +20,6 @@ namespace rah
 
 		AABB m_box;
 		Color m_color;
-		//bool m_rendereable;
 		bool m_adjustToModel;
 
 		Transform m_offsetTransform;

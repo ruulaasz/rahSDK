@@ -6,12 +6,14 @@ namespace rah
 {
 	rahAudioFile::rahAudioFile()
 	{
+		m_volume = 3;
 	}
-
 
 	rahAudioFile::~rahAudioFile()
 	{
+
 	}
+
 	RahResult rahAudioFile::Initialize(BasicResourceParams * _params)
 	{
 		if (__super::Initialize(_params) != RahResult::RAH_SUCCESS)
@@ -32,6 +34,7 @@ namespace rah
 
 		return RahResult::RAH_SUCCESS;
 	}
+
 	RahResult rahAudioFile::Load()
 	{
 		FMOD::System* sym = AudioManager::GetInstance().getSystem();
@@ -63,38 +66,46 @@ namespace rah
 
 		return RahResult::RAH_SUCCESS;
 	}
+
 	void rahAudioFile::Release()
 	{
 		m_sound->release();
 		m_channel->m_channel->stop();
 		RAH_SAFE_DELETE(m_channel);
 	}
+
 	void rahAudioFile::Set3DMinMaxDistance(float min, float max)
 	{
 		m_sound->set3DMinMaxDistance(min, max);
 	}
+
 	void rahAudioFile::Play()
 	{
 		AudioManager::GetInstance().PlayAudio(this);
 		m_channel->m_channel->setPaused(false);
 	}
+
 	void rahAudioFile::SetPaused(bool _paused)
 	{
 		m_isPaused = _paused;
 		m_channel->m_channel->setPaused(m_isPaused);
 	}
+
 	void rahAudioFile::Stop()
 	{
 		m_channel->m_channel->stop();
 	}
+
 	void rahAudioFile::SetVolume(float _volume)
 	{
 		m_channel->m_channel->setVolume(_volume);
 	}
+
 	void rahAudioFile::Mute(bool _mute)
 	{
 		m_channel->m_channel->setMute(_mute);
 	}
+
 	void rahAudioFile::UpdatePositionVelocity(Vector3D _position, Vector3D _velocity)
 	{
 		m_position = _position;

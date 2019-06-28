@@ -1,4 +1,5 @@
 #pragma once
+
 #include <fmod.hpp>
 #include <rahTools.h>
 #include <rahMath.h>
@@ -13,12 +14,14 @@ namespace rah
 		MODE_LOOP_ON = FMOD_LOOP_NORMAL,
 		MODE_LOOP_OFF = FMOD_LOOP_OFF
 	};
+
 	struct AudioParams : public BasicResourceParams
 	{
 		rahSoundMode Mode = MODE_3D;
 		std::string ChannelGroup = "DEFAULT";
 		bool IsStream = false;
 	};
+
 	class rahAudioFile : public rahResource
 	{
 	public:
@@ -33,6 +36,7 @@ namespace rah
 		rahSoundMode m_mode;
 		bool m_isStream;
 		bool m_isPaused;
+		int m_volume;
 
 		virtual RahResult Initialize(BasicResourceParams* _params);
 		RahResult Load();
@@ -43,7 +47,6 @@ namespace rah
 		void Stop();
 		void SetVolume(float _volume);
 		void Mute(bool _mute);
-
 		void UpdatePositionVelocity(Vector3D _position, Vector3D _velocity);
 	};
 }

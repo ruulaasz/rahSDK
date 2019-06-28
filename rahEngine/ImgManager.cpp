@@ -70,6 +70,10 @@ namespace rah
 
 		bool adjust = box->m_adjustToModel;
 		ImGui::Checkbox("Adjust to Model", &box->m_adjustToModel);
+		ImGui::SameLine();
+		ImGui::Text("Current Model: ");
+		ImGui::SameLine();
+		ImGui::Text(box->m_model->m_id.c_str());
 		if (adjust != box->m_adjustToModel)
 		{
 			box->adjustBoxtoModel();
@@ -99,7 +103,6 @@ namespace rah
 			box->m_offsetTransform.m_scale.y = s[1];
 			box->m_offsetTransform.m_scale.z = s[2];
 		}
-		ImGui::Spacing();
 
 		ImGui::End();
 	}
@@ -141,6 +144,75 @@ namespace rah
 			{
 				model->changeModel(filename);
 			}
+		}
+
+		ImGui::End();
+	}
+
+	void ImgManager::audioComponentGUI(Component * _component)
+	{
+		ImGui::Begin("Audio");                          // Create a window called "Hello, world!" and append into it.
+
+		AudioComponent* audio = reinterpret_cast<AudioComponent*>(_component);
+
+		if (ImGui::Button("Add audio"))
+		{
+			char filename[MAX_PATH];
+
+			OPENFILENAME ofn;
+			ZeroMemory(&filename, sizeof(filename));
+			ZeroMemory(&ofn, sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
+			ofn.lpstrFilter = "Any File\0*.*\0";
+			ofn.lpstrFile = filename;
+			ofn.lpstrInitialDir = "..\resources\audio";
+			ofn.nMaxFile = MAX_PATH;
+			ofn.lpstrTitle = "Select a Audio";
+			ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+
+			if (GetOpenFileNameA(&ofn))
+			{
+				rah::AudioParams params;
+				params.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::DEFAULT);
+				params.filePath = filename;
+				params.IsStream = false;
+				params.Mode = rah::rahSoundMode::MODE_3D;
+
+				audio->addAudioFile(params);
+			}
+		}
+
+		for (size_t i = 0; i < audio->m_audioNumber; i++)
+		{
+			ImGui::Separator();
+			if (ImGui::Button("Play"))
+			{
+				audio->m_audio.at(i)->Play();
+			}
+			ImGui::Spacing();
+
+			if (ImGui::Button("Pause"))
+			{
+				audio->m_audio.at(i)->SetPaused(true);
+			}
+			ImGui::Spacing();
+
+			if (ImGui::Button("Resume"))
+			{
+				audio->m_audio.at(i)->SetPaused(false);
+			}
+			ImGui::Spacing();
+
+			if (ImGui::Checkbox("Mute", &audio->m_mute))
+			{
+				audio->m_audio.at(i)->Mute(audio->m_mute);
+			}
+			ImGui::Spacing();
+
+			ImGui::SliderInt("Volume", &audio->m_audio.at(i)->m_volume, 0, 10);
+			audio->m_audio.at(i)->SetVolume(audio->m_audio.at(i)->m_volume);
+			ImGui::Separator();
 		}
 
 		ImGui::End();
