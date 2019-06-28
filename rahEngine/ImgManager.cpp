@@ -180,39 +180,51 @@ namespace rah
 				params.Mode = rah::rahSoundMode::MODE_3D;
 
 				audio->addAudioFile(params);
+				audio->m_audio.at(1)->m_volume = 1;
 			}
 		}
+		ImGui::Spacing();
 
 		for (size_t i = 0; i < audio->m_audioNumber; i++)
 		{
+			ImGui::PushID(i);
 			ImGui::Separator();
 			if (ImGui::Button("Play"))
 			{
 				audio->m_audio.at(i)->Play();
 			}
 			ImGui::Spacing();
+			ImGui::PopID();
 
+			ImGui::PushID(i);
 			if (ImGui::Button("Pause"))
 			{
 				audio->m_audio.at(i)->SetPaused(true);
 			}
 			ImGui::Spacing();
+			ImGui::PopID();
 
+			ImGui::PushID(i);
 			if (ImGui::Button("Resume"))
 			{
 				audio->m_audio.at(i)->SetPaused(false);
 			}
 			ImGui::Spacing();
+			ImGui::PopID();
 
+			ImGui::PushID(i);
 			if (ImGui::Checkbox("Mute", &audio->m_mute))
 			{
 				audio->m_audio.at(i)->Mute(audio->m_mute);
 			}
 			ImGui::Spacing();
+			ImGui::PopID();
 
+			ImGui::PushID(i);
 			ImGui::SliderInt("Volume", &audio->m_audio.at(i)->m_volume, 0, 10);
 			audio->m_audio.at(i)->SetVolume(audio->m_audio.at(i)->m_volume);
 			ImGui::Separator();
+			ImGui::PopID();
 		}
 
 		ImGui::End();

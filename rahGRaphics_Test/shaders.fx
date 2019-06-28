@@ -70,7 +70,7 @@ PS_OUTPUT PS(PS_INPUT input)
 	PS_OUTPUT output = (PS_OUTPUT)0;
 	output.ColorOcclusion = float4(txDiffuse.Sample(samLinear, input.Tex).xyz + input.Color, 1.0f);
 	output.WorldPos = input.WorldPos;
-	output.NormalDepth = float4(input.Normal, (input.Depth / 200.0f));
+	output.NormalDepth = float4(input.Normal, 1.0f/*(input.Depth / 200.0f)*/);
 	//output.ColorOcclusion = output.ColorOcclusion * output.NormalDepth;
 
 	/*output.ColorOcclusion = float4(1.0f, 1.0f, 1.0f, 1.0f);
