@@ -35,7 +35,6 @@ lib/rahGraphics/x64/Debug/rahGraphics_Debug.lib
 lib/rahMath/Win32/Debug/rahMath_Debug.lib
 bin/
 rahGRaphics_Test/resources/
-rahGRaphics_Test/shaders.fx
 lib/rahTools/Win32/Release/rahTools_Release.lib
 rahTools_Test/Log/Jul 12 2018.txt
 rahTools_Test/test2.txt
@@ -53,7 +52,6 @@ lib/rahEngine/x64/Release/rahEngine_Release.lib
 lib/rahEngine/x64/Debug/rahEngine_Debug.lib
 rahGRaphics_Test/Log/
 /rahMathCollisions_Test/rahMathCollisions_Test.vcxproj.user
-rahGRaphics_Test/shapes.fx
 lib/rahAudio/Win32/Debug/rahAudio_Debug.lib
 rahAudio/rahAudio.vcxproj.user
 rahAudio_Test/rahAudio_Test.vcxproj.filters
