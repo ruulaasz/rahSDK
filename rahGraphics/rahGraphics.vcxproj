@@ -73,8 +73,8 @@
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <TargetExt>.lib</TargetExt>
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)DirectXTex/include/;$(IncludePath);$(DEVLIBS)assimp/include/</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(Configuration)/$(PlatformTarget)/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)DirectXTex/include/;$(IncludePath);$(DEVLIBS)assimp/include/;$(DEVLIBS)que3e/include/</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(Configuration)/$(PlatformTarget)/;$(DEVLIBS)que3e/lib/$(Configuration)/;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,9 +82,9 @@
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <TargetExt>.lib</TargetExt>
-    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)DirectXTex/include/;$(IncludePath);$(DEVLIBS)assimp/include/</IncludePath>
+    <IncludePath>$(SolutionDir)rahMath;$(SolutionDir)rahTools;$(DEVLIBS)DirectXTex/include/;$(IncludePath);$(DEVLIBS)assimp/include/;$(DEVLIBS)que3e/include/</IncludePath>
     <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
-    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(Configuration)/$(PlatformTarget)/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)lib\rahMath\$(PlatformName)\$(Configuration)\;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(DEVLIBS)assimp/lib/$(Configuration)/$(PlatformTarget)/;$(DEVLIBS)que3e/lib/$(Configuration)/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>

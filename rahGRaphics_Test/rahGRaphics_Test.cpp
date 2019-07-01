@@ -5,6 +5,8 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+#include <collision/q3Box.h>
+
 //#include <vld.h>
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -55,6 +57,10 @@ int g_gridDensity = 120;
 
 rah::GraphicTexture* guiModelPrev = nullptr;
 
+std::vector<rah::PhysicBody*> g_physicBody;
+
+rah::PhysicBody* g_playerBody;
+
 // Declaraciones de funciones adelantadas incluidas en este módulo de código:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -93,6 +99,26 @@ RahResult InitModules()
 	rah::ComponentFactory::StartModule(NULL);
 
 	rah::DeferredManager::StartModule(NULL);
+
+	rah::InitPhysic physicInit;
+	physicInit.dt = 1.0f / 60.0f;
+	physicInit.gravity = rah::Vector3D(0.0f, -9.8f);
+	physicInit.paused = false;
+	physicInit.iterations = 20;
+	rah::PhysicManager::StartModule(physicInit);
+
+	q3BodyDef bodyDef;
+	rah::PhysicBody* body = rah::PhysicManager::GetInstance().CreateBody(bodyDef);
+	g_physicBody.push_back(body);
+
+	rah::PhysicManager::GetInstance().m_scene->SetEnableFriction(true);
+
+	q3BoxDef boxDef;
+	boxDef.SetRestitution(0);
+	q3Transform tx;
+	q3Identity(tx);
+	boxDef.Set(tx, q3Vec3(50.0f, 1.0f, 50.0f));
+	body->AddBox(boxDef);
 
 	return RAH_SUCCESS;
 }
@@ -139,6 +165,13 @@ void renderWorld()
 	rah::RenderManager::GetInstance().updateWorld(rah::math::Identity4D());
 	
 	g_world.Render();
+
+	for (size_t i = 0; i < g_physicBody.size(); i++)
+	{
+		rah::OBB aabb = g_physicBody[i]->GetOBB();
+
+		rah::RenderManager::GetInstance().renderShape(aabb, rah::Color::red);
+	}
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
 	g_pDeviceContext->IASetInputLayout(g_vertexShapeShader.m_inputLayout.m_inputLayout);
@@ -410,6 +443,27 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 	changePreview();
 
+	q3BodyDef bodyDef;
+	bodyDef.position.Set(g_Actor->m_transform.m_position.x, g_Actor->m_transform.m_position.y, g_Actor->m_transform.m_position.z);
+	bodyDef.axis.Set(g_Actor->m_transform.m_rotation.x, g_Actor->m_transform.m_rotation.y, g_Actor->m_transform.m_rotation.z);
+	bodyDef.bodyType = eDynamicBody;
+	
+	g_playerBody = rah::PhysicManager::GetInstance().CreateBody(bodyDef);
+
+	g_physicBody.push_back(g_playerBody);
+
+	q3Transform tx;
+	q3Identity(tx);
+	tx.position.x = g_Actor->m_transform.m_position.x;
+	tx.position.y = g_Actor->m_transform.m_position.y;
+	tx.position.z = g_Actor->m_transform.m_position.z;
+	q3BoxDef boxDef;
+	boxDef.SetDensity(1.f);
+	boxDef.SetFriction(1.f);
+	rah::BoxComponent* box = (rah::BoxComponent*)g_Actor->getComponent("box");
+	boxDef.Set(tx, q3Vec3(box->m_box.m_max.x, box->m_box.m_max.y, box->m_box.m_max.z));
+	g_playerBody->AddBox(boxDef);
+
 	rah::AudioParams aprm;
 	aprm.ChannelGroup = rah::AudioManager::GetInstance().ChannelName(rah::ChannelsTypesNames::MUSIC);
 	aprm.filePath = "resources\\audio\\Gorillaz - Clint Eastwood (Official Video) (128  kbps).mp3";
@@ -452,6 +506,39 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 			
 			rah::AudioManager::GetInstance().Update();
 
+			rah::PhysicManager::GetInstance().Update(g_deltaTime);
+
+			static float acc;
+
+			acc += rah::PhysicManager::GetInstance().m_dt;
+
+			if (acc > 1.0f)
+			{
+				acc = 0;
+
+				q3BodyDef bodyDef;
+				bodyDef.position.Set(0.0f, 3.0f, 0.0f);
+				bodyDef.axis.Set(q3RandomFloat(-1.0f, 1.0f), q3RandomFloat(-1.0f, 1.0f), q3RandomFloat(-1.0f, 1.0f));
+				bodyDef.angle = q3PI * q3RandomFloat(-1.0f, 1.0f);
+				bodyDef.bodyType = eDynamicBody;
+				bodyDef.angularVelocity.Set(q3RandomFloat(1.0f, 3.0f), q3RandomFloat(1.0f, 3.0f), q3RandomFloat(1.0f, 3.0f));
+				bodyDef.angularVelocity *= q3Sign(q3RandomFloat(-1.0f, 1.0f));
+				bodyDef.linearVelocity.Set(q3RandomFloat(1.0f, 3.0f), q3RandomFloat(1.0f, 3.0f), q3RandomFloat(1.0f, 3.0f));
+				bodyDef.linearVelocity *= q3Sign(q3RandomFloat(-1.0f, 1.0f));
+				rah::PhysicBody* body = rah::PhysicManager::GetInstance().CreateBody(bodyDef);
+
+				g_physicBody.push_back(body);
+
+				q3Transform tx;
+				q3Identity(tx);
+				q3BoxDef boxDef;
+				boxDef.Set(tx, q3Vec3(1.0f, 1.0f, 1.0f));
+				body->AddBox(boxDef);
+
+			}
+			g_Actor->m_transform.m_position.x = g_playerBody->m_body->GetTransform().position.x;
+			g_Actor->m_transform.m_position.y = g_playerBody->m_body->GetTransform().position.y;
+			g_Actor->m_transform.m_position.z = g_playerBody->m_body->GetTransform().position.z;
 			GUI();
 
 			renderWorld();
@@ -474,6 +561,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	rah::ImgManager::CloseModule();
 	rah::ComponentFactory::CloseModule();
 	rah::DeferredManager::CloseModule();
+	rah::PhysicManager::CloseModule();
 
     return (int) msg.wParam;
 }
@@ -544,7 +632,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	rah::InputEvent mainEvent;
 	mainEvent.key = wParam;
 	mainEvent.keyDown = message;
-	rah::InputManager::GetInstance().CheckInput(&mainEvent);
+	//rah::InputManager::GetInstance().CheckInput(&mainEvent);
+
+	if (g_playerBody != NULL && g_Actor != NULL && rah::InputManager::GetInstance().CheckInput(&mainEvent) == RahResult::RAH_SUCCESS)
+	{
+		rah::Vector3D direction;
+		if (wParam == 0x57)
+		{
+			direction.z += 10.f;
+		}
+		else if (wParam == 0x53)
+		{
+			direction.z -= 10.f;
+		}
+		else if (wParam == 0x41)
+		{
+			direction.x -= 10.f;
+		}
+		else if (wParam == 0x44)
+		{
+			direction.x += 10.f;
+		}
+		
+		//g_playerBody->SetTransform(g_Actor->m_transform);
+		//direction.y = g_Actor->m_transform.m_position.y;
+		g_playerBody->m_body->SetLinearVelocity(q3Vec3(direction.x,direction.y,direction.z));
+	}
     switch (message)
     {
     case WM_COMMAND:

@@ -34,7 +34,10 @@ namespace rah
 		for (size_t i = 0; i < m_controllers.size(); i++)
 		{
 			if (m_controllers[i]->CheckInput(_event) != RAH_DONT_FIND_KEY)
+			{
 				GetLastError() = RAH_SUCCESS;
+				return RAH_SUCCESS;
+			}
 		}
 		GetLastError() = RAH_DONT_FIND_KEY;
 		return RAH_DONT_FIND_KEY;

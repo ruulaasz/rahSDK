@@ -27,6 +27,8 @@
     <ClInclude Include="Matrix3D.h" />
     <ClInclude Include="Matrix4D.h" />
     <ClInclude Include="OBB.h" />
+    <ClInclude Include="PhysicBody.h" />
+    <ClInclude Include="PhysicManager.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PlatformMath.h" />
     <ClInclude Include="Quaternion.h" />
@@ -48,6 +50,8 @@
     <ClCompile Include="Matrix3D.cpp" />
     <ClCompile Include="Matrix4D.cpp" />
     <ClCompile Include="OBB.cpp" />
+    <ClCompile Include="PhysicBody.cpp" />
+    <ClCompile Include="PhysicManager.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="PlatformMath.cpp" />
     <ClCompile Include="Quaternion.cpp" />
@@ -114,6 +118,8 @@
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <TargetExt>.lib</TargetExt>
+    <IncludePath>$(DEVLIBS)que3e/include/;$(SolutionDir)rahTools;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DEVLIBS)que3e/lib/$(Configuration)/;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>
@@ -126,6 +132,8 @@
     <IntDir>$(SolutionDir)intermediate\unused\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <TargetExt>.lib</TargetExt>
+    <IncludePath>$(DEVLIBS)que3e/include/;$(SolutionDir)rahTools;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DEVLIBS)que3e/lib/$(Configuration)/;$(SolutionDir)lib\rahTools\$(PlatformName)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)lib\$(ProjectName)\$(PlatformName)\$(Configuration)\</OutDir>

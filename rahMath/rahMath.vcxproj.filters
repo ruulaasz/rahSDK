@@ -19,6 +19,9 @@
     <Filter Include="Include">
       <UniqueIdentifier>{b44adf7c-ab83-49dc-ba42-9acc9241e3d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{f989e9c5-812f-4d29-9670-8f8551096ec3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2D.h">
@@ -78,6 +81,12 @@
     <ClInclude Include="rahMath.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicManager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector4D.cpp">
@@ -133,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicManager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicBody.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
