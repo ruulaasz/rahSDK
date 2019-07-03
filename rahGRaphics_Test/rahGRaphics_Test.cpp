@@ -120,6 +120,17 @@ RahResult InitModules()
 	boxDef.Set(tx, q3Vec3(50.0f, 1.0f, 50.0f));
 	body->AddBox(boxDef);
 
+	body = rah::PhysicManager::GetInstance().CreateBody(bodyDef);
+	g_physicBody.push_back(body);
+
+	boxDef;
+	boxDef.SetRestitution(0);
+	q3Identity(tx);
+	//tx.position.x = 50.0f;
+	tx.position.x = 25.0f;
+	boxDef.Set(tx, q3Vec3(1.0f, 25.0f, 50.0f));
+	body->AddBox(boxDef);
+
 	return RAH_SUCCESS;
 }
 
@@ -168,9 +179,9 @@ void renderWorld()
 
 	for (size_t i = 0; i < g_physicBody.size(); i++)
 	{
-		rah::OBB aabb = g_physicBody[i]->GetOBB();
+		rah::AABB aabb = g_physicBody[i]->GetAABB();
 
-		rah::RenderManager::GetInstance().renderShape(aabb, rah::Color::red);
+		rah::RenderManager::GetInstance().renderShape(aabb, g_physicBody[i]->m_color);
 	}
 
 	g_pDeviceContext->VSSetShader(g_vertexShapeShader.m_vertexShader, NULL, 0);
@@ -459,9 +470,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	tx.position.z = g_Actor->m_transform.m_position.z;
 	q3BoxDef boxDef;
 	boxDef.SetDensity(1.f);
-	boxDef.SetFriction(1.f);
+	boxDef.SetFriction(0.4f);
 	rah::BoxComponent* box = (rah::BoxComponent*)g_Actor->getComponent("box");
-	boxDef.Set(tx, q3Vec3(box->m_box.m_max.x, box->m_box.m_max.y, box->m_box.m_max.z));
+	boxDef.Set(tx, q3Vec3(rah::math::Abs(box->m_box.m_max.x) + rah::math::Abs(box->m_box.m_min.x), rah::math::Abs(box->m_box.m_max.y) + rah::math::Abs(box->m_box.m_min.y), rah::math::Abs(box->m_box.m_max.z) + rah::math::Abs(box->m_box.m_min.z)));
 	g_playerBody->AddBox(boxDef);
 
 	rah::AudioParams aprm;
@@ -511,8 +522,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 			static float acc;
 
 			acc += rah::PhysicManager::GetInstance().m_dt;
-
-			if (acc > 1.0f)
+			static bool oncedo = true;
+			if (acc > 1.0f && oncedo)
 			{
 				acc = 0;
 
@@ -534,11 +545,71 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 				q3BoxDef boxDef;
 				boxDef.Set(tx, q3Vec3(1.0f, 1.0f, 1.0f));
 				body->AddBox(boxDef);
-
+				oncedo = false;
 			}
 			g_Actor->m_transform.m_position.x = g_playerBody->m_body->GetTransform().position.x;
 			g_Actor->m_transform.m_position.y = g_playerBody->m_body->GetTransform().position.y;
 			g_Actor->m_transform.m_position.z = g_playerBody->m_body->GetTransform().position.z;
+			for (int i = 3; i < g_physicBody.size(); i++)
+			{
+				q3AABB aabb;
+				q3Transform world = q3Mul(g_physicBody[i]->m_body->GetTransform(), g_physicBody[i]->m_box->local);
+				q3Vec3 v[8] = {
+					q3Vec3(-g_physicBody[i]->m_box->e.x, -g_physicBody[i]->m_box->e.y, -g_physicBody[i]->m_box->e.z),
+					q3Vec3(-g_physicBody[i]->m_box->e.x, -g_physicBody[i]->m_box->e.y,  g_physicBody[i]->m_box->e.z),
+					q3Vec3(-g_physicBody[i]->m_box->e.x,  g_physicBody[i]->m_box->e.y, -g_physicBody[i]->m_box->e.z),
+					q3Vec3(-g_physicBody[i]->m_box->e.x,  g_physicBody[i]->m_box->e.y,  g_physicBody[i]->m_box->e.z),
+					q3Vec3(g_physicBody[i]->m_box->e.x, -g_physicBody[i]->m_box->e.y, -g_physicBody[i]->m_box->e.z),
+					q3Vec3(g_physicBody[i]->m_box->e.x, -g_physicBody[i]->m_box->e.y,  g_physicBody[i]->m_box->e.z),
+					q3Vec3(g_physicBody[i]->m_box->e.x,  g_physicBody[i]->m_box->e.y, -g_physicBody[i]->m_box->e.z),
+					q3Vec3(g_physicBody[i]->m_box->e.x,  g_physicBody[i]->m_box->e.y,  g_physicBody[i]->m_box->e.z)
+				};
+				for (i32 i = 0; i < 8; ++i)
+					v[i] = q3Mul(world, v[i]);
+
+				q3Vec3 min = q3Vec3(Q3_R32_MAX, Q3_R32_MAX, Q3_R32_MAX);
+				q3Vec3 max = q3Vec3(-Q3_R32_MAX, -Q3_R32_MAX, -Q3_R32_MAX);
+
+				for (i32 i = 0; i < 8; ++i)
+				{
+					min = q3Min(min, v[i]);
+					max = q3Max(max, v[i]);
+				}
+
+				aabb.min = min;
+				aabb.max = max;
+				rah::PhysicManager::GetInstance().m_scene->QueryAABB(g_physicBody[i], aabb);
+			}
+			q3AABB aabb;
+			q3Transform world = q3Mul(g_playerBody->m_body->GetTransform(), g_playerBody->m_box->local);
+			q3Vec3 v[8] = {
+				q3Vec3(-g_playerBody->m_box->e.x, -g_playerBody->m_box->e.y, -g_playerBody->m_box->e.z),
+				q3Vec3(-g_playerBody->m_box->e.x, -g_playerBody->m_box->e.y,  g_playerBody->m_box->e.z),
+				q3Vec3(-g_playerBody->m_box->e.x,  g_playerBody->m_box->e.y, -g_playerBody->m_box->e.z),
+				q3Vec3(-g_playerBody->m_box->e.x,  g_playerBody->m_box->e.y,  g_playerBody->m_box->e.z),
+				q3Vec3(g_playerBody->m_box->e.x, -g_playerBody->m_box->e.y, -g_playerBody->m_box->e.z),
+				q3Vec3(g_playerBody->m_box->e.x, -g_playerBody->m_box->e.y,  g_playerBody->m_box->e.z),
+				q3Vec3(g_playerBody->m_box->e.x,  g_playerBody->m_box->e.y, -g_playerBody->m_box->e.z),
+				q3Vec3(g_playerBody->m_box->e.x,  g_playerBody->m_box->e.y,  g_playerBody->m_box->e.z)
+			};
+			for (i32 i = 0; i < 8; ++i)
+				v[i] = q3Mul(world, v[i]);
+
+			q3Vec3 min = q3Vec3(Q3_R32_MAX, Q3_R32_MAX, Q3_R32_MAX);
+			q3Vec3 max = q3Vec3(-Q3_R32_MAX, -Q3_R32_MAX, -Q3_R32_MAX);
+
+			for (i32 i = 0; i < 8; ++i)
+			{
+				min = q3Min(min, v[i]);
+				max = q3Max(max, v[i]);
+			}
+
+			aabb.min = min;
+			aabb.max = max;
+			//for (int i = 3; i < g_physicBody.size(); i++)
+			//{
+				rah::PhysicManager::GetInstance().m_scene->QueryAABB(g_playerBody, aabb);
+			//}
 			GUI();
 
 			renderWorld();
@@ -653,10 +724,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			direction.x += 10.f;
 		}
-		
+		//direction += g_Actor->m_transform.m_position;
 		//g_playerBody->SetTransform(g_Actor->m_transform);
 		//direction.y = g_Actor->m_transform.m_position.y;
-		g_playerBody->m_body->SetLinearVelocity(q3Vec3(direction.x,direction.y,direction.z));
+		//g_playerBody->m_body->SetToAwake();
+		g_playerBody->SetLinearVelocity(direction);
+		/*if(g_physicBody.size() >= 4)
+			g_physicBody[3]->SetLinearVelocity(direction);*/
+		//g_playerBody->m_body->ApplyLinearImpulseAtWorldPoint(q3Vec3(direction.x,direction.y,direction.z), q3Vec3(g_Actor->m_transform.m_position.x, g_Actor->m_transform.m_position.y, g_Actor->m_transform.m_position.z));
 	}
     switch (message)
     {

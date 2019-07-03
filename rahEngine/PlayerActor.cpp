@@ -42,7 +42,7 @@ namespace rah
 
 	void PlayerActor::Move(void * _value)
 	{
-		MoveCommand value = *(MoveCommand*)_value;
+		/*MoveCommand value = *(MoveCommand*)_value;
 
 		if (value.axis == 1)
 		{
@@ -70,7 +70,7 @@ namespace rah
 				m_transform.m_rotation.y = 0;
 			}
 		}
-		m_currentActionTime = 0;
+		m_currentActionTime = 0;*/
 	}
 
 	PlayerActor::PlayerActor()
